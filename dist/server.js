@@ -5,13 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const profile_1 = __importDefault(require("./routes/profile"));
+const morgan_1 = __importDefault(require("morgan"));
+const path_1 = __importDefault(require("path"));
+const publication_1 = __importDefault(require("./routes/publication"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '3000';
         this.middlewares();
         this.routes();
+        this.folder();
     }
     listen() {
         this.app.listen(this.port, () => {
@@ -19,13 +22,15 @@ class Server {
         });
     }
     middlewares() {
-        // Body Parser
         this.app.use(express_1.default.json());
-        // Cors
         this.app.use((0, cors_1.default)({ credentials: true, origin: 'http://localhost:4200' }));
+        this.app.use((0, morgan_1.default)('dev'));
     }
     routes() {
-        this.app.use('/profile', profile_1.default);
+        this.app.use('/publication', publication_1.default);
+    }
+    folder() {
+        this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
     }
 }
 exports.default = Server;

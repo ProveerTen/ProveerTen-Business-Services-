@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
+import path from 'path';
 
-import profile from './routes/profile';
+import publication from './routes/publication';
 
 class Server {
 
@@ -13,6 +15,7 @@ class Server {
         this.port = process.env.PORT || '3000';
         this.middlewares();
         this.routes();
+        this.folder();
     }
 
     listen() {
@@ -22,15 +25,17 @@ class Server {
     }
 
     middlewares() {
-        // Body Parser
         this.app.use(express.json());
-
-        // Cors
         this.app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
+        this.app.use(morgan('dev'));
     }
 
     routes() {
-        this.app.use('/profile', profile);
+        this.app.use('/publication', publication);
+    }
+
+    folder() {
+        this.app.use('/uploads', express.static(path.resolve('uploads')));
     }
 }
 

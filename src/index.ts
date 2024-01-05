@@ -1,6 +1,7 @@
 import Server from './server';
 import dotenv from 'dotenv'
-import connection from './config/db-config';
+import { connectionMysql } from './config/db-mysql';
+import { connectionMongoDb } from './config/db-mongo';
 
 // Configuramos dotenv 
 dotenv.config();
@@ -10,6 +11,6 @@ const server = new Server();
 
 server.listen();
 
-// Conectamos la db
-connection;
-
+// Conectamos las bases de datos
+connectionMysql();
+connectionMongoDb();
