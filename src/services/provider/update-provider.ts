@@ -10,6 +10,7 @@ export const verifyProvider = (document: any, callback: any) => {
       if (error) {
         return callback(error);
       }
+      
 
       callback(null, results);
     });
