@@ -1,7 +1,6 @@
 import mysql from 'mysql2';
 import dotenv from 'dotenv'
 
-// Configuramos dotenv 
 dotenv.config();
 
 const connection = mysql.createConnection({
@@ -20,3 +19,5 @@ export const connectionMysql = () => {
         }
     });
 }
+
+export default connection;

@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectionMysql = void 0;
 const mysql2_1 = __importDefault(require("mysql2"));
 const dotenv_1 = __importDefault(require("dotenv"));
-// Configuramos dotenv 
 dotenv_1.default.config();
 const connection = mysql2_1.default.createConnection({
     host: process.env.HOST,
@@ -25,3 +24,4 @@ const connectionMysql = () => {
     });
 };
 exports.connectionMysql = connectionMysql;
+exports.default = connection;

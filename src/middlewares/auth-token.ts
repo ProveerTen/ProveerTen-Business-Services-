@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
-import { DecodedToken } from '../models/decoded-token';
+import { DecodedToken } from '../models/Decoded-token';
 
 export let dataDecoded: DecodedToken;
 

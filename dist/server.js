@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
 const publication_1 = __importDefault(require("./routes/publication"));
+const provider_1 = __importDefault(require("./routes/provider"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -28,6 +29,7 @@ class Server {
     }
     routes() {
         this.app.use('/publication', publication_1.default);
+        this.app.use('/provider', provider_1.default);
     }
     folder() {
         this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));

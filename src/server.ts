@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import path from 'path';
 
 import publication from './routes/publication';
+import provider from './routes/provider';
+
 
 class Server {
 
@@ -32,6 +34,8 @@ class Server {
 
     routes() {
         this.app.use('/publication', publication);
+
+        this.app.use ('/provider', provider)
     }
 
     folder() {
