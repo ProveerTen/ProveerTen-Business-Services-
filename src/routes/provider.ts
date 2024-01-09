@@ -7,3 +7,4 @@ const router  = Router();
 router.post('/update/:document',authJwt, updateProvider);
 
 export default router;
+
