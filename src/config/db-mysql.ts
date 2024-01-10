@@ -20,3 +20,5 @@ export const connectionMysql = () => {
         }
     });
 }
+
+export default connection;

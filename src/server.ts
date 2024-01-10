@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
+import provider from './routes/delete-provider'
 
 import publication from './routes/publication';
 
@@ -32,6 +33,7 @@ class Server {
 
     routes() {
         this.app.use('/publication', publication);
+        this.app.use('/provider', provider)
     }
 
     folder() {
