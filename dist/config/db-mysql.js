@@ -25,3 +25,4 @@ const connectionMysql = () => {
     });
 };
 exports.connectionMysql = connectionMysql;
+exports.default = connection;
