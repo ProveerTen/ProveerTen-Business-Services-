@@ -1,5 +1,5 @@
-import connection from "../../config/db-mysql";
-import Provider from "../../models/provider";
+import connection from "../config/db-mysql";
+import Provider from "../models/provider";
 
 
 export const verifyProvider = (document: any, callback: any) => {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { providerUpdate, verifyProvider } from "../../services/provider/update-provider";
-import Provider from "../../models/provider";
+import { providerUpdate, verifyProvider } from "../services/update-provider";
+import Provider from "../models/provider";
 
 
 export const updateProvider = async (req: Request, res: Response) => {

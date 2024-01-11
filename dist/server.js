@@ -30,10 +30,8 @@ class Server {
     }
     routes() {
         this.app.use('/publication', publication_1.default);
-        this.app.use('/provider', provider_1.default);
-
         this.app.use('/provider', delete_provider_1.default);
-
+        this.app.use('/provider', provider_1.default);
     }
     folder() {
         this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
