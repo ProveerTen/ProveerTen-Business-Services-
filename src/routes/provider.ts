@@ -1,10 +1,11 @@
 import { Router } from "express";
-import authJwt from "../middlewares/jwt-validator";
-import validator from '../middlewares/provider-params-validator'
 import { updateProvider } from "../controllers/update-provider-controller";
+import { verifyToken }from "../middlewares/auth-token";
+import { validateCompany } from "../middlewares/validate-role-validator";
 
+ 
 const router  = Router();
-router.post('/update/:document',authJwt, updateProvider);
+router.post('/update/:document',verifyToken, validateCompany, updateProvider);
 
 export default router;
 
