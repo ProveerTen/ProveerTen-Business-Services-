@@ -16,12 +16,10 @@ exports.updateProvider = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const update_provider_1 = require("../services/update-provider");
 const updateProvider = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Controlador");
     const document = req.params.document;
     try {
         (0, update_provider_1.verifyProvider)(document, (error, result) => __awaiter(void 0, void 0, void 0, function* () {
             if (error) {
-                console.log("11");
                 return res.status(500).json({ error: error.message });
             }
             if (!result) {

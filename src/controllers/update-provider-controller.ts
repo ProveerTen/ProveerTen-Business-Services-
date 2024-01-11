@@ -5,14 +5,12 @@ import Provider from "../models/provider";
 
 
 export const updateProvider = async (req: Request, res: Response) => {
-    console.log("Controlador");
   
   const document = req.params.document;
     
   try {
     verifyProvider(document, async (error: any, result: any) => {
       if (error) {
-        console.log("11");
         
         return res.status(500).json({ error: error.message });
       }

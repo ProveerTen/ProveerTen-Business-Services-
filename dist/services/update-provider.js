@@ -21,12 +21,8 @@ const verifyProvider = (document, callback) => {
 };
 exports.verifyProvider = verifyProvider;
 const providerUpdate = (data, callback) => {
-    if (data) {
-        console.log("LLEGO");
-    }
     const updateQuery = "call update_data_provider (?,?,?,?,?,?,?,?,?,?,?,@message_text);";
     try {
-        console.log("HHHHHH");
         db_mysql_1.default.query(updateQuery, [
             data.document_provider,
             data.name_provider,

@@ -21,18 +21,10 @@ export const verifyProvider = (document: any, callback: any) => {
 
 
 export const providerUpdate = (data: Provider, callback: any) => {
-
-
-        if (data) {
-            console.log("LLEGO");
-            
-        }
     
   const updateQuery = "call update_data_provider (?,?,?,?,?,?,?,?,?,?,?,@message_text);";
 
   try {
-    console.log("HHHHHH");
-    
     connection.query(
       updateQuery,
       [
