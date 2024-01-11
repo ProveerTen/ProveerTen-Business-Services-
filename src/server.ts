@@ -5,6 +5,8 @@ import path from 'path';
 import provider from './routes/delete-provider'
 
 import publication from './routes/publication';
+import providerU from './routes/provider';
+
 
 class Server {
 
@@ -33,7 +35,9 @@ class Server {
 
     routes() {
         this.app.use('/publication', publication);
-        this.app.use('/provider', provider)
+
+        this.app.use ('/provider', provider)
+        this.app.use('/provider', providerU)
     }
 
     folder() {
