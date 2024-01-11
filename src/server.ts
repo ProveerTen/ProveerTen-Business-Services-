@@ -37,7 +37,7 @@ class Server {
         this.app.use('/publication', publication);
 
         this.app.use ('/provider', provider)
-        this.app.use('/provider', providerU)
+        this.app.use('/provideru', providerU)
     }
 
     folder() {
