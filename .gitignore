@@ -1,3 +1,5 @@
-# Ignora variables de entorno
+# Node
+/node_modules
+
+# dotenv
 .env
-node_modules
