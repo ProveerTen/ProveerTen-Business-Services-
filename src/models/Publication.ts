@@ -22,6 +22,3 @@ export interface IPublication extends Document {
 
 export default model<IPublication>('Publication', publication_schema)
 
-export interface IupdateDataPub extends Document {
-    text: string,
-}
