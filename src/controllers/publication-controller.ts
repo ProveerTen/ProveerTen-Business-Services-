@@ -35,7 +35,7 @@ export const updateDataPublication = async (req: Request, res: Response) => {
         }
 
         publication = await Publication.findById(id); //esto es de prueba
-        res.status(200).json({ message: 'Publication successfully saved', publication })
+        res.status(200).json({ message: 'Publication successfully update', publication })
 
     } catch (error) {
         console.log(error);
