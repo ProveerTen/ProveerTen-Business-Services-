@@ -1,0 +1,224 @@
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*   Categoria   */
+create table Category (
+    name_category varchar (50) primary key
+);
+
+/* Producto */
+
+create table Product (
+id_product varchar(50) primary key,
+name_product varchar(20) not null,
+description_product varchar(80) not null,
+purchase_price_product float not null,
+unit_purchase_price_product float,
+suggested_unit_selling_price_product float,
+purchase_quantity int,
+stock_product int not null,
+content_product varchar(50),
+image_product varchar(500) not null,
+availability_product varchar(15) not null,
+fk_product_nit_company varchar (15), foreign key (fk_product_nit_company) references company(nit_company)
+);
+
+use Proveerten;
+
+create table Product_category (
+fk_product_category_id_product varchar(50), foreign key (fk_product_category_id_product) references product(id_product),
+fk_product_category_name_category varchar(50), foreign key (fk_product_category_name_category) references category(name_category)
+);
+
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+delimiter //
+create procedure insertProduct
+(
+in id_product varchar(50),
+in name_product varchar(20),
+in description_product varchar(80),
+in purchase_price_product float,
+in unit_purchase_price_product float,
+in suggested_unit_selling_price_product float,
+in purchase_quantity int,
+in stock_product int,
+in content_product varchar(50),
+in image_product varchar(500),
+in availability_product varchar(15),
+in fk_product_nit_company varchar (15),
+out message_text varchar (255)
+)
+begin
+	insert into product (
+		id_product,
+		name_product,
+		description_product,
+		purchase_price_product,
+		unit_purchase_price_product,
+		suggested_unit_selling_price_product,
+		purchase_quantity,
+		stock_product,
+		content_product,
+		image_product,
+		availability_product,
+		fk_product_nit_company
+    )values(
+		id_product,
+		name_product,
+		description_product,
+		purchase_price_product,
+		unit_purchase_price_product,
+		suggested_unit_selling_price_product,
+		purchase_quantity,
+		stock_product,
+		content_product,
+		image_product,
+		availability_product,
+		fk_product_nit_company
+    );
+
+/*    
+    insert into category (
+		name_category
+    )values(
+		name_category
+    );
+    
+    insert into Product_category(
+		id_product,
+		name_category
+    ) values (
+    	id_product,
+		name_category
+    );
+*/  
+	set message_text = 'The product was successfully entered';
+	select message_text;
+end //
+
+call insertProduct('Colanta_Leche_entera_V1i4j','Leche entera','Abc',1234,1234,1234,1234,50,'20ml','image','Yes','33199025484-9','Lechita',@message_text)
+
+select * from product;
+
+delimiter ;
+
+delimiter **
+create procedure get_name_company_by_id 
+(
+	in nit_company varchar(15)
+)
+begin 
+    select name_company from company where company.nit_company = nit_company;
+end **
+
+delimiter ;
+
+call get_name_company_by_id('33199025484-9');
+
+delimiter //
+create procedure insertCategory
+(
+in name_category varchar(50),
+out message_text varchar (255)
+)
+begin
+	declare count_category int;
+    declare error_message varchar(255);
+	select count(*) into count_category from category where category.name_category = name_category;
+    if count_category > 0 then
+		set error_message = 'error, this category already exists';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message ;
+	else
+		insert into category (
+			name_category
+		)values(
+			name_category
+		);
+    
+		set message_text = 'The category was successfully entered';
+    end if;
+	select message_text;
+end //
+
+call insertCategory ('Bombones', @message_text);
+
+select * from category;
+
+delimite ;
+
+delimiter **
+create procedure get_names_category 
+()
+begin 
+    select * from category;
+end **
+
+call get_names_category;
+
+delimiter ;
+
+delimiter //
+create procedure insert_product_category
+(
+in id_product varchar(50),
+in name_category varchar(50),
+out message_text varchar (255)
+)
+begin
+	
+    insert into Product_category(
+		fk_product_category_id_product,
+		fk_product_category_name_category
+    ) values (
+    	id_product,
+		name_category
+    );
+		set message_text = 'The category and product was successfully entered';
+	select message_text;
+end //
+
+delimiter ;
+
+select * from Product_category;
+
+select * from product;
+
+
+
+------------------ Nuevos Proc
+delimiter **
+create procedure delete_product (
+	in id_product varchar(50),
+    out message_text varchar (255)
+)
+begin 
+	delete from product where product.id_product = id_product;
+    set message_text = 'The category was successfully entered';
+end **
+delimiter ;
+------------------------------------------
+delimiter **
+create procedure delete_product_category (
+	in fk_product_category_id_product varchar(50),
+    out message_text varchar (255)
+)
+begin 
+	delete from product_category where product_category.fk_product_category_id_product = fk_product_category_id_product;
+    set message_text = 'The category was successfully entered';
+end **
+delimiter ;
+----------------------------------
+delimiter **
+create procedure delete_category (
+	in name_category varchar(50),
+    out message_text varchar(255)
+)
+begin
+	delete from category where category.name_category = name_category;
+end **
+delimiter ;
+
+
+call insertProduct('Colanta_Leche_entera_V1i4j','Leche entera','Abc',1234,1234,1234,1234,50,'20ml','image','Yes','55599025484-9',@message_text);
+call insertCategory ('helados', @message_text);
+call insert_product_category('Colanta_Leche_entera_V1i4j', 'bombones',@message_text);
