@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPublication = void 0;
+exports.updateDataPublication = exports.getAllPublications = exports.getPublicationsByCompany = exports.getPublicationById = exports.deleteOnePublication = exports.createPublication = void 0;
 const cloudinary_1 = __importDefault(require("../libs/cloudinary"));
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const Publication_1 = __importDefault(require("../models/Publication"));
@@ -45,3 +45,101 @@ const createPublication = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.createPublication = createPublication;
+const deleteOnePublication = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const publication = yield Publication_1.default.findById(id);
+        if (!publication) {
+            return res.status(404).json({ error: 'Publication not found' });
+        }
+        const public_id = publication.public_id;
+        yield Publication_1.default.findByIdAndDelete(id);
+        yield cloudinary_1.default.uploader.destroy(public_id);
+        res.status(200).json({
+            message: 'Publication successfully deleted'
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).json({
+            error: `error`
+        });
+    }
+});
+exports.deleteOnePublication = deleteOnePublication;
+const getPublicationById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const publication = yield Publication_1.default.findById(id);
+        res.status(200).json({
+            publication
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).json({
+            error: `error`
+        });
+    }
+});
+exports.getPublicationById = getPublicationById;
+const getPublicationsByCompany = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const publications = yield Publication_1.default.find({ nit_company: id });
+        res.status(200).json({
+            publications
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).json({
+            error: `error`
+        });
+    }
+});
+exports.getPublicationsByCompany = getPublicationsByCompany;
+const getAllPublications = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const publications = yield Publication_1.default.find();
+        res.status(200).json({
+            publications
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).json({
+            error: `error`
+        });
+    }
+});
+exports.getAllPublications = getAllPublications;
+const updateDataPublication = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g;
+    try {
+        const { text, id } = req.body;
+        let publication = yield Publication_1.default.findById(id);
+        let oldPublic_id = publication === null || publication === void 0 ? void 0 : publication.public_id;
+        if (req.file == null) {
+            yield Publication_1.default.updateOne({ _id: id }, { $set: { text } });
+        }
+        if (req.file != null) {
+            const result = yield cloudinary_1.default.uploader.upload((_f = req.file) === null || _f === void 0 ? void 0 : _f.path);
+            if (!result) {
+                res.status(400).json({ "error": "error subiendo la imagen" });
+            }
+            yield Publication_1.default.updateOne({ _id: id }, { $set: { text: text, image_url: result.url, secure_url: result.secure_url, public_id: result.public_id } });
+            fs_extra_1.default.unlink((_g = req.file) === null || _g === void 0 ? void 0 : _g.path);
+            if (oldPublic_id) {
+                yield cloudinary_1.default.uploader.destroy(oldPublic_id);
+            }
+        }
+        publication = yield Publication_1.default.findById(id); //esto es de prueba
+        res.status(200).json({ message: 'Publication successfully update', publication });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).json({ "error": error });
+    }
+});
+exports.updateDataPublication = updateDataPublication;
