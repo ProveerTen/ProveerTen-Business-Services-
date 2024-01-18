@@ -23,5 +23,5 @@ function validatorParams(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
-export default paramsUpdateProvider 
+export default paramsUpdateProvider
 validatorParams;

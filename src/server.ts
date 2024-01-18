@@ -7,6 +7,9 @@ import provider from './routes/delete-provider'
 import publication from './routes/publication';
 import providerU from './routes/provider';
 import profile from './routes/profile';
+import routesEditProfile from './routes/editProfileData';
+import routesChangePassword from './routes/changePasswordProfile';
+import routesUpdatePhoto from './routes/updatePhotoProfile';
 
 class Server {
 
@@ -36,8 +39,11 @@ class Server {
     routes() {
         this.app.use('/publication', publication);
         this.app.use('/profile', profile);
-        this.app.use('/provider', provider)
-        this.app.use('/provideru', providerU)
+        this.app.use('/provider', provider);
+        this.app.use('/provideru', providerU);
+        this.app.use('/edit_profile', routesEditProfile);
+        this.app.use('/password', routesChangePassword);
+        this.app.use('/photo', routesUpdatePhoto);
     }
 
     folder() {

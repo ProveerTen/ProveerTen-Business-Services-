@@ -11,6 +11,9 @@ const delete_provider_1 = __importDefault(require("./routes/delete-provider"));
 const publication_1 = __importDefault(require("./routes/publication"));
 const provider_1 = __importDefault(require("./routes/provider"));
 const profile_1 = __importDefault(require("./routes/profile"));
+const editProfileData_1 = __importDefault(require("./routes/editProfileData"));
+const changePasswordProfile_1 = __importDefault(require("./routes/changePasswordProfile"));
+const updatePhotoProfile_1 = __importDefault(require("./routes/updatePhotoProfile"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -34,6 +37,9 @@ class Server {
         this.app.use('/profile', profile_1.default);
         this.app.use('/provider', delete_provider_1.default);
         this.app.use('/provideru', provider_1.default);
+        this.app.use('/edit_profile', editProfileData_1.default);
+        this.app.use('/password', changePasswordProfile_1.default);
+        this.app.use('/photo', updatePhotoProfile_1.default);
     }
     folder() {
         this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
