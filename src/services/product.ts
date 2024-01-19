@@ -81,3 +81,60 @@ export const insert_product_category = (id_product: string, categories: string[]
     });
 };
 
+// delete
+export const delete_product = (id_product: string) => {
+
+    const query = 'call delete_product(?, @message_text)';
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, id_product, (error: any, result: any) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    })
+
+}
+export const deleteOldImage = (urlImage: string, urlVaues: any, fieldName: string): Promise<any> => {
+
+    return new Promise((resolve, reject) => {
+        connection.query(urlImage, urlVaues, (err, result: any[]) => {
+
+            if (err) {
+                reject({"Error al consultar en la bd:": err});
+
+            } else {
+                let urlImagen: string | null = result[0][fieldName]
+                console.log("urlImagen", urlImagen);
+
+                if (urlImagen != null) {
+                    let split = urlImagen.split(/[./]/)
+                    console.log("Split", split);
+                    resolve(split[9]);
+                } else {
+                    resolve(null);
+                }
+            }
+        })
+
+    })
+}
+
+export const delete_product_category = (id_product:string) => {
+
+    const query = 'call delete_product_category(?, @message_text)';
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, id_product, (error:any, result:any) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    })
+
+
+}
