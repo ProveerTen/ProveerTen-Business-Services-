@@ -10,6 +10,8 @@ import profile from './routes/profile';
 import routesEditProfile from './routes/editProfileData';
 import routesChangePassword from './routes/changePasswordProfile';
 import routesUpdatePhoto from './routes/updatePhotoProfile';
+import product from './routes/product';
+import category from './routes/category';
 
 class Server {
 
@@ -44,6 +46,8 @@ class Server {
         this.app.use('/edit_profile', routesEditProfile);
         this.app.use('/password', routesChangePassword);
         this.app.use('/photo', routesUpdatePhoto);
+        this.app.use('/product', product);
+        this.app.use('/category', category);
     }
 
     folder() {
