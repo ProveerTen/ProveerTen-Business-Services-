@@ -13,11 +13,11 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
             return res.status(401).json({ auth: false, message: 'Token no proporcionado' });
         }
 
-        let token = tokenAuth!.split(' ')[1];
+        // let token = tokenAuth!.split(' ')[1];
 
         let secretKey = process.env.SECRET_KEY
 
-        jwt.verify(token, secretKey!, (err: VerifyErrors | null, decoded) => {
+        jwt.verify(tokenAuth, secretKey!, (err: VerifyErrors | null, decoded) => {
             if (err) {
                 console.log("error", err);
                 return res.status(401).json({ auth: false, message: 'Error authenticating token' });

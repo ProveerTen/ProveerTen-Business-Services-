@@ -11,4 +11,5 @@ const auth_token_1 = require("../middlewares/auth-token");
 const product_validator_1 = __importDefault(require("../middlewares/product-validator"));
 const router = (0, express_1.Router)();
 router.post('/create', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image_product'), product_validator_1.default.paramsProduct, product_validator_1.default.validatorParams, product_controller_1.createProduct);
+router.post('/update', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image_product'), product_validator_1.default.paramsProductUpdate, product_validator_1.default.validatorParams, product_controller_1.updateProduct);
 exports.default = router;

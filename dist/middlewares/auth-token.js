@@ -11,9 +11,9 @@ const verifyToken = (req, res, next) => {
         if (!tokenAuth) {
             return res.status(401).json({ auth: false, message: 'Token no proporcionado' });
         }
-        let token = tokenAuth.split(' ')[1];
+        // let token = tokenAuth!.split(' ')[1];
         let secretKey = process.env.SECRET_KEY;
-        jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
+        jsonwebtoken_1.default.verify(tokenAuth, secretKey, (err, decoded) => {
             if (err) {
                 console.log("error", err);
                 return res.status(401).json({ auth: false, message: 'Error authenticating token' });
