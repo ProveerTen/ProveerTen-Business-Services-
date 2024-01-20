@@ -1,9 +1,13 @@
+
 import { Request, Response } from "express";
 import fs from 'fs-extra';
 
 import cloudinary from '../libs/cloudinary';
 import Product from '../models/Product';
-import { get_name_company, insert_product, insert_product_category, delete_product, delete_product_category, deleteOldImage } from "../services/product";
+import { get_name_company, insert_product,
+     insert_product_category, delete_product,
+      delete_product_category, deleteOldImage,
+    verifyExistProduct, updateDataProdcut } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import generateRandomString from "../helpers/generate-string";
 
@@ -91,3 +95,69 @@ export const deleteProduct = async (req: Request, res: Response) => {
         res.status(400).json({ error })
     }
 }
+
+
+
+export const updateProduct = async (req: Request, res: Response) => {
+    let id_product = req.body.id_product;
+    let resultC: any;
+    let imageNew: string;
+  
+    
+    try {
+      let dataProduct = await verifyExistProduct(id_product);
+      
+  
+      let imageSaveDb = dataProduct[0].image_product;
+      console.log("data", dataProduct);
+      console.log("image " ,imageSaveDb);
+      
+      
+       await cloudinary.uploader.destroy(imageSaveDb);
+  
+        
+      if (req.file?.path!) {
+        console.log(req.file.path!);
+        resultC = await cloudinary.uploader.upload(req.file?.path!);
+        console.log("Foto");
+        imageNew = resultC.secure_url;
+        await fs.unlink(req.file.path);
+      }
+  
+  
+      const {
+        name_product,
+        description_product,
+        purchase_price_product,
+        unit_purchase_price_product,
+        suggested_unit_selling_price_product,
+        purchase_quantity,
+        stock_product,
+        content_product,
+        availability_product,
+      } = req.body;
+  
+      const data: Product = {
+        id_product,
+        name_product,
+        description_product,
+        purchase_price_product,
+        unit_purchase_price_product,
+        suggested_unit_selling_price_product,
+        purchase_quantity,
+        stock_product,
+        content_product,
+        image_product: imageNew!,
+        availability_product,
+        fk_product_nit_company: dataDecoded.id,
+      };
+      await  updateDataProdcut(data);
+      res.status(200).json({ updateProduct : true,  message: "Ok" });
+      
+    } catch (error) {
+      if (resultC && resultC.public_id) {
+        await cloudinary.uploader.destroy(resultC.public_id);
+      }
+      res.status(400).json({ error: "Error al actualizar el producto" });
+    }
+  };

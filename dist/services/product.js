@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insert_product_category = exports.insert_product = exports.get_name_company = void 0;
+exports.updateDataProdcut = exports.verifyExistProduct = exports.delete_product_category = exports.deleteOldImage = exports.delete_product = exports.insert_product_category = exports.insert_product = exports.get_name_company = void 0;
 const db_mysql_1 = __importDefault(require("../config/db-mysql"));
 const get_name_company = (nit_company) => {
-    const query = 'call  get_name_company_by_id(?)';
+    const query = "call  get_name_company_by_id(?)";
     return new Promise((resolve, reject) => {
         db_mysql_1.default.query(query, nit_company, (error, result) => {
             if (error) {
@@ -18,7 +18,7 @@ const get_name_company = (nit_company) => {
 };
 exports.get_name_company = get_name_company;
 const insert_product = (data) => {
-    const query = 'call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,@message_text)';
+    const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,@message_text)";
     return new Promise((resolve, reject) => {
         db_mysql_1.default.query(query, [
             data.id_product,
@@ -32,7 +32,7 @@ const insert_product = (data) => {
             data.content_product,
             data.image_product,
             data.availability_product,
-            data.fk_product_nit_company
+            data.fk_product_nit_company,
         ], (error, result) => {
             if (error) {
                 return reject(error);
@@ -60,8 +60,8 @@ exports.insert_product = insert_product;
 //     return Promise.all(promises);
 // };
 const insert_product_category = (id_product, categories) => {
-    const query = 'call  insert_product_category(?, ?, @message_text)';
-    categories.forEach(category => {
+    const query = "call  insert_product_category(?, ?, @message_text)";
+    categories.forEach((category) => {
         return new Promise((resolve, reject) => {
             db_mysql_1.default.query(query, [id_product, category], (error, result) => {
                 if (error) {
@@ -75,3 +75,95 @@ const insert_product_category = (id_product, categories) => {
     });
 };
 exports.insert_product_category = insert_product_category;
+// delete
+const delete_product = (id_product) => {
+    const query = "call delete_product(?, @message_text)";
+    return new Promise((resolve, reject) => {
+        db_mysql_1.default.query(query, id_product, (error, result) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(result);
+            }
+        });
+    });
+};
+exports.delete_product = delete_product;
+const deleteOldImage = (urlImage, urlVaues, fieldName) => {
+    return new Promise((resolve, reject) => {
+        db_mysql_1.default.query(urlImage, urlVaues, (err, result) => {
+            if (err) {
+                reject({ "Error al consultar en la bd:": err });
+            }
+            else {
+                let urlImagen = result[0][fieldName];
+                console.log("urlImagen", urlImagen);
+                if (urlImagen != null) {
+                    let split = urlImagen.split(/[./]/);
+                    console.log("Split", split);
+                    resolve(split[9]);
+                }
+                else {
+                    resolve(null);
+                }
+            }
+        });
+    });
+};
+exports.deleteOldImage = deleteOldImage;
+const delete_product_category = (id_product) => {
+    const query = "call delete_product_category(?, @message_text)";
+    return new Promise((resolve, reject) => {
+        db_mysql_1.default.query(query, id_product, (error, result) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(result);
+            }
+        });
+    });
+};
+exports.delete_product_category = delete_product_category;
+const verifyExistProduct = (idP) => {
+    const queryV = "SELECT * FROM product WHERE id_product = ?";
+    return new Promise((resolve, reject) => {
+        db_mysql_1.default.query(queryV, idP, (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(results);
+            }
+        });
+    });
+};
+exports.verifyExistProduct = verifyExistProduct;
+const updateDataProdcut = (data) => {
+    return new Promise((resolve, reject) => {
+        const query = "call UpdateProduct (?,?,?,?,?,?,?,?,?,?,?,?, @message_text);";
+        db_mysql_1.default.query(query, [
+            data.id_product,
+            data.name_product,
+            data.description_product,
+            data.purchase_price_product,
+            data.unit_purchase_price_product,
+            data.suggested_unit_selling_price_product,
+            data.purchase_quantity,
+            data.stock_product,
+            data.content_product,
+            data.image_product,
+            data.availability_product,
+            data.fk_product_nit_company,
+        ], (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(results);
+            }
+        });
+    });
+};
+exports.updateDataProdcut = updateDataProdcut;
