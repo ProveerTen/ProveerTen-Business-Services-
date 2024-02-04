@@ -12,6 +12,8 @@ import routesChangePassword from './routes/changePasswordProfile';
 import routesUpdatePhoto from './routes/updatePhotoProfile';
 import product from './routes/product';
 import category from './routes/category';
+import order from './routes/order'
+import view from './routes/view'
 
 class Server {
 
@@ -34,7 +36,7 @@ class Server {
 
     middlewares() {
         this.app.use(express.json());
-        this.app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
+        this.app.use(cors({ credentials: true, origin: '*' }));
         this.app.use(morgan('dev'));
     }
 
@@ -48,6 +50,8 @@ class Server {
         this.app.use('/photo', routesUpdatePhoto);
         this.app.use('/product', product);
         this.app.use('/category', category);
+        this.app.use('/order', order);
+        this.app.use('/view', view);
     }
 
     folder() {

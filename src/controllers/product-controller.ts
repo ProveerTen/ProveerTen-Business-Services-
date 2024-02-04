@@ -7,7 +7,7 @@ import Product from '../models/Product';
 import { get_name_company, insert_product,
      insert_product_category, delete_product,
       delete_product_category, deleteOldImage,
-    verifyExistProduct, updateDataProdcut } from "../services/product";
+    verifyExistProduct, updateDataProduct,get_product_price, insert_suggest_product_price } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import generateRandomString from "../helpers/generate-string";
 
@@ -151,7 +151,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         availability_product,
         fk_product_nit_company: dataDecoded.id,
       };
-      await  updateDataProdcut(data);
+      await  updateDataProduct(data);
       res.status(200).json({ updateProduct : true,  message: "Ok" });
       
     } catch (error) {
@@ -161,3 +161,37 @@ export const updateProduct = async (req: Request, res: Response) => {
       res.status(400).json({ error: "Error al actualizar el producto" });
     }
   };
+
+
+  export const suggest_product_price = async (req: Request, res: Response) => {
+
+    try {
+
+        let {
+          id_product,
+          document_grocer,
+          suggested_price_product
+        } = req.body;
+
+        let get_price:any = await get_product_price(id_product)
+        let price:any = get_price.suggested_unit_selling_price_product
+
+
+        let range = (price*0.5)+price;
+        
+        if (range > suggested_price_product && price < suggested_price_product){
+          insert_suggest_product_price(id_product,document_grocer,suggested_price_product).then((mensaje: any) => {
+            res.status(200).json({ message: mensaje[0].message_text });
+          }).catch((error: any) => { res.status(500).json({ message: error.sqlMessage }); })
+        } else {
+          res.status(400).json({"message":"the price value must be between "+ price + " and " + range})
+        }
+
+    } catch (error) {
+        res.status(500).json(error)
+    }
+   
+  };
+
+
+  

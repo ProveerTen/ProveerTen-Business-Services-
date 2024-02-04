@@ -10,5 +10,6 @@ export default interface Product {
     content_product: string,
     image_product: string,
     availability_product: string,
-    fk_product_nit_company: string
+    fk_product_nit_company: string,
+    categories?: any[]
 }

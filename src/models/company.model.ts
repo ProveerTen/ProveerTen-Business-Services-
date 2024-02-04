@@ -6,5 +6,6 @@ export default interface Company {
     profile_photo_company?:string | null,
     cover_photo_company?:string | null,
     foundation_company:string,
-    description_company:string
+    description_company:string,
+    categories?:any[]
 }

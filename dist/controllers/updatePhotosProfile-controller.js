@@ -15,6 +15,8 @@ const patchPhotoCompany = (req, res) => {
             id
         };
         update_profilePhotos_service_1.default.updatePhotoCompany(credentials, req.file, (error, results) => {
+            console.log(req.file);
+            console.log(req.query);
             if (error) {
                 res.status(500).json({ "error-controller": error });
             }

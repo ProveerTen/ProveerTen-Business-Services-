@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProduct = exports.deleteProduct = exports.createProduct = void 0;
+exports.suggest_product_price = exports.updateProduct = exports.deleteProduct = exports.createProduct = void 0;
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const cloudinary_1 = __importDefault(require("../libs/cloudinary"));
 const product_1 = require("../services/product");
@@ -109,7 +109,7 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             availability_product,
             fk_product_nit_company: auth_token_1.dataDecoded.id,
         };
-        yield (0, product_1.updateDataProdcut)(data);
+        yield (0, product_1.updateDataProduct)(data);
         res.status(200).json({ updateProduct: true, message: "Ok" });
     }
     catch (error) {
@@ -120,3 +120,23 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.updateProduct = updateProduct;
+const suggest_product_price = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let { id_product, document_grocer, suggested_price_product } = req.body;
+        let get_price = yield (0, product_1.get_product_price)(id_product);
+        let price = get_price.suggested_unit_selling_price_product;
+        let range = (price * 0.5) + price;
+        if (range > suggested_price_product && price < suggested_price_product) {
+            (0, product_1.insert_suggest_product_price)(id_product, document_grocer, suggested_price_product).then((mensaje) => {
+                res.status(200).json({ message: mensaje[0].message_text });
+            }).catch((error) => { res.status(500).json({ message: error.sqlMessage }); });
+        }
+        else {
+            res.status(400).json({ "message": "the price value must be between " + price + " and " + range });
+        }
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+});
+exports.suggest_product_price = suggest_product_price;

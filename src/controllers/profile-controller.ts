@@ -23,7 +23,7 @@ export const company = (req: Request, res: Response) => {
 
 export const provider = (req: Request, res: Response) => {
 
-    let { id } = req.params;
+    let { id } = dataDecoded;
 
     const query = 'call get_data_profile_provider(?);';
 
@@ -42,7 +42,7 @@ export const provider = (req: Request, res: Response) => {
 
 export const grocers = (req: Request, res: Response) => {
 
-    let { id } = req.params;
+    let { id } = dataDecoded;
 
     const query = 'call get_data_profile_grocer(?);';
 
@@ -66,7 +66,7 @@ export const companies = async (req: Request, res: Response) => {
         let { id } = req.params;
 
         if (dataDecoded.role === 'provider') {
-            let result: any = await profile.getCompanyByProvider(dataDecoded.id);
+            let result: any = await profile.getCompanyByProvider(dataDecoded.id, id);
 
             if (result.length == 0) {
                 return res.status(404).json({ Status: 'Error' });
@@ -98,9 +98,14 @@ export const providers = async (req: Request, res: Response) => {
         let { id } = req.params;
 
         if (dataDecoded.role === 'company') {
-            let result: any = await profile.getProviderByCompany(dataDecoded.id);
+            console.log(req.params);
+            console.log(dataDecoded.id);
+
+            let result: any = await profile.getProviderByCompany(dataDecoded.id, id);
+            console.log('a');
 
             if (result.length == 0) {
+                console.log('b');
                 return res.status(404).json({ Status: 'Error' });
             }
         }

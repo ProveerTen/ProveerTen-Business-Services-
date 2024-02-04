@@ -13,6 +13,10 @@ export const patchPhotoCompany = (req:Request, res:Response) => {
             id
         }
         updatePhotoService.updatePhotoCompany(credentials, req.file, (error: any, results: any) => {
+            console.log(req.file);
+            console.log(req.query);
+            
+            
             if (error) {
                 res.status(500).json({ "error-controller": error });
             }

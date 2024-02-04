@@ -1,13 +1,12 @@
 import { QueryError } from 'mysql2'
-
-import connection from '../config/db-mysql';
+//import connection from '../config/db-mysql';
 import Provider from '../models/provider';
 import Grocer from '../models/grocer.model';
 import Company from '../models/company.model';
 import cloudinary from '../libs/cloudinary';
-
 import currentDataService from '../services/update-profile-service'
 
+/*
 const deleteDataProfile = async (dataToken: any, dataToDelete: any, callback: any) => {
 
     try {
@@ -138,11 +137,10 @@ const deleteOldImage = (urlImage: string, urlVaues: any, fieldName: string): Pro
 
     })
 }
+*/
 
-export default {
-    deleteDataProfile,
-    deleteOldImage
-}
+
+
 
 // if (role === 'company') {
 //     nameFielPK = 'nit_company'
@@ -183,3 +181,154 @@ export default {
 //       });
 //   }
 // </script>
+
+
+import pool from '../config/db-mysql';
+
+
+const deleteDataProfile = async (dataToken: any, dataToDelete: any, callback: any) => {
+    try {
+    let deleteDataQuery: string, deleteValues: string[];
+    let imageUrlToDelete: string, nameFielPK: string, publicId: string | null
+
+    const { role, email, id } = dataToken;
+
+    let fieldName = dataToDelete.deleteField
+    console.log("field name a delete", fieldName);
+
+    const validFields: string[] = ['profile_photo_grocer', 'cover_photo_grocer', 'apartment', 'profile_photo_provider', 'profile_photo_company', 'cover_photo_company', 'foundation_company', 'description_company'];
+
+    if (!validFields.includes(fieldName)) {
+        return callback("Campo no válido para borrar o incorrecto")
+    }
+
+    // Mapeo de campos a tablas
+    const fieldToTable: Record<string, string> = {
+        profile_photo_grocer: 'grocer',
+        cover_photo_grocer: 'grocer',
+        apartment: 'locationGrocer',
+        profile_photo_provider: 'provider',
+        profile_photo_company: 'company',
+        cover_photo_company: 'company',
+        foundation_company: 'company',
+        description_company: 'company'
+    };
+
+    let tableName = fieldToTable[fieldName];
+
+    if (!tableName) {
+        return callback("No se pudo determinar la tabla asociada al campo proporcionado");
+    }
+
+    const fieldPKToTable: Record<string, string> = { //pk de las tablas
+        grocer: 'document_grocer',
+        locationGrocer: 'fk_document_locationGrocer',
+        provider: 'document_provider',
+        company: 'nit_company'
+    };
+
+    let namePK = fieldPKToTable[tableName];
+
+    if (!namePK) {
+        return callback("No se pudo determinar la PK de la tabla a la que pertenece este campo");
+    }
+
+    deleteDataQuery = `UPDATE ${tableName} SET ?? = null WHERE ${namePK} = ?`;
+    deleteValues = [fieldName, id];
+
+    const imagesFields: string[] = ['profile_photo_grocer', 'cover_photo_grocer', 'profile_photo_provider', 'profile_photo_company', 'cover_photo_company']
+
+    if (imagesFields.includes(fieldName)) {
+        imageUrlToDelete = `select ?? from ${role} WHERE ${namePK} = ?`
+        console.log(role, id);
+
+        publicId = await deleteOldImage(imageUrlToDelete!, deleteValues, fieldName)
+        console.log("Publicid", publicId);
+    }
+
+    console.log(deleteDataQuery, deleteValues, imageUrlToDelete!);
+    
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                return callback(err);
+            }
+
+            connection.query(deleteDataQuery!, deleteValues, async (err: any, results: any) => {
+                connection.release();
+                if (err) {
+                    callback({ "Error al eliminar datos de la company": err })
+
+                } else {
+                    currentDataService.getCurrentData(procAlm(role), id, (err: QueryError | null, infoProfile: Company | Provider | Grocer) => {
+                        if (err) {
+                            callback(err)
+                        } else {
+                            console.log("exito");
+                            callback(null, { "Dato eliminado con éxito": infoProfile })
+                        }
+                    })
+                    console.log("PUBLIC ID", publicId);
+                    if (publicId) {
+                        await cloudinary.uploader.destroy(publicId);
+                    }
+                }
+            });
+        });
+    } catch (error) {
+        return callback(error);
+    }
+}
+
+const procAlm = (role: string): string => {
+    let procAlmRol: string;
+
+    if (role === 'company') {
+        procAlmRol = 'call get_data_profile_company(?)'
+    }
+    if (role === 'provider') {
+        procAlmRol = 'call get_data_profile_provider(?)'
+    }
+    if (role === 'grocer') {
+        procAlmRol = 'call get_data_profile_grocer(?)'
+    }
+    console.log("credentials", role);
+    return procAlmRol!;
+}
+
+const deleteOldImage = (urlImage: string, urlVaues: any, fieldName: string): Promise<any> => {
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(urlImage, urlVaues, (err, result: any[]) => {
+                connection.release();
+                if (err) {
+                    reject({ "Error al consultar en la bd:": err });
+
+                } else {
+                    console.log("RESULT", result);
+
+                    let urlImagen: string | null = result[0][fieldName]
+                    console.log("urlImagen", urlImagen);
+
+                    if (urlImagen != null) {
+                        let split = urlImagen.split(/[./]/)
+                        console.log("Split", split);
+                        resolve(split[9]);
+                    } else {
+                        resolve(null);
+                    }
+                }
+            })
+        })
+    })
+}
+
+export default {
+    deleteDataProfile,
+    deleteOldImage
+}

@@ -5,7 +5,7 @@ let paramsCompany: any = [
     check('name_company').isLength({ min: 1, max: 100 }).optional(),
     check('email_company').isEmail().optional(),
     check('national_line_company').isLength({ min: 1, max: 20 }).optional(),
-    check('foundation_company').isLength({ min: 1, max: 40 }).optional(),
+    check('foundation_company').isLength({ max: 40 }).optional(),
     check('description_company').isLength({ max: 255 }).optional(),
 ];
 
@@ -28,7 +28,7 @@ let paramsGrocer: any = [
     check('email_grocer').isEmail().optional(),
     check('name_store').isLength({ min: 1, max: 50 }).optional(),
     check('city_grocer').isLength({ min: 1, max: 25 }).optional(),
-    check('neighborhood').isLength({ min: 4, max: 40 }).optional(),    
+    check('neighborhood').isLength({ min: 4, max: 40 }).optional().withMessage("El barrio ingresado no cumple"),
     check('street').isLength({ min: 1, max: 30 }).optional(),
     check('number_street').isLength({ min: 1, max: 25 }).optional(),
     check('apartment').isLength({ max: 25 }).optional(),

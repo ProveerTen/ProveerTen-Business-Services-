@@ -13,7 +13,7 @@ export const deleteDataProfile = (req: Request, res: Response)=> {
             id
         }
         
-        deleteDataService.deleteDataProfile(credentials, req.body, (error: any, results: any) => {
+        deleteDataService.deleteDataProfile(credentials, req.query, (error: any, results: any) => {
             if (error) {
                 res.status(500).json({ "error-controller": error });
             }
