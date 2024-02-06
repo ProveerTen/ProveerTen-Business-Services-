@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 
-import provider from './routes/delete-provider'
+import provider from './routes/provider'
 import publication from './routes/publication';
 import providerU from './routes/provider';
 import profile from './routes/profile';
@@ -44,7 +44,6 @@ class Server {
         this.app.use('/publication', publication);
         this.app.use('/profile', profile);
         this.app.use('/provider', provider);
-        this.app.use('/provideru', providerU);
         this.app.use('/edit_profile', routesEditProfile);
         this.app.use('/password', routesChangePassword);
         this.app.use('/photo', routesUpdatePhoto);

@@ -16,7 +16,7 @@ export const deleteProvider = async (req: Request, res: Response) => {
       }
 
       try {
-    
+  
         
         providerDelete(document_provider, (error: any, results: any) => {
           if (error) {
