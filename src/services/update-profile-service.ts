@@ -57,12 +57,11 @@ const updateDataProvider = async (dataToken: any, dataToUpdate: any, callback: a
         }
 
         try {
-            updateQuery = `UPDATE provider SET name_provider = ?, last_name_provider = ?, email_provider = ? WHERE document_provider = ?`;
+            updateQuery = "call update_data_provider(?,?,?,?,?,?,?,?,?, @message_text)";
 
-            updateValues = [dataToUpdate.name_provider, dataToUpdate.last_name_provider, dataToUpdate.email_provider, id];
+            updateValues = [dataToUpdate.name_provider, dataToUpdate.last_name_provider, dataToUpdate.email_provider, dataToUpdate.city_provider, dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.number_provider, id];
 
             connection.query(updateQuery, updateValues, async (err: QueryError | null, results) => {
-                connection.release();
                 if (err) {
                     callback({ "Error al actualizar los datos del usuario provider": err })
 
@@ -81,7 +80,7 @@ const updateDataProvider = async (dataToken: any, dataToUpdate: any, callback: a
         } catch (error) {
             return callback(error);
         }
-    });    
+    });
 };
 
 const updateDataGrocer = (dataToken: any, dataToUpdate: any, callback: any) => {
@@ -120,7 +119,7 @@ const updateDataGrocer = (dataToken: any, dataToUpdate: any, callback: any) => {
         } catch (error) {
             return callback(error);
         }
-    });    
+    });
 };
 
 const getCurrentData = (procAlm: string, id: any, callback: any) => {
@@ -147,7 +146,7 @@ const getCurrentData = (procAlm: string, id: any, callback: any) => {
                 return callback({ err: "usuario no encontrado" });
             }
         });
-    })    
+    })
 };
 
 

@@ -1,74 +1,77 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import { providerUpdate, verifyProvider } from "../services/update-provider";
-import Provider from "../models/provider";
 
+import profile from '../services/profile-service';
+import updateService from "../services/update-profile-service";
+import { changePassProvider } from '../services/changePassword-service';
+
+
+import { dataDecoded } from '../middlewares/auth-token';
 
 export const updateProvider = async (req: Request, res: Response) => {
-  
-  const document = req.params.document;
-  
   try {
-    verifyProvider(document, async (error: any, result: any) => {
+
+    const { email_provider, document_provider } = req.body;
+
+    let result: any = await profile.getProviderByCompany(dataDecoded.id, document_provider);
+
+    if (result.length == 0) {
+      return res.status(404).json({ Status: 'Error' });
+    }
+
+    let data = {
+      email: email_provider,
+      role: 'provider',
+      id: document_provider
+    }
+
+    updateService.updateDataProvider(data, req.body, (error: any, results: any) => {
       if (error) {
-        
-        return res.status(500).json({ error: error.message });
+        res.status(500).json({ "error-controller": error });
       }
-      
-      if (!result) {
-        return res.status(404).json({ message: "Proveedor no encontrado" });
-      }
-
-      try {
-        const {
-          name_provider,
-          last_name_provider,
-          email_provider,
-          password_provider,
-          profile_photo_provider,
-          nit_company,
-          city_provider,
-          neighborhood,
-          street,
-          number_street,
-          number_provider
-      } = req.body;
-
-      console.log(req.body);
-      
-    
-  const password_hash = await bcrypt.hash(password_provider, 10);
-      const data: Provider = {
-        document_provider : document,
-        name_provider,
-        last_name_provider,
-        email_provider,
-        password_provider: password_hash,
-        profile_photo_provider,
-        nit_company,
-        city_provider,
-        neighborhood,
-        street,
-        number_street,
-        number_provider
-    };
-    console.log(data);
-    
-        
-        providerUpdate(data, (error: any, results: any) => {
-          if (error) {
-            return res.status(500).json({ error: error.message });
-          }
-
-          if (results) {
-            return res.status(200).json({ message: "Proveedor actualizado correctamente" });
-          }
-        });
-      } catch (error) {
-        return res.status(500).json({ error: "Error interno al actualizar el proveedor" });
+      if (results) {
+        res.status(200).json({ "Status": "oki", "result": results });
       }
     });
   } catch (error) {
-    return res.status(500).json({ error: "Error al buscar el proveedor" });
+    console.log('Error');
+    res.status(400).json(error)
+  }
+};
+
+export const updateProviderPassword = async (req: Request, res: Response) => {
+  console.log('a');
+
+  try {
+
+    const { email_provider, document_provider } = req.body;
+
+    console.log(email_provider);
+    console.log(document_provider);
+
+    console.log(req.body.password_provider);
+
+    let result: any = await profile.getProviderByCompany(dataDecoded.id, document_provider);
+
+    if (result.length == 0) {
+      return res.status(404).json({ Status: 'Error' });
+    }
+
+    let data = {
+      email: email_provider,
+      role: 'provider',
+      id: document_provider
+    }
+
+    changePassProvider(data, req.body, (error: any, results: any) => {
+      if (error) {
+        res.status(500).json({ "error-controller": error });
+      }
+      if (results) {
+        res.status(200).json({ "Status": "oki", "result": results });
+      }
+    });
+  } catch (error) {
+    console.log('Error');
+    res.status(400).json(error)
   }
 };

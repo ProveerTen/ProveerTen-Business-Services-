@@ -190,6 +190,41 @@ export const changePasswordCompany_ = (dataToken: any, newData: any, callback: a
     });
 }
 
+export const changePassProvider = async (dataToken: any, newData: any, callback: any) => {
+
+    const { role, email, id } = dataToken;
+
+    let { password_provider } = newData;
+
+    console.log(newData);
+
+
+    password_provider = await bcrypt.hash(password_provider, 10);
+
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+        }
+
+        updatePassQuery = "UPDATE provider set password_provider = ? WHERE document_provider = ?";
+        passwordRolDB = "password_provider"
+        try {
+
+            connection.query(updatePassQuery, [password_provider, id], (err: QueryError | null, result: any[]) => {
+                connection.release();
+                if (err) {
+                    callback({ "Error de base de datos": err })
+                } else {
+                    callback(null, "Contraseña Actualizada")
+                }
+            });
+
+        } catch (error) {
+            callback({ "Error en la función changePassword provider": error })
+        }
+    });
+}
+
 export const changePasswordProvider_ = (dataToken: any, newData: any, callback: any) => {
 
     const { role, email, id } = dataToken;
@@ -238,8 +273,9 @@ export const changePasswordProvider_ = (dataToken: any, newData: any, callback: 
         } catch (error) {
             callback({ "Error en la función changePassword provider": error })
         }
-    });    
+    });
 }
+
 
 export const changePasswordGrocer_ = (dataToken: any, newData: any, callback: any) => {
 

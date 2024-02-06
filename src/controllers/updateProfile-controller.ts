@@ -3,7 +3,6 @@ import updateService from "../services/update-profile-service";
 
 import { dataDecoded } from '../middlewares/auth-token';
 
-
 export const patchCompany = (req: Request, res: Response) => {
 
     try {

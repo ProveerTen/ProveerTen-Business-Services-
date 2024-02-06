@@ -81,6 +81,7 @@ export const verifyProvider = (document: any, callback: any) => {
 };
 
 
+
 export const providerUpdate = (data: Provider, callback: any) => {
 
   const updateQuery = "call update_data_provider (?,?,?,?,?,?,?,?,?,?,?,@message_text);";
