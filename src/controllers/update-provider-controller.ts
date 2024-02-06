@@ -7,7 +7,7 @@ import Provider from "../models/provider";
 export const updateProvider = async (req: Request, res: Response) => {
   
   const document = req.params.document;
-    
+  
   try {
     verifyProvider(document, async (error: any, result: any) => {
       if (error) {
@@ -21,7 +21,6 @@ export const updateProvider = async (req: Request, res: Response) => {
 
       try {
         const {
-          document_provider,
           name_provider,
           last_name_provider,
           email_provider,
@@ -34,10 +33,13 @@ export const updateProvider = async (req: Request, res: Response) => {
           number_street,
           number_provider
       } = req.body;
+
+      console.log(req.body);
+      
     
   const password_hash = await bcrypt.hash(password_provider, 10);
       const data: Provider = {
-        document_provider,
+        document_provider : document,
         name_provider,
         last_name_provider,
         email_provider,
@@ -50,6 +52,8 @@ export const updateProvider = async (req: Request, res: Response) => {
         number_street,
         number_provider
     };
+    console.log(data);
+    
         
         providerUpdate(data, (error: any, results: any) => {
           if (error) {

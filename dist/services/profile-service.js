@@ -68,14 +68,14 @@ const profileService = (query, id, callback) => {
         }
     });
 };
-const getCompanyByProvider = (id) => {
+const getCompanyByProvider = (id_provider, id) => {
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
             if (err) {
                 console.log(err);
                 reject(err);
             }
-            connection.query("select * from provider join company on provider.fk_nit_company = company.nit_company where document_provider = (?)", id, (error, result) => {
+            connection.query("select * from company join provider on company.nit_company = provider.fk_nit_company where company.nit_company = (?) and provider.document_provider = (?);", [id, id_provider], (error, result) => {
                 connection.release();
                 if (error) {
                     return reject(error);
@@ -85,14 +85,14 @@ const getCompanyByProvider = (id) => {
         });
     });
 };
-const getProviderByCompany = (id) => {
+const getProviderByCompany = (id_company, id) => {
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
             if (err) {
                 console.log(err);
                 reject(err);
             }
-            connection.query("select * from company join provider on company.nit_company = provider.fk_nit_company where nit_company = (?)", id, (error, result) => {
+            connection.query("select * from provider join company on provider.fk_nit_company = company.nit_company where document_provider = (?) and provider.fk_nit_company = (?)", [id, id_company], (error, result) => {
                 connection.release();
                 if (error) {
                     return reject(error);

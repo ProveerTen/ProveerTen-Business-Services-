@@ -14,7 +14,7 @@ const deleteDataProfile = (req, res) => {
             role,
             id
         };
-        delete_profileData_service_1.default.deleteDataProfile(credentials, req.body, (error, results) => {
+        delete_profileData_service_1.default.deleteDataProfile(credentials, req.query, (error, results) => {
             if (error) {
                 res.status(500).json({ "error-controller": error });
             }

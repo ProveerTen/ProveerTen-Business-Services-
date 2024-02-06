@@ -34,7 +34,7 @@ const company = (req, res) => {
 };
 exports.company = company;
 const provider = (req, res) => {
-    let { id } = req.params;
+    let { id } = auth_token_1.dataDecoded;
     const query = 'call get_data_profile_provider(?);';
     profile_service_1.default.profileService(query, id, (error, data) => {
         if (error) {
@@ -52,7 +52,7 @@ const provider = (req, res) => {
 };
 exports.provider = provider;
 const grocers = (req, res) => {
-    let { id } = req.params;
+    let { id } = auth_token_1.dataDecoded;
     const query = 'call get_data_profile_grocer(?);';
     profile_service_1.default.profileService(query, id, (error, data) => {
         if (error) {
@@ -73,7 +73,7 @@ const companies = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { id } = req.params;
         if (auth_token_1.dataDecoded.role === 'provider') {
-            let result = yield profile_service_1.default.getCompanyByProvider(auth_token_1.dataDecoded.id);
+            let result = yield profile_service_1.default.getCompanyByProvider(auth_token_1.dataDecoded.id, id);
             if (result.length == 0) {
                 return res.status(404).json({ Status: 'Error' });
             }
@@ -103,8 +103,12 @@ const providers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { id } = req.params;
         if (auth_token_1.dataDecoded.role === 'company') {
-            let result = yield profile_service_1.default.getProviderByCompany(auth_token_1.dataDecoded.id);
+            console.log(req.params);
+            console.log(auth_token_1.dataDecoded.id);
+            let result = yield profile_service_1.default.getProviderByCompany(auth_token_1.dataDecoded.id, id);
+            console.log('a');
             if (result.length == 0) {
+                console.log('b');
                 return res.status(404).json({ Status: 'Error' });
             }
         }

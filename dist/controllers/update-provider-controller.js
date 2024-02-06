@@ -26,10 +26,11 @@ const updateProvider = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 return res.status(404).json({ message: "Proveedor no encontrado" });
             }
             try {
-                const { document_provider, name_provider, last_name_provider, email_provider, password_provider, profile_photo_provider, nit_company, city_provider, neighborhood, street, number_street, number_provider } = req.body;
+                const { name_provider, last_name_provider, email_provider, password_provider, profile_photo_provider, nit_company, city_provider, neighborhood, street, number_street, number_provider } = req.body;
+                console.log(req.body);
                 const password_hash = yield bcrypt_1.default.hash(password_provider, 10);
                 const data = {
-                    document_provider,
+                    document_provider: document,
                     name_provider,
                     last_name_provider,
                     email_provider,
@@ -42,6 +43,7 @@ const updateProvider = (req, res) => __awaiter(void 0, void 0, void 0, function*
                     number_street,
                     number_provider
                 };
+                console.log(data);
                 (0, update_provider_1.providerUpdate)(data, (error, results) => {
                     if (error) {
                         return res.status(500).json({ error: error.message });

@@ -5,7 +5,7 @@ let paramsCompany = [
     (0, express_validator_1.check)('name_company').isLength({ min: 1, max: 100 }).optional(),
     (0, express_validator_1.check)('email_company').isEmail().optional(),
     (0, express_validator_1.check)('national_line_company').isLength({ min: 1, max: 20 }).optional(),
-    (0, express_validator_1.check)('foundation_company').isLength({ min: 1, max: 40 }).optional(),
+    (0, express_validator_1.check)('foundation_company').isLength({ max: 40 }).optional(),
     (0, express_validator_1.check)('description_company').isLength({ max: 255 }).optional(),
 ];
 let paramsProvider = [
@@ -24,7 +24,7 @@ let paramsGrocer = [
     (0, express_validator_1.check)('email_grocer').isEmail().optional(),
     (0, express_validator_1.check)('name_store').isLength({ min: 1, max: 50 }).optional(),
     (0, express_validator_1.check)('city_grocer').isLength({ min: 1, max: 25 }).optional(),
-    (0, express_validator_1.check)('neighborhood').isLength({ min: 4, max: 40 }).optional(),
+    (0, express_validator_1.check)('neighborhood').isLength({ min: 4, max: 40 }).optional().withMessage("El barrio ingresado no cumple"),
     (0, express_validator_1.check)('street').isLength({ min: 1, max: 30 }).optional(),
     (0, express_validator_1.check)('number_street').isLength({ min: 1, max: 25 }).optional(),
     (0, express_validator_1.check)('apartment').isLength({ max: 25 }).optional(),

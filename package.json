@@ -7,7 +7,7 @@
     "test": "echo Error: no test specified",
     "dev": "nodemon dist/index.js",
     "super": "supervisor dist/index.js",
-    "build" : "tsc",
+    "build": "tsc",
     "start": "node dist/index.js"
   },
   "keywords": [],
