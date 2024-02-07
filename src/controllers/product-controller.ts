@@ -7,7 +7,7 @@ import Product from '../models/Product';
 import { get_name_company, insert_product,
      insert_product_category, delete_product,
       delete_product_category, deleteOldImage,
-    verifyExistProduct, updateDataProduct,get_product_price, insert_suggest_product_price } from "../services/product";
+    verifyExistProduct, updateDataProduct,get_product_price, insert_suggest_product_price, get_product } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import generateRandomString from "../helpers/generate-string";
 
@@ -194,4 +194,19 @@ export const updateProduct = async (req: Request, res: Response) => {
   };
 
 
-  
+  export const product = async (req: Request, res: Response) => {
+    let { id_product } = req.body;
+
+    try {
+        let products = await get_product(id_product)
+
+        if (products) {
+            res.status(200).json({ "products": products[0] })
+        }
+
+    } catch (error) {
+        res.status(400).json({
+            error
+        })
+    }
+};

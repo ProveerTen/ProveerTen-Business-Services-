@@ -133,7 +133,6 @@ export const products = async (req: Request, res: Response) => {
             error
         })
     }
-
 };
 
 export const orders_grocer = async (req: Request, res: Response) => {
