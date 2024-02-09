@@ -84,18 +84,25 @@ export const insert_product_category = (id_product: string, categories: string[]
 // delete
 export const delete_product = (id_product: string) => {
   const query = "call delete_product(?, @message_text)";
-
+  console.log('2');
+  
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
         console.log(err);
         reject(err)
       }
+      console.log('-A');
+      
       connection.query(query, id_product, (error: any, result: any) => {
         connection.release();
         if (error) {
+          console.log(error);
+          
           reject(error);
         } else {
+          console.log('A');
+          
           resolve(result);
         }
       });
@@ -132,7 +139,6 @@ export const deleteOldImage = (urlImage: string,urlVaues: any,fieldName: string)
 
 export const delete_product_category = (id_product: string) => {
   const query = "call delete_product_category(?, @message_text)";
-
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
@@ -143,6 +149,29 @@ export const delete_product_category = (id_product: string) => {
         if (error) {
           reject(error);
         } else {
+          console.log(result);
+          resolve(result);
+        }
+      });
+    }); 
+  });
+};
+
+export const delete_product_suggested = (id_product: string) => {
+  const query = "delete from suggested_product_price where fk_id_product_suggested_price = ?";
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.log(err);
+        reject(err)
+      }
+      connection.query(query, id_product, (error: any, result: any) => {
+        if (error) {
+          console.log(error);
+          
+          reject(error);
+        } else {
+          console.log(result);
           resolve(result);
         }
       });

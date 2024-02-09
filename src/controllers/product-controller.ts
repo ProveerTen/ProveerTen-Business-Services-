@@ -7,7 +7,7 @@ import Product from '../models/Product';
 import { get_name_company, insert_product,
      insert_product_category, delete_product,
       delete_product_category, deleteOldImage,
-    verifyExistProduct, updateDataProduct,get_product_price, insert_suggest_product_price, get_product } from "../services/product";
+    verifyExistProduct, updateDataProduct,get_product_price, insert_suggest_product_price, get_product, delete_product_suggested } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import generateRandomString from "../helpers/generate-string";
 
@@ -76,14 +76,15 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     try {
         const { id_product } = req.body
+        
         let oldImageUrl = 'select image_product from product WHERE id_product = ?';
 
         const public_id_clou = await deleteOldImage(oldImageUrl, id_product, 'image_product')
         console.log("public_id_clou", public_id_clou);
         
-        await delete_product_category(id_product)
-
-        await delete_product(id_product)
+        await delete_product_category(id_product);
+        await delete_product_suggested(id_product);
+        await delete_product(id_product);
 
         if (public_id_clou) {
             await cloudinary.uploader.destroy(public_id_clou);

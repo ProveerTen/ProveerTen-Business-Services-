@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_product = exports.get_product_price = exports.insert_suggest_product_price = exports.updateDataProduct = exports.verifyExistProduct = exports.delete_product_category = exports.deleteOldImage = exports.delete_product = exports.insert_product_category = exports.insert_product = exports.get_name_company = void 0;
+exports.get_product = exports.get_product_price = exports.insert_suggest_product_price = exports.updateDataProduct = exports.verifyExistProduct = exports.delete_product_suggested = exports.delete_product_category = exports.deleteOldImage = exports.delete_product = exports.insert_product_category = exports.insert_product = exports.get_name_company = void 0;
 const db_mysql_1 = __importDefault(require("../config/db-mysql"));
 const get_name_company = (nit_company) => {
     const query = "call  get_name_company_by_id(?)";
@@ -82,18 +82,22 @@ exports.insert_product_category = insert_product_category;
 // delete
 const delete_product = (id_product) => {
     const query = "call delete_product(?, @message_text)";
+    console.log('2');
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
             if (err) {
                 console.log(err);
                 reject(err);
             }
+            console.log('-A');
             connection.query(query, id_product, (error, result) => {
                 connection.release();
                 if (error) {
+                    console.log(error);
                     reject(error);
                 }
                 else {
+                    console.log('A');
                     resolve(result);
                 }
             });
@@ -143,6 +147,7 @@ const delete_product_category = (id_product) => {
                     reject(error);
                 }
                 else {
+                    console.log(result);
                     resolve(result);
                 }
             });
@@ -150,6 +155,28 @@ const delete_product_category = (id_product) => {
     });
 };
 exports.delete_product_category = delete_product_category;
+const delete_product_suggested = (id_product) => {
+    const query = "delete from suggested_product_price where fk_id_product_suggested_price = ?";
+    return new Promise((resolve, reject) => {
+        db_mysql_1.default.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            connection.query(query, id_product, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                }
+                else {
+                    console.log(result);
+                    resolve(result);
+                }
+            });
+        });
+    });
+};
+exports.delete_product_suggested = delete_product_suggested;
 const verifyExistProduct = (idP) => {
     const queryV = "SELECT * FROM product WHERE id_product = ?";
     return new Promise((resolve, reject) => {

@@ -65,6 +65,7 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const public_id_clou = yield (0, product_1.deleteOldImage)(oldImageUrl, id_product, 'image_product');
         console.log("public_id_clou", public_id_clou);
         yield (0, product_1.delete_product_category)(id_product);
+        yield (0, product_1.delete_product_suggested)(id_product);
         yield (0, product_1.delete_product)(id_product);
         if (public_id_clou) {
             yield cloudinary_1.default.uploader.destroy(public_id_clou);
