@@ -14,7 +14,7 @@ let paramsProduct: any = [
 ];
 
 let paramsProductUpdate: any = [
-    check ('id_product').isLength ({min : 1, max: 5}),
+    check ('id_product').isLength ({min : 1}),
     check('name_product').isLength({ min: 1, max: 20 }),
     check('description_product').isLength({ min: 1, max: 80 }),
     check('purchase_price_product').isNumeric(),

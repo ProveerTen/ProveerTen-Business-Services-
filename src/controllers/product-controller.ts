@@ -113,11 +113,11 @@ export const updateProduct = async (req: Request, res: Response) => {
       console.log("image " ,imageSaveDb);
       
       
-       await cloudinary.uploader.destroy(imageSaveDb);
-  
-        
+      
+      
       if (req.file?.path!) {
         console.log(req.file.path!);
+        await cloudinary.uploader.destroy(imageSaveDb);
         resultC = await cloudinary.uploader.upload(req.file?.path!);
         console.log("Foto");
         imageNew = resultC.secure_url;
@@ -147,7 +147,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         purchase_quantity,
         stock_product,
         content_product,
-        image_product: imageNew!,
+        image_product: imageNew! || imageSaveDb,
         availability_product,
         fk_product_nit_company: dataDecoded.id,
       };

@@ -13,7 +13,7 @@ let paramsProduct = [
     (0, express_validator_1.check)('availability_product').isLength({ min: 1, max: 15 })
 ];
 let paramsProductUpdate = [
-    (0, express_validator_1.check)('id_product').isLength({ min: 1, max: 5 }),
+    (0, express_validator_1.check)('id_product').isLength({ min: 1 }),
     (0, express_validator_1.check)('name_product').isLength({ min: 1, max: 20 }),
     (0, express_validator_1.check)('description_product').isLength({ min: 1, max: 80 }),
     (0, express_validator_1.check)('purchase_price_product').isNumeric(),

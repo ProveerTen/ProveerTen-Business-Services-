@@ -86,9 +86,9 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         let imageSaveDb = dataProduct[0].image_product;
         console.log("data", dataProduct);
         console.log("image ", imageSaveDb);
-        yield cloudinary_1.default.uploader.destroy(imageSaveDb);
         if ((_c = req.file) === null || _c === void 0 ? void 0 : _c.path) {
             console.log(req.file.path);
+            yield cloudinary_1.default.uploader.destroy(imageSaveDb);
             resultC = yield cloudinary_1.default.uploader.upload((_d = req.file) === null || _d === void 0 ? void 0 : _d.path);
             console.log("Foto");
             imageNew = resultC.secure_url;
@@ -105,7 +105,7 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             purchase_quantity,
             stock_product,
             content_product,
-            image_product: imageNew,
+            image_product: imageNew || imageSaveDb,
             availability_product,
             fk_product_nit_company: auth_token_1.dataDecoded.id,
         };
