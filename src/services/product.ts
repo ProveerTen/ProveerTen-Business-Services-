@@ -84,16 +84,14 @@ export const insert_product_category = (id_product: string, categories: string[]
 // delete
 export const delete_product = (id_product: string) => {
   const query = "call delete_product(?, @message_text)";
-  console.log('2');
-  
+
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
         console.log(err);
         reject(err)
       }
-      console.log('-A');
-      
+
       connection.query(query, id_product, (error: any, result: any) => {
         connection.release();
         if (error) {
@@ -101,8 +99,7 @@ export const delete_product = (id_product: string) => {
           
           reject(error);
         } else {
-          console.log('A');
-          
+  
           resolve(result);
         }
       });
@@ -146,6 +143,7 @@ export const delete_product_category = (id_product: string) => {
         reject(err)
       }
       connection.query(query, id_product, (error: any, result: any) => {
+        connection.release();
         if (error) {
           reject(error);
         } else {
@@ -166,6 +164,7 @@ export const delete_product_suggested = (id_product: string) => {
         reject(err)
       }
       connection.query(query, id_product, (error: any, result: any) => {
+        connection.release();
         if (error) {
           console.log(error);
           

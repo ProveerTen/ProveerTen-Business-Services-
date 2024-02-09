@@ -82,14 +82,12 @@ exports.insert_product_category = insert_product_category;
 // delete
 const delete_product = (id_product) => {
     const query = "call delete_product(?, @message_text)";
-    console.log('2');
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
             if (err) {
                 console.log(err);
                 reject(err);
             }
-            console.log('-A');
             connection.query(query, id_product, (error, result) => {
                 connection.release();
                 if (error) {
@@ -97,7 +95,6 @@ const delete_product = (id_product) => {
                     reject(error);
                 }
                 else {
-                    console.log('A');
                     resolve(result);
                 }
             });
@@ -143,6 +140,7 @@ const delete_product_category = (id_product) => {
                 reject(err);
             }
             connection.query(query, id_product, (error, result) => {
+                connection.release();
                 if (error) {
                     reject(error);
                 }
@@ -164,6 +162,7 @@ const delete_product_suggested = (id_product) => {
                 reject(err);
             }
             connection.query(query, id_product, (error, result) => {
+                connection.release();
                 if (error) {
                     console.log(error);
                     reject(error);
