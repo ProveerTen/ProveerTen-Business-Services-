@@ -276,20 +276,30 @@ import pool from "../config/db-mysql";
 
 export const get_companies = (): Promise<any> => {
 
-    const query = 'call get_companies';
+    const query = 'select * from company';
 
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
+            console.log("4");
+            
             if (err) {
+            console.log("5");
+
                 console.log(err);
                 reject(err)
             }
             connection.query(query, (error: any, result: any) => {
+                console.log("6");
+                
                 connection.release();
                 if (error) {
+                    console.log("7");
+                    
                     console.log(error);
                     return reject('error')
                 }
+                console.log("8");
+                
                 resolve(result);
             });
         });

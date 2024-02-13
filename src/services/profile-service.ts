@@ -101,12 +101,39 @@ const getProviderByCompany = (id_company: string, id: string) => {
                 }
                 resolve(result);
             });
-        });    
+        });
     });
 };
 
+const _allcompanies = (query: string, callback: any) => {
+        pool.getConnection((err, connection) => {
+
+            try {
+                if (err) {
+                    console.log(err);
+                    callback(err)
+                }
+                connection.query(query, (error: any, results: any) => {
+                    connection.release();
+                    if (error) {
+                        return callback(error);
+                    }
+
+                    let data = results;
+                    console.log("RESULTS", results);
+                    
+                    callback(null, data);
+                });
+                
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    // });
+}
 export default {
     profileService,
     getCompanyByProvider,
-    getProviderByCompany
+    getProviderByCompany,
+    _allcompanies
 }

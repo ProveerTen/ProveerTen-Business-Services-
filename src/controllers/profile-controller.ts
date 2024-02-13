@@ -129,6 +129,26 @@ export const providers = async (req: Request, res: Response) => {
     }
 };
 
+export const allCompanies = async (req: Request, res: Response) => {
+
+    try {
+
+        const query = 'select nit_company, name_company, profile_photo_company from company'
+        profile._allcompanies(query, (error: any, data: any) => {
+                if (error) {
+                    res.status(500).json({ "error": error.message });
+                } else {
+                    if (data) {
+                        res.status(200).json({ status: 'Ok data', data })
+                    }
+                }
+                })
+    } catch (error) {
+        console.log('Error');
+        res.status(400).json(error)
+    }
+};
+
 export const grocer = (req: Request, res: Response) => {
 
     let { id } = dataDecoded;
@@ -147,4 +167,5 @@ export const grocer = (req: Request, res: Response) => {
             }
         }
     });
+
 };

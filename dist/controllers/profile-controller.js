@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grocer = exports.providers = exports.companies = exports.grocers = exports.provider = exports.company = void 0;
+exports.grocer = exports.allCompanies = exports.providers = exports.companies = exports.grocers = exports.provider = exports.company = void 0;
 const profile_service_1 = __importDefault(require("../services/profile-service"));
 const auth_token_1 = require("../middlewares/auth-token");
 const company = (req, res) => {
@@ -133,6 +133,26 @@ const providers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.providers = providers;
+const allCompanies = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const query = 'select nit_company, name_company, profile_photo_company from company';
+        profile_service_1.default._allcompanies(query, (error, data) => {
+            if (error) {
+                res.status(500).json({ "error": error.message });
+            }
+            else {
+                if (data) {
+                    res.status(200).json({ status: 'Ok data', data });
+                }
+            }
+        });
+    }
+    catch (error) {
+        console.log('Error');
+        res.status(400).json(error);
+    }
+});
+exports.allCompanies = allCompanies;
 const grocer = (req, res) => {
     let { id } = auth_token_1.dataDecoded;
     const query = 'call get_data_profile_grocer(?);';

@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { company, provider, grocer, companies, providers, grocers } from '../controllers/profile-controller'
+import { company, provider, grocer, companies, providers, grocers, allCompanies } from '../controllers/profile-controller'
 import { verifyToken } from '../middlewares/auth-token';
 import { validateRole } from "../middlewares/auth-role";
 
@@ -14,4 +14,7 @@ router.get('/companies/:id', verifyToken, validateRole(['grocer', 'provider']), 
 router.get('/providers/:id', verifyToken, validateRole(['grocer', 'company']), providers);
 router.get('/grocers/:id', verifyToken, validateRole(['company', 'provider']), grocers);
 
+router.get('/allCompanies', verifyToken, validateRole(['grocer']), allCompanies) //
+router.get('/allCompaniesUserCero', validateRole(['']), allCompanies) // para usuario cero
+// router.get('/allCompanies', allCompanies) //
 export default router;

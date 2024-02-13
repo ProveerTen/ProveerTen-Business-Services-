@@ -15,9 +15,10 @@ export const createPublication = async (req: Request, res: Response) => {
             text: req.body.text,
             imagePath: req.file?.path,
             nit_company: dataDecoded.id,
-            image_url: result.url,
-            secure_url: result.secure_url,
-            public_id: result.public_id
+            image_url: result?.url,
+            secure_url: result?.secure_url,
+            public_id: result?.public_id,
+            date: req.body.date
         }
 
         const publication = new Publication(newPublication);
@@ -93,8 +94,12 @@ export const getPublicationsByCompany = async (req: Request, res: Response) => {
     try {
 
         const { id } = req.params;
+        console.log("ED", id);
+        
 
         const publications = await Publication.find({ nit_company: id });
+        console.log(publications);
+        
 
         res.status(200).json({
             publications

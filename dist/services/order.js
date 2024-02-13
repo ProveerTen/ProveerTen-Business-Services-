@@ -288,19 +288,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.delete_product_order = exports.get_orders_detail = exports.get_order = exports.get_orders_company = exports.get_orders_provider = exports.get_orders_grocer = exports.reset_quantity_order = exports.get_quantity_order = exports.delete_order = exports.get_stock = exports.insert_products_order = exports.insert_order = exports.get_providers = exports.get_products = exports.get_name_store_grocer = exports.get_companies = void 0;
 const db_mysql_1 = __importDefault(require("../config/db-mysql"));
 const get_companies = () => {
-    const query = 'call get_companies';
+    const query = 'select * from company';
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
+            console.log("4");
             if (err) {
+                console.log("5");
                 console.log(err);
                 reject(err);
             }
             connection.query(query, (error, result) => {
+                console.log("6");
                 connection.release();
                 if (error) {
+                    console.log("7");
                     console.log(error);
                     return reject('error');
                 }
+                console.log("8");
                 resolve(result);
             });
         });

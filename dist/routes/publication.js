@@ -11,7 +11,9 @@ const auth_role_1 = require("../middlewares/auth-role");
 const router = (0, express_1.Router)();
 router.post('/create', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image'), publication_controller_1.createPublication);
 router.delete('/delete/:id', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), publication_controller_1.deleteOnePublication);
-router.get('/view/', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['grocer']), publication_controller_1.getAllPublications);
+router.get('/view/', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['grocer']), publication_controller_1.getAllPublications); //
+router.get('/viewUserCero/', publication_controller_1.getAllPublications); // para usuario cero
+// router.get('/view/', getAllPublications); //
 router.get('/view/:id', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), publication_controller_1.getPublicationById);
 router.get('/view/company/:id', auth_token_1.verifyToken, publication_controller_1.getPublicationsByCompany);
 router.patch('/update', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image'), publication_controller_1.updateDataPublication);
