@@ -7,7 +7,8 @@ const publication_schema = new Schema({
     nit_company: String,
     image_url: String,
     secure_url: String,
-    public_id: String
+    public_id: String,
+    date: Date
 });
 
 export interface IPublication extends Document {
@@ -17,7 +18,8 @@ export interface IPublication extends Document {
     nit_company: string,
     image_url: string,
     secure_url: string,
-    public_id: string
+    public_id: string,
+    date: Date
 }
 
 export default model<IPublication>('Publication', publication_schema);

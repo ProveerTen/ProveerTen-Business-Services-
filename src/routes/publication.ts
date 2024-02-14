@@ -8,9 +8,10 @@ const router = Router();
 
 router.post('/create', verifyToken, validateRole(['company']), multer.single('image'), createPublication);
 router.delete('/delete/:id', verifyToken, validateRole(['company']), deleteOnePublication);
-router.get('/view/', verifyToken, validateRole(['grocer']), getAllPublications);
+router.get('/view/', getAllPublications);
 router.get('/view/:id', verifyToken, validateRole(['company']), getPublicationById);
 router.get('/view/company/:id', verifyToken, getPublicationsByCompany);
+router.get('/data/view/company/:id', getPublicationsByCompany);
 router.patch('/update', verifyToken, validateRole(['company']), multer.single('image'), updateDataPublication);
 
 export default router;

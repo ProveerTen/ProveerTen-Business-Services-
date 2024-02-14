@@ -26,9 +26,10 @@ const createPublication = (req, res) => __awaiter(void 0, void 0, void 0, functi
             text: req.body.text,
             imagePath: (_d = req.file) === null || _d === void 0 ? void 0 : _d.path,
             nit_company: auth_token_1.dataDecoded.id,
-            image_url: result.url,
-            secure_url: result.secure_url,
-            public_id: result.public_id
+            image_url: result === null || result === void 0 ? void 0 : result.url,
+            secure_url: result === null || result === void 0 ? void 0 : result.secure_url,
+            public_id: result === null || result === void 0 ? void 0 : result.public_id,
+            date: req.body.date
         };
         const publication = new Publication_1.default(newPublication);
         yield publication.save();
@@ -86,7 +87,9 @@ exports.getPublicationById = getPublicationById;
 const getPublicationsByCompany = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
+        console.log("ED", id);
         const publications = yield Publication_1.default.find({ nit_company: id });
+        console.log(publications);
         res.status(200).json({
             publications
         });

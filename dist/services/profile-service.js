@@ -102,8 +102,32 @@ const getProviderByCompany = (id_company, id) => {
         });
     });
 };
+const _allcompanies = (query, callback) => {
+    db_mysql_1.default.getConnection((err, connection) => {
+        try {
+            if (err) {
+                console.log(err);
+                callback(err);
+            }
+            connection.query(query, (error, results) => {
+                connection.release();
+                if (error) {
+                    return callback(error);
+                }
+                let data = results;
+                console.log("RESULTS", results);
+                callback(null, data);
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+    // });
+};
 exports.default = {
     profileService,
     getCompanyByProvider,
-    getProviderByCompany
+    getProviderByCompany,
+    _allcompanies
 };
