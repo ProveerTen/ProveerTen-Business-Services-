@@ -42,7 +42,7 @@ export const provider = (req: Request, res: Response) => {
 
 export const grocers = (req: Request, res: Response) => {
 
-    let { id } = dataDecoded;
+    let { id } = req.params;
 
     const query = 'call get_data_profile_grocer(?);';
 
