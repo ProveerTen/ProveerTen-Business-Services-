@@ -82,6 +82,7 @@ const updateDataProvider = (dataToken, dataToUpdate, callback) => __awaiter(void
     });
 });
 const updateDataGrocer = (dataToken, dataToUpdate, callback) => {
+    console.log("apartment", dataToUpdate.apartment);
     let updateQuery, updateValues;
     const { role, email, id } = dataToken;
     db_mysql_1.default.getConnection((err, connection) => {

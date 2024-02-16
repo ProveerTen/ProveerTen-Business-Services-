@@ -52,7 +52,7 @@ const provider = (req, res) => {
 };
 exports.provider = provider;
 const grocers = (req, res) => {
-    let { id } = auth_token_1.dataDecoded;
+    let { id } = req.params;
     const query = 'call get_data_profile_grocer(?);';
     profile_service_1.default.profileService(query, id, (error, data) => {
         if (error) {

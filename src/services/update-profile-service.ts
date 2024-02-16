@@ -84,6 +84,8 @@ const updateDataProvider = async (dataToken: any, dataToUpdate: any, callback: a
 };
 
 const updateDataGrocer = (dataToken: any, dataToUpdate: any, callback: any) => {
+console.log("apartment", dataToUpdate.apartment);
+
 
     let updateQuery: string, updateValues: string[]
     const { role, email, id } = dataToken;

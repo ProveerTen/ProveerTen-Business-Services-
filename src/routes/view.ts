@@ -9,8 +9,8 @@ import { get_view_companies, get_view_grocers, get_view_price_products, get_view
 const router = Router();
 
 router.get('/grocers',verifyToken,validateRole(['provider']),get_view_grocers);
-router.get('/companies',verifyToken,validateRole(['grocer']),get_view_companies);
-router.get('/products',verifyToken,validateRole(['grocer']),get_view_products);
+router.get('/companies', get_view_companies);
+router.get('/products', get_view_products);
 router.get('/price/products',verifyToken,validateRole(['grocer']),get_view_price_products);
 
 
