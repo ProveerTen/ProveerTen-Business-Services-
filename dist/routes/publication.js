@@ -16,5 +16,6 @@ router.get('/viewUserCero/', publication_controller_1.getAllPublications); // pa
 // router.get('/view/', getAllPublications); //
 router.get('/view/:id', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), publication_controller_1.getPublicationById);
 router.get('/view/company/:id', auth_token_1.verifyToken, publication_controller_1.getPublicationsByCompany);
+router.get('/viewUserCero/company/:id', publication_controller_1.getPublicationsByCompany); // para usuario cero
 router.patch('/update', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image'), publication_controller_1.updateDataPublication);
 exports.default = router;

@@ -14,7 +14,10 @@ router.get('/viewUserCero/',  getAllPublications); // para usuario cero
 // router.get('/view/', getAllPublications); //
 
 router.get('/view/:id', verifyToken, validateRole(['company']), getPublicationById);
+
 router.get('/view/company/:id', verifyToken, getPublicationsByCompany);
+router.get('/viewUserCero/company/:id', getPublicationsByCompany); // para usuario cero
+
 router.patch('/update', verifyToken, validateRole(['company']), multer.single('image'), updateDataPublication);
 
 export default router;

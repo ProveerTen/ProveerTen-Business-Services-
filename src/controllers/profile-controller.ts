@@ -64,8 +64,10 @@ export const companies = async (req: Request, res: Response) => {
 
     try {
         let { id } = req.params;
+        console.log("id compa",id);
+        
 
-        if (dataDecoded.role === 'provider') {
+        if (dataDecoded?.role === 'provider') {
             let result: any = await profile.getCompanyByProvider(dataDecoded.id, id);
 
             if (result.length == 0) {
@@ -87,7 +89,7 @@ export const companies = async (req: Request, res: Response) => {
             }
         });
     } catch (error) {
-        console.log('Error');
+        console.log(error);
         res.status(400).json(error)
     }
 };

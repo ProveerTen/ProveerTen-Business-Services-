@@ -72,7 +72,8 @@ exports.grocers = grocers;
 const companies = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { id } = req.params;
-        if (auth_token_1.dataDecoded.role === 'provider') {
+        console.log("id compa", id);
+        if ((auth_token_1.dataDecoded === null || auth_token_1.dataDecoded === void 0 ? void 0 : auth_token_1.dataDecoded.role) === 'provider') {
             let result = yield profile_service_1.default.getCompanyByProvider(auth_token_1.dataDecoded.id, id);
             if (result.length == 0) {
                 return res.status(404).json({ Status: 'Error' });
@@ -94,7 +95,7 @@ const companies = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (error) {
-        console.log('Error');
+        console.log(error);
         res.status(400).json(error);
     }
 });
