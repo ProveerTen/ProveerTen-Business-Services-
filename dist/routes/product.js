@@ -13,6 +13,6 @@ const router = (0, express_1.Router)();
 router.post('/create', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image_product'), product_validator_1.default.paramsProduct, product_validator_1.default.validatorParams, product_controller_1.createProduct);
 router.post('/update', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), multer_1.default.single('image_product'), product_validator_1.default.paramsProductUpdate, product_validator_1.default.validatorParams, product_controller_1.updateProduct);
 router.post('/delete', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company']), product_controller_1.deleteProduct);
-router.post('/detail', auth_token_1.verifyToken, product_controller_1.product);
+router.post('/detail', product_controller_1.product);
 router.post('/price', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['grocer']), product_controller_1.suggest_product_price);
 exports.default = router;

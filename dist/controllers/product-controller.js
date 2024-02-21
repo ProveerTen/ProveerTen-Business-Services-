@@ -17,6 +17,7 @@ const fs_extra_1 = __importDefault(require("fs-extra"));
 const cloudinary_1 = __importDefault(require("../libs/cloudinary"));
 const product_1 = require("../services/product");
 const auth_token_1 = require("../middlewares/auth-token");
+const view_1 = require("../services/view");
 const generate_string_1 = __importDefault(require("../helpers/generate-string"));
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -145,8 +146,18 @@ const product = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id_product } = req.body;
     try {
         let products = yield (0, product_1.get_product)(id_product);
-        if (products) {
-            res.status(200).json({ "products": products[0] });
+        let product = products[0][0];
+        let categories = yield (0, view_1.view_categories)();
+        let categoriesByProducts = [];
+        const filteredCategories = categories.filter((category) => category.fk_product_category_id_product === product.id_product).map((filteredCategory) => (filteredCategory.fk_product_category_name_category));
+        product.categories = filteredCategories;
+        categoriesByProducts.push(product);
+        console.log("product___", product);
+        console.log("categories___", categories);
+        console.log("filteredCategories", filteredCategories); //
+        console.log("final", categoriesByProducts[0]);
+        if (product) {
+            res.status(200).json({ categoriesByProducts });
         }
     }
     catch (error) {
