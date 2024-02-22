@@ -17,6 +17,7 @@ const product_1 = __importDefault(require("./routes/product"));
 const category_1 = __importDefault(require("./routes/category"));
 const order_1 = __importDefault(require("./routes/order"));
 const view_1 = __importDefault(require("./routes/view"));
+const search_1 = __importDefault(require("./routes/search"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -47,6 +48,7 @@ class Server {
         this.app.use('/category', category_1.default);
         this.app.use('/order', order_1.default);
         this.app.use('/view', view_1.default);
+        this.app.use('/search', search_1.default);
     }
     folder() {
         this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
