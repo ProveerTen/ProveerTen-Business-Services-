@@ -37,8 +37,8 @@ class Server {
 
     middlewares() {
         this.app.use(express.json());
-        // this.app.use(cors({ credentials: true, origin: 'https://proveerten.netlify.app' }));
-        this.app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
+        this.app.use(cors({ credentials: true, origin: 'https://proveerten.netlify.app' }));
+        // this.app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
         this.app.use(morgan('dev'));
     }
 
