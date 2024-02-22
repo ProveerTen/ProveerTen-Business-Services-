@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express'
 import { check, validationResult } from 'express-validator';
 
 let paramsProduct: any = [
-    check('name_product').isLength({ min: 1, max: 20 }),
-    check('description_product').isLength({ min: 1, max: 80 }),
+    check('name_product').isLength({ min: 1, max: 100 }),
+    check('description_product').isLength({ min: 1, max: 200 }),
     check('purchase_price_product').isNumeric(),
     check('unit_purchase_price_product').isNumeric(),
     check('suggested_unit_selling_price_product').isNumeric(),
@@ -15,8 +15,8 @@ let paramsProduct: any = [
 
 let paramsProductUpdate: any = [
     check ('id_product').isLength ({min : 1}),
-    check('name_product').isLength({ min: 1, max: 20 }),
-    check('description_product').isLength({ min: 1, max: 80 }),
+    check('name_product').isLength({ min: 1, max: 100 }),
+    check('description_product').isLength({ min: 1, max: 200 }),
     check('purchase_price_product').isNumeric(),
     check('unit_purchase_price_product').isNumeric(),
     check('suggested_unit_selling_price_product').isNumeric(),
