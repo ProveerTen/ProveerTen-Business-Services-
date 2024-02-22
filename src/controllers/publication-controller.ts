@@ -8,7 +8,7 @@ import { dataDecoded } from '../middlewares/auth-token';
 export const createPublication = async (req: Request, res: Response) => {
     try {
 
-        const result = await cloudinary.uploader.upload(req.file?.path!);
+        const result = await cloudinary.uploader.upload(req.file?.path!, { resource_type: 'auto' });
 
         const newPublication = {
             _id: req.file?.filename.slice(0, req.file?.filename.lastIndexOf('.')),
