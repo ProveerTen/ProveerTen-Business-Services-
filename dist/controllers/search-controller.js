@@ -37,8 +37,12 @@ const getProductsByCategories = (req, res) => __awaiter(void 0, void 0, void 0, 
 exports.getProductsByCategories = getProductsByCategories;
 const getCompaniesByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { value } = req.body;
+        let values = yield (0, search_service_1.getCompaniesByNameService)(value);
+        res.status(200).json({ values });
     }
     catch (error) {
+        console.log(error);
         res.status(400).json({
             error
         });
