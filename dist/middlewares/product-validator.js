@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 let paramsProduct = [
-    (0, express_validator_1.check)('name_product').isLength({ min: 1, max: 20 }),
-    (0, express_validator_1.check)('description_product').isLength({ min: 1, max: 80 }),
+    (0, express_validator_1.check)('name_product').isLength({ min: 1, max: 100 }),
+    (0, express_validator_1.check)('description_product').isLength({ min: 1, max: 200 }),
     (0, express_validator_1.check)('purchase_price_product').isNumeric(),
     (0, express_validator_1.check)('unit_purchase_price_product').isNumeric(),
     (0, express_validator_1.check)('suggested_unit_selling_price_product').isNumeric(),
@@ -14,8 +14,8 @@ let paramsProduct = [
 ];
 let paramsProductUpdate = [
     (0, express_validator_1.check)('id_product').isLength({ min: 1 }),
-    (0, express_validator_1.check)('name_product').isLength({ min: 1, max: 20 }),
-    (0, express_validator_1.check)('description_product').isLength({ min: 1, max: 80 }),
+    (0, express_validator_1.check)('name_product').isLength({ min: 1, max: 100 }),
+    (0, express_validator_1.check)('description_product').isLength({ min: 1, max: 200 }),
     (0, express_validator_1.check)('purchase_price_product').isNumeric(),
     (0, express_validator_1.check)('unit_purchase_price_product').isNumeric(),
     (0, express_validator_1.check)('suggested_unit_selling_price_product').isNumeric(),

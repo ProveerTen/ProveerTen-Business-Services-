@@ -13,6 +13,9 @@ import {
 import { dataDecoded } from "../middlewares/auth-token";
 import { view_categories } from "../services/view";
 import generateRandomString from "../helpers/generate-string";
+import { validationImage } from "../services/ia-image-validation";
+
+
 
 
 export const createProduct = async (req: Request, res: Response) => {
@@ -40,6 +43,11 @@ export const createProduct = async (req: Request, res: Response) => {
     let id_product = name_company + '_' + generateRandomString(5);
 
     if (req.file?.path!) {
+      await validationImage(name_product, req.file?.path!).then((mensaje:any)=>{
+        res.status(200).json({ message: mensaje});
+      }).catch ((error: any) => { res.status(500).json({ message: error}); })
+      
+      
       result_cloudinary = await cloudinary.uploader.upload(req.file?.path!);
       image = result_cloudinary.secure_url;
       fs.unlink(req.file.path);
@@ -120,6 +128,9 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 
     if (req.file?.path!) {
+      
+     await validationImage (req.file?.path!, "")
+
       console.log(req.file.path!);
       await cloudinary.uploader.destroy(imageSaveDb);
       resultC = await cloudinary.uploader.upload(req.file?.path!);

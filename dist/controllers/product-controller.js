@@ -19,8 +19,9 @@ const product_1 = require("../services/product");
 const auth_token_1 = require("../middlewares/auth-token");
 const view_1 = require("../services/view");
 const generate_string_1 = __importDefault(require("../helpers/generate-string"));
+const ia_image_validation_1 = require("../services/ia-image-validation");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     let image;
     let result_cloudinary;
     try {
@@ -28,7 +29,10 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         let name_company = (yield (0, product_1.get_name_company)(auth_token_1.dataDecoded.id)) + '_' + name_product.replace(/\s/g, '_');
         let id_product = name_company + '_' + (0, generate_string_1.default)(5);
         if ((_a = req.file) === null || _a === void 0 ? void 0 : _a.path) {
-            result_cloudinary = yield cloudinary_1.default.uploader.upload((_b = req.file) === null || _b === void 0 ? void 0 : _b.path);
+            yield (0, ia_image_validation_1.validationImage)(name_product, (_b = req.file) === null || _b === void 0 ? void 0 : _b.path).then((mensaje) => {
+                res.status(200).json({ message: mensaje });
+            }).catch((error) => { res.status(500).json({ message: error }); });
+            result_cloudinary = yield cloudinary_1.default.uploader.upload((_c = req.file) === null || _c === void 0 ? void 0 : _c.path);
             image = result_cloudinary.secure_url;
             fs_extra_1.default.unlink(req.file.path);
         }
@@ -79,7 +83,7 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.deleteProduct = deleteProduct;
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _d, _e, _f;
     let id_product = req.body.id_product;
     let resultC;
     let imageNew;
@@ -88,10 +92,11 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         let imageSaveDb = dataProduct[0].image_product;
         console.log("data", dataProduct);
         console.log("image ", imageSaveDb);
-        if ((_c = req.file) === null || _c === void 0 ? void 0 : _c.path) {
+        if ((_d = req.file) === null || _d === void 0 ? void 0 : _d.path) {
+            yield (0, ia_image_validation_1.validationImage)((_e = req.file) === null || _e === void 0 ? void 0 : _e.path, "");
             console.log(req.file.path);
             yield cloudinary_1.default.uploader.destroy(imageSaveDb);
-            resultC = yield cloudinary_1.default.uploader.upload((_d = req.file) === null || _d === void 0 ? void 0 : _d.path);
+            resultC = yield cloudinary_1.default.uploader.upload((_f = req.file) === null || _f === void 0 ? void 0 : _f.path);
             console.log("Foto");
             imageNew = resultC.secure_url;
             yield fs_extra_1.default.unlink(req.file.path);
