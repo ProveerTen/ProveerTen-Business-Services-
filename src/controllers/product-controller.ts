@@ -16,6 +16,15 @@ import generateRandomString from "../helpers/generate-string";
 import { validationImage } from "../services/ia-image-validation";
 
 
+function fileToGenerativePart(path:any, mimeType:any) {
+  return {
+    inlineData: {
+      data: Buffer.from(fs.readFileSync(path)).toString("base64"),
+      mimeType
+    },
+  };
+}
+
 
 
 export const createProduct = async (req: Request, res: Response) => {
@@ -42,17 +51,20 @@ export const createProduct = async (req: Request, res: Response) => {
 
     let id_product = name_company + '_' + generateRandomString(5);
 
+    console.log(req.file);
+    
+
     if (req.file?.path!) {
-      await validationImage(name_product, req.file?.path!).then((mensaje:any)=>{
-        res.status(200).json({ message: mensaje});
-      }).catch ((error: any) => { res.status(500).json({ message: error}); })
+      
+  
+      
       
       
       result_cloudinary = await cloudinary.uploader.upload(req.file?.path!);
       image = result_cloudinary.secure_url;
       fs.unlink(req.file.path);
     }
-
+    
     const data: Product = {
       id_product,
       name_product,
@@ -67,13 +79,13 @@ export const createProduct = async (req: Request, res: Response) => {
       availability_product,
       fk_product_nit_company: dataDecoded.id
     }
-
+    
     await insert_product(data);
-
+    
     insert_product_category(id_product, categories);
-
+    
     res.status(200).json({ message: 'Ok' })
-
+    
   } catch (error) {
     if (result_cloudinary.public_id) {
       await cloudinary.uploader.destroy(result_cloudinary.public_id)
@@ -84,25 +96,25 @@ export const createProduct = async (req: Request, res: Response) => {
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
-
+  
   try {
     const { id_product } = req.body
-
+    
     let oldImageUrl = 'select image_product from product WHERE id_product = ?';
-
+    
     const public_id_clou = await deleteOldImage(oldImageUrl, id_product, 'image_product')
     console.log("public_id_clou", public_id_clou);
-
+    
     await delete_product_category(id_product);
     await delete_product_suggested(id_product);
     await delete_product(id_product);
-
+    
     if (public_id_clou) {
       await cloudinary.uploader.destroy(public_id_clou);
     }
-
+    
     res.status(200).json({ message: 'Ok, producto eliminado con exito' })
-
+    
   } catch (error) {
     res.status(400).json({ error })
   }
@@ -114,29 +126,45 @@ export const updateProduct = async (req: Request, res: Response) => {
   let id_product = req.body.id_product;
   let resultC: any;
   let imageNew: string;
-
-
+  
+  
   try {
     let dataProduct = await verifyExistProduct(id_product);
-
-
+    
+    
     let imageSaveDb = dataProduct[0].image_product;
-    console.log("data", dataProduct);
-    console.log("image ", imageSaveDb);
-
-
+    // console.log("data", dataProduct);
+    // console.log("image ", imageSaveDb);
+    
+    
+    // console.log(req.file);
+    
+    
 
 
     if (req.file?.path!) {
       
-     await validationImage (req.file?.path!, "")
+      const imageParts = [
+        fileToGenerativePart(req.file?.path!, req.file?.mimetype)
+        // fileToGenerativePart("./imagenes/sandero2.jpg", "image/jpeg")
+      ];
 
+      // console.log(imageParts[0]);
+      
+      
+      const result = await validationImage( imageParts, "Crema de dientes colgate")
+
+      
+      console.log("weresrses", result);
+
+      
+      
       console.log(req.file.path!);
       await cloudinary.uploader.destroy(imageSaveDb);
       resultC = await cloudinary.uploader.upload(req.file?.path!);
       console.log("Foto");
       imageNew = resultC.secure_url;
-      await fs.unlink(req.file.path);
+      // await fs.unlink(req.file.path);
     }
 
 

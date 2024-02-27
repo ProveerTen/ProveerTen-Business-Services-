@@ -20,19 +20,25 @@ const auth_token_1 = require("../middlewares/auth-token");
 const view_1 = require("../services/view");
 const generate_string_1 = __importDefault(require("../helpers/generate-string"));
 const ia_image_validation_1 = require("../services/ia-image-validation");
+function fileToGenerativePart(path, mimeType) {
+    return {
+        inlineData: {
+            data: Buffer.from(fs_extra_1.default.readFileSync(path)).toString("base64"),
+            mimeType
+        },
+    };
+}
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a, _b;
     let image;
     let result_cloudinary;
     try {
         const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product, categories } = req.body;
         let name_company = (yield (0, product_1.get_name_company)(auth_token_1.dataDecoded.id)) + '_' + name_product.replace(/\s/g, '_');
         let id_product = name_company + '_' + (0, generate_string_1.default)(5);
+        console.log(req.file);
         if ((_a = req.file) === null || _a === void 0 ? void 0 : _a.path) {
-            yield (0, ia_image_validation_1.validationImage)(name_product, (_b = req.file) === null || _b === void 0 ? void 0 : _b.path).then((mensaje) => {
-                res.status(200).json({ message: mensaje });
-            }).catch((error) => { res.status(500).json({ message: error }); });
-            result_cloudinary = yield cloudinary_1.default.uploader.upload((_c = req.file) === null || _c === void 0 ? void 0 : _c.path);
+            result_cloudinary = yield cloudinary_1.default.uploader.upload((_b = req.file) === null || _b === void 0 ? void 0 : _b.path);
             image = result_cloudinary.secure_url;
             fs_extra_1.default.unlink(req.file.path);
         }
@@ -83,23 +89,30 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.deleteProduct = deleteProduct;
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d, _e, _f;
+    var _c, _d, _e, _f;
     let id_product = req.body.id_product;
     let resultC;
     let imageNew;
     try {
         let dataProduct = yield (0, product_1.verifyExistProduct)(id_product);
         let imageSaveDb = dataProduct[0].image_product;
-        console.log("data", dataProduct);
-        console.log("image ", imageSaveDb);
-        if ((_d = req.file) === null || _d === void 0 ? void 0 : _d.path) {
-            yield (0, ia_image_validation_1.validationImage)((_e = req.file) === null || _e === void 0 ? void 0 : _e.path, "");
+        // console.log("data", dataProduct);
+        // console.log("image ", imageSaveDb);
+        // console.log(req.file);
+        if ((_c = req.file) === null || _c === void 0 ? void 0 : _c.path) {
+            const imageParts = [
+                fileToGenerativePart((_d = req.file) === null || _d === void 0 ? void 0 : _d.path, (_e = req.file) === null || _e === void 0 ? void 0 : _e.mimetype)
+                // fileToGenerativePart("./imagenes/sandero2.jpg", "image/jpeg")
+            ];
+            // console.log(imageParts[0]);
+            const result = yield (0, ia_image_validation_1.validationImage)(imageParts, "Crema de dientes colgate");
+            console.log("weresrses", result);
             console.log(req.file.path);
             yield cloudinary_1.default.uploader.destroy(imageSaveDb);
             resultC = yield cloudinary_1.default.uploader.upload((_f = req.file) === null || _f === void 0 ? void 0 : _f.path);
             console.log("Foto");
             imageNew = resultC.secure_url;
-            yield fs_extra_1.default.unlink(req.file.path);
+            // await fs.unlink(req.file.path);
         }
         const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product, } = req.body;
         const data = {
