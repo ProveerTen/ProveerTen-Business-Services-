@@ -14,7 +14,7 @@ import {
 import { dataDecoded } from "../middlewares/auth-token";
 import { view_categories } from "../services/view";
 import generateRandomString from "../helpers/generate-string";
-import { validationImage } from "../services/ia-image-validation";
+import { validationImage } from "../helpers/ia-image-validation";
 
 
 function fileToGenerativePart(path:any, mimeType:any) {
@@ -56,11 +56,19 @@ export const createProduct = async (req: Request, res: Response) => {
     
 
     if (req.file?.path!) {
+
+      const  promptValueProduct:string = `Evalua la imagen y dime si tiene relacion la imagen con el produto ${name_product}, responde "SÍ" si hace refenrencia al producto mencionado, resporde "NO" si no hace referencia al producto mencionado `;
+
+      const imageParts = [
+        fileToGenerativePart(req.file?.path!, req.file?.mimetype)
+      ];
       
-  
+      let isValidImage = await validationImage(imageParts, promptValueProduct);
       
-      
-      
+      if (!isValidImage) {
+        res.status(400).json({ error: "La imagen no hace referencia al producto" });
+      }
+
       result_cloudinary = await cloudinary.uploader.upload(req.file?.path!);
       image = result_cloudinary.secure_url;
       fs.unlink(req.file.path);
@@ -209,24 +217,28 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     let dataProduct = await verifyExistProduct(id_product);
     let imageSaveDb = dataProduct[0].image_product;
-
+    let imageA = req.file?.path!;
+    
+    const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product } = req.body;
     if (req.file?.path!) {
+      const  promptValueProduct:string = `Evalua la imagen y dime si tiene relacion la imagen con el produto ${name_product}, responde "SÍ" si hace refenrencia al producto mencionado, resporde "NO" si no hace referencia al producto mencionado `;
+
       const imageParts = [
         fileToGenerativePart(req.file?.path!, req.file?.mimetype)
       ];
       
-      let isValidImage = await validationImage(imageParts, "Crema dental Colgate");
+      let isValidImage = await validationImage(imageParts, promptValueProduct);
       
-      if (isValidImage) {
-        return res.status(400).json({ error: "La imagen no corresponde al producto esperado." });
+      if (!isValidImage) {
+       return res.status(400).json({ error: "La imagen no hace referencia al producto" });
       }
 
+
       await cloudinary.uploader.destroy(imageSaveDb);
-      resultC = await cloudinary.uploader.upload(req.file?.path!);
+      resultC = await cloudinary.uploader.upload(imageA);
       imageNew = resultC.secure_url;
     }
 
-    const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product } = req.body;
 
     const data: Product = {
       id_product,

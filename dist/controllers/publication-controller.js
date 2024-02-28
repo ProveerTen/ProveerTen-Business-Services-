@@ -17,14 +17,31 @@ const cloudinary_1 = __importDefault(require("../libs/cloudinary"));
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const Publication_1 = __importDefault(require("../models/Publication"));
 const auth_token_1 = require("../middlewares/auth-token");
+const ia_image_validation_1 = require("../helpers/ia-image-validation");
+function fileToGenerativePart(path, mimeType) {
+    return {
+        inlineData: {
+            data: Buffer.from(fs_extra_1.default.readFileSync(path)).toString("base64"),
+            mimeType
+        },
+    };
+}
 const createPublication = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f, _g;
     try {
-        const result = yield cloudinary_1.default.uploader.upload((_a = req.file) === null || _a === void 0 ? void 0 : _a.path, { resource_type: 'auto' });
+        const promptValuePublication = `Necesito que analices la imagen que te manndo y me respondas esto? Responde con "SÍ" si la imagen es limpia o no tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria, o respondeme "NO" si tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria`;
+        const imageParts = [
+            fileToGenerativePart((_a = req.file) === null || _a === void 0 ? void 0 : _a.path, (_b = req.file) === null || _b === void 0 ? void 0 : _b.mimetype)
+        ];
+        let isValidImage = yield (0, ia_image_validation_1.validationImage)(imageParts, promptValuePublication);
+        if (!isValidImage) {
+            res.status(400).json({ error: "La imagen contiene escenas no permiridas" });
+        }
+        const result = yield cloudinary_1.default.uploader.upload((_c = req.file) === null || _c === void 0 ? void 0 : _c.path, { resource_type: 'auto' });
         const newPublication = {
-            _id: (_b = req.file) === null || _b === void 0 ? void 0 : _b.filename.slice(0, (_c = req.file) === null || _c === void 0 ? void 0 : _c.filename.lastIndexOf('.')),
+            _id: (_d = req.file) === null || _d === void 0 ? void 0 : _d.filename.slice(0, (_e = req.file) === null || _e === void 0 ? void 0 : _e.filename.lastIndexOf('.')),
             text: req.body.text,
-            imagePath: (_d = req.file) === null || _d === void 0 ? void 0 : _d.path,
+            imagePath: (_f = req.file) === null || _f === void 0 ? void 0 : _f.path,
             nit_company: auth_token_1.dataDecoded.id,
             image_url: result === null || result === void 0 ? void 0 : result.url,
             secure_url: result === null || result === void 0 ? void 0 : result.secure_url,
@@ -33,7 +50,7 @@ const createPublication = (req, res) => __awaiter(void 0, void 0, void 0, functi
         };
         const publication = new Publication_1.default(newPublication);
         yield publication.save();
-        fs_extra_1.default.unlink((_e = req.file) === null || _e === void 0 ? void 0 : _e.path);
+        fs_extra_1.default.unlink((_g = req.file) === null || _g === void 0 ? void 0 : _g.path);
         res.status(200).json({
             message: 'Publication successfully saved',
         });
@@ -118,7 +135,7 @@ const getAllPublications = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.getAllPublications = getAllPublications;
 const updateDataPublication = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f, _g;
+    var _h, _j, _k, _l;
     try {
         const { text, id } = req.body;
         let publication = yield Publication_1.default.findById(id);
@@ -127,12 +144,20 @@ const updateDataPublication = (req, res) => __awaiter(void 0, void 0, void 0, fu
             yield Publication_1.default.updateOne({ _id: id }, { $set: { text } });
         }
         if (req.file != null) {
-            const result = yield cloudinary_1.default.uploader.upload((_f = req.file) === null || _f === void 0 ? void 0 : _f.path);
+            const promptValuePublication = `Necesito que analices la imagen que te manndo y me respondas esto? Responde con "SÍ" si la imagen es limpia o no tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria, o respondeme "NO" si tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria`;
+            const imageParts = [
+                fileToGenerativePart((_h = req.file) === null || _h === void 0 ? void 0 : _h.path, (_j = req.file) === null || _j === void 0 ? void 0 : _j.mimetype)
+            ];
+            let isValidImage = yield (0, ia_image_validation_1.validationImage)(imageParts, promptValuePublication);
+            if (!isValidImage) {
+                res.status(400).json({ error: "La imagen contiene escenas no permiridas" });
+            }
+            const result = yield cloudinary_1.default.uploader.upload((_k = req.file) === null || _k === void 0 ? void 0 : _k.path);
             if (!result) {
                 res.status(400).json({ "error": "error subiendo la imagen" });
             }
             yield Publication_1.default.updateOne({ _id: id }, { $set: { text: text, image_url: result.url, secure_url: result.secure_url, public_id: result.public_id } });
-            fs_extra_1.default.unlink((_g = req.file) === null || _g === void 0 ? void 0 : _g.path);
+            fs_extra_1.default.unlink((_l = req.file) === null || _l === void 0 ? void 0 : _l.path);
             if (oldPublic_id) {
                 yield cloudinary_1.default.uploader.destroy(oldPublic_id);
             }

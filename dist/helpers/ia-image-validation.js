@@ -17,21 +17,20 @@ const validationImage = (image, promptValue) => {
         const genAI = new generative_ai_1.GoogleGenerativeAI(api);
         try {
             const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
-            const prompt = `La imagen contiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona, o contiene lenceria ? Responde con SÍ si lo tiene, o NO si no lo tiene.`;
-            console.log(prompt);
-            const result = yield model.generateContent([prompt, image]);
+            // const prompt = ``;
+            const result = yield model.generateContent([promptValue, image]);
             const response = yield result.response;
             const text = response.text().trim();
             console.log(result.response.text);
             console.log(`Respuesta del modelo: ${text}`);
-            if (text === "NO") {
-                resolve(false);
+            if (text === "SÍ") {
+                return resolve(true);
             }
-            else if (text === "SÍ") {
-                resolve(true);
+            else if (text === "NO") {
+                return resolve(false);
             }
             else {
-                reject("Respuesta no reconocida");
+                return reject("Respuesta no reconocida");
             }
         }
         catch (error) {

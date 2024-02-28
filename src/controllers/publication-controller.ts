@@ -1,12 +1,36 @@
 import { Request, Response } from 'express';
 import cloudinary from '../libs/cloudinary';
 import fs from 'fs-extra';
-
 import Publication from '../models/Publication';
 import { dataDecoded } from '../middlewares/auth-token';
+import { validationImage } from '../helpers/ia-image-validation';
+
+function fileToGenerativePart(path:any, mimeType:any) {
+    return {
+      inlineData: {
+        data: Buffer.from(fs.readFileSync(path)).toString("base64"),
+        mimeType
+      },
+    };
+  }
+
+
 
 export const createPublication = async (req: Request, res: Response) => {
     try {
+
+        const  promptValuePublication:string = `Necesito que analices la imagen que te manndo y me respondas esto? Responde con "SÍ" si la imagen es limpia o no tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria, o respondeme "NO" si tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria`;
+
+        const imageParts = [
+          fileToGenerativePart(req.file?.path!, req.file?.mimetype)
+        ];
+        
+        let isValidImage = await validationImage(imageParts, promptValuePublication);
+        
+        if (!isValidImage) {
+            res.status(400).json({ error: "La imagen contiene escenas no permiridas" });
+        }
+
 
         const result = await cloudinary.uploader.upload(req.file?.path!, { resource_type: 'auto' });
 
@@ -20,6 +44,10 @@ export const createPublication = async (req: Request, res: Response) => {
             public_id: result?.public_id,
             date: req.body.date
         }
+
+    
+
+
 
         const publication = new Publication(newPublication);
 
@@ -144,6 +172,21 @@ export const updateDataPublication = async (req: Request, res: Response) => {
         }
 
         if (req.file != null) {
+
+            const  promptValuePublication:string = `Necesito que analices la imagen que te manndo y me respondas esto? Responde con "SÍ" si la imagen es limpia o no tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria, o respondeme "NO" si tiene contenido explícito o potencialmente perjudicial visual y emocionalmente para una persona,lenceria`;
+
+            const imageParts = [
+              fileToGenerativePart(req.file?.path!, req.file?.mimetype)
+            ];
+            
+            let isValidImage = await validationImage(imageParts, promptValuePublication);
+            
+            if (!isValidImage) {
+               res.status(400).json({ error: "La imagen contiene escenas no permiridas" });
+            }
+    
+
+
             const result = await cloudinary.uploader.upload(req.file?.path!);
 
             if (!result) {
