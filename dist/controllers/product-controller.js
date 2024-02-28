@@ -88,33 +88,86 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteProduct = deleteProduct;
+// export const updateProduct = async (req: Request, res: Response) => {
+//   let id_product = req.body.id_product;
+//   let resultC: any;
+//   let imageNew: string;
+//   try {
+//     let dataProduct = await verifyExistProduct(id_product);
+//     let imageSaveDb = dataProduct[0].image_product;
+//     if (req.file?.path!) {
+//       const imageParts = [
+//         fileToGenerativePart(req.file?.path!, req.file?.mimetype)
+//       ];
+//   let validaImage = await validationImage(imageParts, "Crema dental Colgate")
+//   .then((mensaje) => {
+//     console.log(mensaje);
+//   })
+//   .catch((error) => {
+//     console.error("Error en la validación de la imagen:", error);
+//   });
+//       console.log(req.file.path!);
+//       await cloudinary.uploader.destroy(imageSaveDb);
+//       resultC = await cloudinary.uploader.upload(req.file?.path!);
+//       console.log("Foto");
+//       imageNew = resultC.secure_url;
+//  await fs.unlink(req.file.path);
+//     }
+//     const {
+//       name_product,
+//       description_product,
+//       purchase_price_product,
+//       unit_purchase_price_product,
+//       suggested_unit_selling_price_product,
+//       purchase_quantity,
+//       stock_product,
+//       content_product,
+//       availability_product,
+//     } = req.body;
+//     const data: Product = {
+//       id_product,
+//       name_product,
+//       description_product,
+//       purchase_price_product,
+//       unit_purchase_price_product,
+//       suggested_unit_selling_price_product,
+//       purchase_quantity,
+//       stock_product,
+//       content_product,
+//       image_product: imageNew! || imageSaveDb,
+//       availability_product,
+//       fk_product_nit_company: dataDecoded.id,
+//     };
+//     await updateDataProduct(data);
+//     res.status(200).json({ updateProduct: true, message: "Ok" });
+//   } catch (error) {
+//     if (resultC && resultC.public_id) {
+//       await cloudinary.uploader.destroy(resultC.public_id);
+//     }
+//     res.status(400).json({ error: "Error al actualizar el producto" });
+//   }
+// };
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d, _e, _f;
+    var _c, _d, _e, _f, _g;
     let id_product = req.body.id_product;
     let resultC;
     let imageNew;
     try {
         let dataProduct = yield (0, product_1.verifyExistProduct)(id_product);
         let imageSaveDb = dataProduct[0].image_product;
-        // console.log("data", dataProduct);
-        // console.log("image ", imageSaveDb);
-        // console.log(req.file);
         if ((_c = req.file) === null || _c === void 0 ? void 0 : _c.path) {
             const imageParts = [
                 fileToGenerativePart((_d = req.file) === null || _d === void 0 ? void 0 : _d.path, (_e = req.file) === null || _e === void 0 ? void 0 : _e.mimetype)
-                // fileToGenerativePart("./imagenes/sandero2.jpg", "image/jpeg")
             ];
-            // console.log(imageParts[0]);
-            const result = yield (0, ia_image_validation_1.validationImage)(imageParts, "Crema de dientes colgate");
-            console.log("weresrses", result);
-            console.log(req.file.path);
+            let isValidImage = yield (0, ia_image_validation_1.validationImage)(imageParts, "Crema dental Colgate");
+            if (isValidImage) {
+                return res.status(400).json({ error: "La imagen no corresponde al producto esperado." });
+            }
             yield cloudinary_1.default.uploader.destroy(imageSaveDb);
             resultC = yield cloudinary_1.default.uploader.upload((_f = req.file) === null || _f === void 0 ? void 0 : _f.path);
-            console.log("Foto");
             imageNew = resultC.secure_url;
-            // await fs.unlink(req.file.path);
         }
-        const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product, } = req.body;
+        const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product } = req.body;
         const data = {
             id_product,
             name_product,
@@ -131,6 +184,7 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         };
         yield (0, product_1.updateDataProduct)(data);
         res.status(200).json({ updateProduct: true, message: "Ok" });
+        yield fs_extra_1.default.unlink((_g = req.file) === null || _g === void 0 ? void 0 : _g.path);
     }
     catch (error) {
         if (resultC && resultC.public_id) {
@@ -172,7 +226,7 @@ const product = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         categoriesByProducts.push(product);
         console.log("product___", product);
         console.log("categories___", categories);
-        console.log("filteredCategories", filteredCategories); //
+        console.log("filteredCategories", filteredCategories);
         console.log("final", categoriesByProducts[0]);
         if (product) {
             res.status(200).json({ categoriesByProducts });
