@@ -24,7 +24,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     let image;
     let result_cloudinary;
     try {
-        const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product, categories } = req.body;
+        const { name_product, description_product, purchase_price_product, unit_purchase_price_product, suggested_unit_selling_price_product, purchase_quantity, stock_product, content_product, availability_product, date_creation, categories } = req.body;
         let name_company = (yield (0, product_1.get_name_company)(auth_token_1.dataDecoded.id)) + '_' + name_product.replace(/\s/g, '_');
         let id_product = name_company + '_' + (0, generate_string_1.default)(5);
         if ((_a = req.file) === null || _a === void 0 ? void 0 : _a.path) {
@@ -44,6 +44,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             content_product,
             image_product: image,
             availability_product,
+            date_creation,
             fk_product_nit_company: auth_token_1.dataDecoded.id
         };
         yield (0, product_1.insert_product)(data);

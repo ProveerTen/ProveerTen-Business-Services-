@@ -10,6 +10,7 @@ export default interface Product {
     content_product: string,
     image_product: string,
     availability_product: string,
+    date_creation?: Date,
     fk_product_nit_company: string,
     categories?: any[]
 }

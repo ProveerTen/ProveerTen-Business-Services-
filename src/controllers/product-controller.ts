@@ -32,6 +32,7 @@ export const createProduct = async (req: Request, res: Response) => {
       stock_product,
       content_product,
       availability_product,
+      date_creation,
       categories
     } = req.body;
 
@@ -57,6 +58,7 @@ export const createProduct = async (req: Request, res: Response) => {
       content_product,
       image_product: image!,
       availability_product,
+      date_creation,
       fk_product_nit_company: dataDecoded.id
     }
 

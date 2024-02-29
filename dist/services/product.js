@@ -25,7 +25,8 @@ const get_name_company = (nit_company) => {
 };
 exports.get_name_company = get_name_company;
 const insert_product = (data) => {
-    const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,@message_text)";
+    console.log("PRODUCT l ", data);
+    const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,?,@message_text)";
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
             if (err) {
@@ -44,6 +45,7 @@ const insert_product = (data) => {
                 data.content_product,
                 data.image_product,
                 data.availability_product,
+                data.date_creation,
                 data.fk_product_nit_company,
             ], (error, result) => {
                 connection.release();

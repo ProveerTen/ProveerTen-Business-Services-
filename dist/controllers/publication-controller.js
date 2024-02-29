@@ -20,7 +20,7 @@ const auth_token_1 = require("../middlewares/auth-token");
 const createPublication = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
     try {
-        const result = yield cloudinary_1.default.uploader.upload((_a = req.file) === null || _a === void 0 ? void 0 : _a.path);
+        const result = yield cloudinary_1.default.uploader.upload((_a = req.file) === null || _a === void 0 ? void 0 : _a.path, { resource_type: 'auto' });
         const newPublication = {
             _id: (_b = req.file) === null || _b === void 0 ? void 0 : _b.filename.slice(0, (_c = req.file) === null || _c === void 0 ? void 0 : _c.filename.lastIndexOf('.')),
             text: req.body.text,
