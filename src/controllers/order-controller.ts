@@ -40,7 +40,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
         await Promise.all(products.map(async (item: any) => {
             let data = await get_stock(item.id_product);
-            if (data[0].stock_product > item.product_quantity) {
+            if (data[0].stock_product >= item.product_quantity) {
                 success = true;
             } else {
                 success = false;
