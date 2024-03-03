@@ -37,8 +37,8 @@ class Server {
 
     middlewares() {
         this.app.use(express.json());
-        // const allowedOrigins = ['https://proveerten.netlify.app','https://proveer-ten-front-end-git-hu-featurechat-bryctans-projects.vercel.app','http://localhost:4200'];
-        const allowedOrigins = 'http://localhost:4200';
+        const allowedOrigins = ['https://proveerten.netlify.app','https://proveer-ten-front-end-git-hu-featurechat-bryctans-projects.vercel.app','http://localhost:4200'];
+        //const allowedOrigins = 'http://localhost:4200';
         this.app.use(cors({ credentials: true, origin: allowedOrigins }));
         this.app.use(morgan('dev'));
     }
