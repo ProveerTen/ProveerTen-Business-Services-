@@ -17,7 +17,7 @@ router.route("/socialRed")
     .get(verifyToken, getSocialRed)
 
 router.route("/socialRed/:id")
-    .get(verifyToken, getSocialRedByCompany)
+    .get(getSocialRedByCompany)
 
 router.route('/company')
     .patch(verifyToken, validator.paramsCompany, validator.validatorParams, patchCompany)

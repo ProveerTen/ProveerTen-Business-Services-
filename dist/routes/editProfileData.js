@@ -16,7 +16,7 @@ router.route("/socialRed")
     .delete(auth_token_1.verifyToken, updateProfile_controller_1.deleteSocialRed)
     .get(auth_token_1.verifyToken, updateProfile_controller_1.getSocialRed);
 router.route("/socialRed/:id")
-    .get(auth_token_1.verifyToken, updateProfile_controller_1.getSocialRedByCompany);
+    .get(updateProfile_controller_1.getSocialRedByCompany);
 router.route('/company')
     .patch(auth_token_1.verifyToken, validator_params_1.default.paramsCompany, validator_params_1.default.validatorParams, updateProfile_controller_1.patchCompany)
     .delete(auth_token_1.verifyToken, deleteProfileData_controller_1.deleteDataProfile);
