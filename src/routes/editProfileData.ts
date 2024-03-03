@@ -3,16 +3,28 @@ import { Router } from "express";
 import { verifyToken } from "../middlewares/auth-token";
 import validator from '../middlewares/validator-params';
 
-import { patchCompany, patchProvider, patchGrocer, getData } from "../controllers/updateProfile-controller";
+import { patchCompany, patchProvider, patchGrocer, getData, addSocialRed, getSocialRed, deleteSocialRed, getSocialRedByCompany } from "../controllers/updateProfile-controller";
 import { deleteDataProfile } from "../controllers/deleteProfileData-controller";
 
 const router = Router();
 
 
 // rutas para actualizar datos o eliminarlos
+router.route("/socialRed")
+    .post(verifyToken, addSocialRed)
+    .patch()
+    .delete(verifyToken, deleteSocialRed)
+    .get(verifyToken, getSocialRed)
+
+router.route("/socialRed/:id")
+    .get(verifyToken, getSocialRedByCompany)
+
 router.route('/company')
     .patch(verifyToken, validator.paramsCompany, validator.validatorParams, patchCompany)
     .delete(verifyToken, deleteDataProfile)
+
+    // .post(verifyToken, addSocialRed)
+    // .get(verifyToken, getSocialRed)
 
 router.route('/provider')
     .patch(verifyToken, validator.paramsProvider, validator.validatorParams, patchProvider)

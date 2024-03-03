@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getData = exports.patchGrocer = exports.patchProvider = exports.patchCompany = void 0;
+exports.deleteSocialRed = exports.getSocialRedByCompany = exports.getSocialRed = exports.addSocialRed = exports.getData = exports.patchGrocer = exports.patchProvider = exports.patchCompany = void 0;
 const update_profile_service_1 = __importDefault(require("../services/update-profile-service"));
 const auth_token_1 = require("../middlewares/auth-token");
 const patchCompany = (req, res) => {
@@ -91,3 +91,74 @@ const getData = (req, res) => {
     }
 };
 exports.getData = getData;
+const addSocialRed = (req, res) => {
+    try {
+        update_profile_service_1.default.addSocialRed(req.body, (error, results) => {
+            if (error) {
+                res.status(500).json({ error });
+            }
+            if (results) {
+                res.status(200).json({ "Status": results });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ "failed to add social red": error });
+    }
+};
+exports.addSocialRed = addSocialRed;
+const getSocialRed = (req, res) => {
+    const { email, role, id } = auth_token_1.dataDecoded;
+    try {
+        update_profile_service_1.default.getSocialRed(id, (error, results) => {
+            if (error) {
+                res.status(500).json({ error });
+            }
+            if (results) {
+                res.status(200).json({ "status": results });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ "failed to add social red": error });
+    }
+};
+exports.getSocialRed = getSocialRed;
+const getSocialRedByCompany = (req, res) => {
+    let { id } = req.params;
+    try {
+        update_profile_service_1.default.getSocialRed(id, (error, results) => {
+            if (error) {
+                res.status(500).json({ error });
+            }
+            if (results) {
+                res.status(200).json({ "status": results });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ "failed to add social red": error });
+    }
+};
+exports.getSocialRedByCompany = getSocialRedByCompany;
+const deleteSocialRed = (req, res) => {
+    const { email, role, id } = auth_token_1.dataDecoded;
+    try {
+        update_profile_service_1.default.deleteSocialRed(id, req.query, (error, results) => {
+            if (error) {
+                res.status(500).json({ error });
+            }
+            if (results) {
+                res.status(200).json({ "status": results });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ "failed to add social red": error });
+    }
+};
+exports.deleteSocialRed = deleteSocialRed;

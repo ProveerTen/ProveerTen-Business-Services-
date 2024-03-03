@@ -96,4 +96,78 @@ export const getData = (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ "failed to view profile user": error });
     }
+
 }
+
+
+export const addSocialRed = (req: Request, res: Response) => {
+    try {
+        updateService.addSocialRed(req.body, (error:any, results:any )=> {
+            if (error) {
+                res.status(500).json({error})
+            }
+            if (results) {
+                res.status(200).json({"Status":results})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({"failed to add social red": error})        
+    }
+}
+
+export const getSocialRed = (req: Request, res: Response) => {
+    const { email, role, id } = dataDecoded;
+
+    try {
+        updateService.getSocialRed(id, (error:any, results:any )=> {
+            if (error) {
+                res.status(500).json({error})
+            }
+            if (results) {
+                res.status(200).json({"status":results})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({"failed to add social red": error})        
+    }
+}
+
+export const getSocialRedByCompany = (req: Request, res: Response) => {
+    let {id} = req.params
+    
+    try {
+        updateService.getSocialRed(id, (error:any, results:any )=> {
+            if (error) {
+                res.status(500).json({error})
+            }
+            if (results) {
+                res.status(200).json({"status":results})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({"failed to add social red": error})        
+    }
+}
+
+
+export const deleteSocialRed = (req: Request, res: Response) => {
+    const { email, role, id } = dataDecoded;  
+
+    try {
+        updateService.deleteSocialRed(id, req.query, (error:any, results:any )=> {
+            if (error) {
+                res.status(500).json({error})
+            }
+            if (results) {
+                res.status(200).json({"status":results})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({"failed to add social red": error})        
+    }
+}
+

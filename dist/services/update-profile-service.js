@@ -116,6 +116,90 @@ const updateDataGrocer = (dataToken, dataToUpdate, callback) => {
         }
     });
 };
+const addSocialRed = (dataToAdd, callback) => {
+    let addQuery, addValues;
+    try {
+        addQuery = "insert into socialRed (link, icon, fk_nit_company_socialRed) values (?,?,?)";
+        addValues = [dataToAdd.link, dataToAdd.icon, dataToAdd.nit_company];
+        console.log(addValues);
+        db_mysql_1.default.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                return callback(err);
+            }
+            connection.query(addQuery, addValues, (err, results) => __awaiter(void 0, void 0, void 0, function* () {
+                connection.release();
+                if (err) {
+                    callback({ "Error insertando los datos": err });
+                }
+                else {
+                    console.log("exito");
+                    callback(null, { "Datos insertados con exito": results });
+                }
+            }));
+        });
+    }
+    catch (error) {
+        return callback(error);
+    }
+};
+const getSocialRed = (id, callback) => {
+    let getQuery, getValues;
+    console.log("id___", id);
+    try {
+        getQuery = "select * from socialRed where fk_nit_company_socialRed = ?";
+        getValues = [id];
+        console.log(getValues);
+        db_mysql_1.default.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                return callback(err);
+            }
+            connection.query(getQuery, getValues, (err, results) => __awaiter(void 0, void 0, void 0, function* () {
+                connection.release();
+                if (err) {
+                    console.log("error", err);
+                    callback({ "Error obteniendo los datos": err });
+                }
+                else {
+                    console.log("exito");
+                    console.log(results);
+                    callback(null, { data: results });
+                }
+            }));
+        });
+    }
+    catch (error) {
+        return callback(error);
+    }
+};
+const deleteSocialRed = (id, datatoDelete, callback) => {
+    let getQuery, getValues;
+    try {
+        getQuery = "delete from socialRed where id = ?";
+        getValues = [datatoDelete.id];
+        console.log(getValues);
+        db_mysql_1.default.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                return callback(err);
+            }
+            connection.query(getQuery, getValues, (err, results) => __awaiter(void 0, void 0, void 0, function* () {
+                connection.release();
+                if (err) {
+                    callback({ "Error eliminando los datos": err });
+                }
+                else {
+                    console.log("exito");
+                    callback(null, { data: results });
+                }
+            }));
+        });
+    }
+    catch (error) {
+        return callback(error);
+    }
+};
 const getCurrentData = (procAlm, id, callback) => {
     const queryCurrentData = procAlm;
     db_mysql_1.default.getConnection((err, connection) => {
@@ -143,5 +227,8 @@ exports.default = {
     updateDataCompany,
     updateDataProvider,
     updateDataGrocer,
-    getCurrentData
+    getCurrentData,
+    addSocialRed,
+    getSocialRed,
+    deleteSocialRed
 };

@@ -10,9 +10,18 @@ const updateProfile_controller_1 = require("../controllers/updateProfile-control
 const deleteProfileData_controller_1 = require("../controllers/deleteProfileData-controller");
 const router = (0, express_1.Router)();
 // rutas para actualizar datos o eliminarlos
+router.route("/socialRed")
+    .post(auth_token_1.verifyToken, updateProfile_controller_1.addSocialRed)
+    .patch()
+    .delete(auth_token_1.verifyToken, updateProfile_controller_1.deleteSocialRed)
+    .get(auth_token_1.verifyToken, updateProfile_controller_1.getSocialRed);
+router.route("/socialRed/:id")
+    .get(auth_token_1.verifyToken, updateProfile_controller_1.getSocialRedByCompany);
 router.route('/company')
     .patch(auth_token_1.verifyToken, validator_params_1.default.paramsCompany, validator_params_1.default.validatorParams, updateProfile_controller_1.patchCompany)
     .delete(auth_token_1.verifyToken, deleteProfileData_controller_1.deleteDataProfile);
+// .post(verifyToken, addSocialRed)
+// .get(verifyToken, getSocialRed)
 router.route('/provider')
     .patch(auth_token_1.verifyToken, validator_params_1.default.paramsProvider, validator_params_1.default.validatorParams, updateProfile_controller_1.patchProvider)
     .delete(auth_token_1.verifyToken, deleteProfileData_controller_1.deleteDataProfile);
