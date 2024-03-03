@@ -38,7 +38,7 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let success = false;
         yield Promise.all(products.map((item) => __awaiter(void 0, void 0, void 0, function* () {
             let data = yield (0, order_1.get_stock)(item.id_product);
-            if (data[0].stock_product > item.product_quantity) {
+            if (data[0].stock_product >= item.product_quantity) {
                 success = true;
             }
             else {
