@@ -19,6 +19,7 @@ const order_1 = require("../services/order");
 const order_2 = require("../services/order");
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.body);
         const { order_delivery_date, total_ordered_price, status, document_provider, products } = req.body;
         let name_store = yield (0, order_2.get_name_store_grocer)(auth_token_1.dataDecoded.id);
         let id_order = name_store.replace(/\s/g, '_') + '_' + (0, generate_string_1.default)(10);
@@ -31,16 +32,20 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             document_grocer: auth_token_1.dataDecoded.id,
             products
         };
+        console.log("*****************");
+        console.log(data);
+        console.log("*****************");
         let success = false;
         yield Promise.all(products.map((item) => __awaiter(void 0, void 0, void 0, function* () {
             let data = yield (0, order_1.get_stock)(item.id_product);
-            if (data[0].stock_product > item.quantity) {
+            if (data[0].stock_product > item.product_quantity) {
                 success = true;
             }
             else {
                 success = false;
             }
         })));
+        console.log("S", success);
         if (success) {
             yield (0, order_1.insert_order)(data);
             (0, order_1.insert_products_order)(id_order, data.products).then((mensaje) => {

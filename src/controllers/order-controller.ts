@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import { dataDecoded } from "../middlewares/auth-token";
 import generateRandomString from "../helpers/generate-string";
 import Order from "../models/order";
-import { insert_order, insert_products_order, get_stock, delete_order, get_quantity_order, reset_quantity_order, get_orders_grocer, get_orders_provider, get_orders_company, get_orders_detail, get_order} from '../services/order';
+import { insert_order, insert_products_order, get_stock, delete_order, get_quantity_order, reset_quantity_order, get_orders_grocer, get_orders_provider, get_orders_company, get_orders_detail, get_order } from '../services/order';
 import { get_companies, get_products, get_providers, get_name_store_grocer } from "../services/order";
 
 export const createOrder = async (req: Request, res: Response) => {
 
     try {
+
+        console.log(req.body);
+
         const {
             order_delivery_date,
             total_ordered_price,
@@ -29,16 +32,22 @@ export const createOrder = async (req: Request, res: Response) => {
             products
         }
 
+        console.log("*****************");
+        console.log(data);
+        console.log("*****************");
+
         let success: boolean = false;
 
         await Promise.all(products.map(async (item: any) => {
             let data = await get_stock(item.id_product);
-            if (data[0].stock_product > item.quantity) {
+            if (data[0].stock_product > item.product_quantity) {
                 success = true;
             } else {
                 success = false;
             }
         }));
+
+        console.log("S", success);
 
         if (success) {
             await insert_order(data);
@@ -51,7 +60,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log('Error');
-        res.status(400).json({"error": "error al crear el pedido"})
+        res.status(400).json({ "error": "error al crear el pedido" })
     }
 
 
@@ -184,8 +193,9 @@ export const orders_details = async (req: Request, res: Response) => {
         let order_detail: any = await get_orders_detail(id_order)
         let order: any = await get_order(id_order)
         res.status(200).json({
-            order,order_detail} 
-            )
+            order, order_detail
+        }
+        )
     } catch (error) {
         res.status(400).json({
             error
@@ -195,7 +205,7 @@ export const orders_details = async (req: Request, res: Response) => {
 };
 
 
-  export const orderandproducts = async (req: Request, res: Response) => {
+export const orderandproducts = async (req: Request, res: Response) => {
     let { id_order } = req.body;
 
     try {
@@ -205,7 +215,7 @@ export const orders_details = async (req: Request, res: Response) => {
         products = products[0];
         let productsdistint: any[] = [];
 
-        productsdistint = products.filter((product: any) => {return !order_detail.find((orderItem: any) => orderItem.fk_id_product === product.id_product);});
+        productsdistint = products.filter((product: any) => { return !order_detail.find((orderItem: any) => orderItem.fk_id_product === product.id_product); });
 
         res.status(200).json({
             productsdistint,

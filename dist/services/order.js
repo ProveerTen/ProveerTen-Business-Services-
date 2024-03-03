@@ -402,7 +402,7 @@ const insert_products_order = (id_order, products) => __awaiter(void 0, void 0, 
                     console.log(err);
                     reject(err);
                 }
-                connection.query(query, [id_order, item.id_product, item.quantity], (error, result) => {
+                connection.query(query, [id_order, item.id_product, item.product_quantity], (error, result) => {
                     connection.release();
                     if (error) {
                         reject(error);

@@ -323,7 +323,7 @@ export const get_products = (nit_company: string): Promise<any> => {
 
     const query = 'call get_products_company (?);';
 
-    
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
@@ -409,7 +409,7 @@ export const insert_products_order = async (id_order: string, products: any[]) =
                     console.log(err);
                     reject(err)
                 }
-                connection.query(query, [id_order, item.id_product, item.quantity], (error: any, result: any) => {
+                connection.query(query, [id_order, item.id_product, item.product_quantity], (error: any, result: any) => {
                     connection.release();
                     if (error) {
                         reject(error);
