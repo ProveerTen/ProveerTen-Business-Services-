@@ -9,7 +9,7 @@ import validator from '../middlewares/order-validator';
 const router = Router();
 
 router.post('/create', verifyToken, validateRole(['grocer']),validator.paramsOrder,validator.validatorParams,createOrder);
-router.post('/delete',verifyToken, validateRole(['company','provider']), deleteOrder);
+router.post('/delete',verifyToken, deleteOrder);
 router.get('/companies',verifyToken,companies);
 router.post('/products',verifyToken,products);
 router.post('/providers',verifyToken,providers);
