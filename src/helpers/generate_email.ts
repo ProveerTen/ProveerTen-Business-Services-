@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 export const generateOrderEmailContent = (order: any, order_detail: any, email: any) => {
     try {
 
-        const { id_order, order_delivery_date, total_ordered_price } = order[0];
+        const { id_order, order_date, total_ordered_price } = order[0];
         const products = order_detail.map((detail: any) => ({
             name: detail.name_product,
             price: detail.price
@@ -33,7 +33,7 @@ export const generateOrderEmailContent = (order: any, order_detail: any, email: 
                             <img class="my-6 w-32" src="https://us.123rf.com/450wm/blankstock/blankstock2012/blankstock201205247/161013072-icono-de-carrito-de-compras-signo-de-pedido-expreso-s%C3%ADmbolo-de-compra-r%C3%A1pida-elemento-de-dise%C3%B1o.jpg" />
                             <div class="space-y-4 mb-6">
                                 <h1 class="text-4xl fw-800">¡En hora buena por tu pedido!</h1>
-                                <p>Tu pedido ${id_order} ha sido realizado exitosamente. La fecha estimada de entrega es ${order_delivery_date}. </p>
+                                <p>Tu pedido ${id_order} ha sido realizado exitosamente. Fecha de creación del pedido ${order_date}. </p>
                             </div>
                             <div class="card rounded-3xl px-4 py-8 p-lg-10 mb-6">
                                 <h3 class="text-center">Detalle del Pedido</h3>
@@ -56,7 +56,6 @@ export const generateOrderEmailContent = (order: any, order_detail: any, email: 
             </html>
         `;
 
-        console.log(emailContent);
 
         if (email) {
             const transporter = nodemailer.createTransport({
@@ -72,8 +71,6 @@ export const generateOrderEmailContent = (order: any, order_detail: any, email: 
                 subject: 'Pedido Realizado',
                 html: emailContent
             };
-
-            console.log(mailOptions);
 
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
