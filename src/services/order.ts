@@ -505,6 +505,7 @@ export const reset_quantity_order = async (id_product: string, quantity: number)
                 reject(err)
             }
             connection.query(query, [id_product, quantity], (error: any, result: any) => {
+                connection.release()
                 if (error) {
                     reject(error);
                 } else {
