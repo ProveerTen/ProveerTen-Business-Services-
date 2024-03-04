@@ -10,7 +10,7 @@ const order_controller_1 = require("../controllers/order-controller");
 const order_validator_1 = __importDefault(require("../middlewares/order-validator"));
 const router = (0, express_1.Router)();
 router.post('/create', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['grocer']), order_validator_1.default.paramsOrder, order_validator_1.default.validatorParams, order_controller_1.createOrder);
-router.post('/delete', auth_token_1.verifyToken, (0, auth_role_1.validateRole)(['company', 'provider']), order_controller_1.deleteOrder);
+router.post('/delete', auth_token_1.verifyToken, order_controller_1.deleteOrder);
 router.get('/companies', auth_token_1.verifyToken, order_controller_1.companies);
 router.post('/products', auth_token_1.verifyToken, order_controller_1.products);
 router.post('/providers', auth_token_1.verifyToken, order_controller_1.providers);

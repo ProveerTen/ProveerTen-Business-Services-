@@ -165,9 +165,9 @@ export const view_categories_different = (): Promise<any> => {
 }
 
 
-export const view_grocers = (): Promise<any> => {
+export const view_grocers = (document_provider:string): Promise<any> => {
 
-    const query = 'call view_grocers';
+    const query = 'call view_grocers (?)';
 
     return new Promise((resolve, reject) => {
 
@@ -176,7 +176,7 @@ export const view_grocers = (): Promise<any> => {
                 console.log(err);
                 reject(err)
             }
-            connection.query(query, (error: any, result: any) => {
+            connection.query(query, document_provider,(error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);

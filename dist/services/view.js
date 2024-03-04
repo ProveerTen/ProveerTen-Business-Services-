@@ -160,15 +160,15 @@ const view_categories_different = () => {
     });
 };
 exports.view_categories_different = view_categories_different;
-const view_grocers = () => {
-    const query = 'call view_grocers';
+const view_grocers = (document_provider) => {
+    const query = 'call view_grocers (?)';
     return new Promise((resolve, reject) => {
         db_mysql_1.default.getConnection((err, connection) => {
             if (err) {
                 console.log(err);
                 reject(err);
             }
-            connection.query(query, (error, result) => {
+            connection.query(query, document_provider, (error, result) => {
                 connection.release();
                 if (error) {
                     console.log(error);

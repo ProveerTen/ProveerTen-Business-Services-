@@ -76,7 +76,8 @@ const get_view_price_products = (req, res) => __awaiter(void 0, void 0, void 0, 
 exports.get_view_price_products = get_view_price_products;
 const get_view_grocers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let grocers = yield (0, view_1.view_grocers)();
+        let { document_provider } = req.body;
+        let grocers = yield (0, view_1.view_grocers)(document_provider);
         if (grocers) {
             res.status(200).json({ grocers });
         }

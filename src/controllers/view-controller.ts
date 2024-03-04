@@ -83,7 +83,10 @@ export const get_view_price_products = async (req: Request, res: Response) => {
 export const get_view_grocers = async (req: Request, res: Response) => {
 
     try {
-        let grocers = await view_grocers();
+
+        let {document_provider} = req.body
+
+        let grocers = await view_grocers(document_provider);
 
         if (grocers) {
             res.status(200).json({ grocers });

@@ -4,3 +4,6 @@
 
 # dotenv
 .env
+
+#dist
+dist/*
