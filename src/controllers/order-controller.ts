@@ -5,12 +5,10 @@ import Order from "../models/order";
 import { insert_order, insert_products_order, get_stock, delete_order, get_quantity_order, reset_quantity_order, get_orders_grocer, get_orders_provider, get_orders_company, get_orders_detail, get_order } from '../services/order';
 import { get_companies, get_products, get_providers, get_name_store_grocer } from "../services/order";
 import { generateOrderEmailContent } from "../helpers/generate_email";
-
 export const createOrder = async (req: Request, res: Response) => {
 
     try {
-
-        console.log(req.body);
+        const { email}  = dataDecoded;
 
         const {
             order_delivery_date,
@@ -52,7 +50,7 @@ export const createOrder = async (req: Request, res: Response) => {
             insert_products_order(id_order, data.products).then(async (mensaje: any) => {
                 let order_detail: any = await get_orders_detail(id_order)
                 let order: any = await get_order(id_order)
-                generateOrderEmailContent(order,order_detail,process.env.EMAIL)
+                generateOrderEmailContent(order,order_detail,email)
                 res.status(200).json({ message: mensaje[0][0][0].message_text });
             }).catch((error: any) => { res.status(500).json({ message: error.sqlMessage }); });
         } else {
