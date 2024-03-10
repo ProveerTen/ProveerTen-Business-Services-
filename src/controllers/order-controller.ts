@@ -8,7 +8,7 @@ import { generateOrderEmailContent } from "../helpers/generate_email";
 export const createOrder = async (req: Request, res: Response) => {
 
     try {
-        const { email}  = dataDecoded;
+        const { email } = dataDecoded;
 
         const {
             order_delivery_date,
@@ -43,14 +43,10 @@ export const createOrder = async (req: Request, res: Response) => {
             }
         }));
 
-        console.log("S", success);
-
         if (success) {
             await insert_order(data);
             insert_products_order(id_order, data.products).then(async (mensaje: any) => {
-                let order_detail: any = await get_orders_detail(id_order)
-                let order: any = await get_order(id_order)
-                generateOrderEmailContent(order,order_detail,email)
+                generateOrderEmailContent(mensaje[0][1], mensaje[0][2], email)
                 res.status(200).json({ message: mensaje[0][0][0].message_text });
             }).catch((error: any) => { res.status(500).json({ message: error.sqlMessage }); });
         } else {

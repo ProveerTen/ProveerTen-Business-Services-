@@ -2,17 +2,25 @@ import nodemailer from 'nodemailer';
 
 export const generateOrderEmailContent = (order: any, order_detail: any, email: any) => {
     try {
+        //console.log(order);
+        //console.log(order_detail);
+
 
         const { id_order, order_date, total_ordered_price } = order[0];
+        
         const products = order_detail.map((detail: any) => ({
             name: detail.name_product,
-            price: detail.price
+            price: detail.price,
+            total_amount: detail.total_amount
         }));
+        //console.log(products);
+        
 
         let productsHtml = products.map((product: any) => `
             <tr>
                 <td>${product.name}</td>
                 <td class="text-right">$${product.price}</td>
+                <td class="text-right">$${product.total_amount}</td>
             </tr>
         `).join('');
 
