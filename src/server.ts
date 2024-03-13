@@ -2,10 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
-
 import provider from './routes/provider'
 import publication from './routes/publication';
-import providerU from './routes/provider';
 import profile from './routes/profile';
 import routesEditProfile from './routes/editProfileData';
 import routesChangePassword from './routes/changePasswordProfile';
@@ -38,7 +36,6 @@ class Server {
     middlewares() {
         this.app.use(express.json());
         const allowedOrigins = ['https://proveerten.netlify.app','https://proveer-ten-front-end-git-hu-featurechat-bryctans-projects.vercel.app','http://localhost:4200'];
-        //const allowedOrigins = 'http://localhost:4200';
         this.app.use(cors({ credentials: true, origin: allowedOrigins }));
         this.app.use(morgan('dev'));
     }

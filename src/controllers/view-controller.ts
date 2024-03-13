@@ -31,7 +31,10 @@ export const get_view_companies = async (req: Request, res: Response) => {
 export const get_view_products = async (req: Request, res: Response) => {
 
     try {
-        let products = await view_products();
+
+        const {document_grocer} = req.body;
+
+        let products = await view_products(document_grocer);
         let categories = await view_categories();
         let categoriesByProducts: any[] = [];
 
