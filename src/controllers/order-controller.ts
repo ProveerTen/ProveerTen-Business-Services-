@@ -86,8 +86,13 @@ export const deleteOrder = async (req: Request, res: Response) => {
 
 export const companies = async (req: Request, res: Response) => {
 
+    let {id} = dataDecoded;
+
+    console.log(id);
+    
+
     try {
-        let companies = await get_companies();
+        let companies = await get_companies(id);
 
         if (companies) {
             res.status(200).json({ "companies": companies[0] })
