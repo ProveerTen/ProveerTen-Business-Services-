@@ -153,6 +153,11 @@ export const grocer = (req: Request, res: Response) => {
 
     let { id } = dataDecoded;
 
+    console.log('111111');
+
+    console.log(id);
+    
+
     const query = 'call get_data_profile_grocer(?);';
 
     profile.profileService(query, id, (error: any, data: any) => {

@@ -5,7 +5,10 @@ import { view_categories, view_categories_different, view_companies, view_grocer
 export const get_view_companies = async (req: Request, res: Response) => {
 
     try {
-        let companies = await view_companies();
+
+        const {document_grocer} = req.body;
+
+        let companies = await view_companies(document_grocer);
         let categories = await view_categories_different();
         let categoriesByCompanies: any[] = [];
 
@@ -33,7 +36,7 @@ export const get_view_products = async (req: Request, res: Response) => {
     try {
 
         const {document_grocer} = req.body;
-
+        
         let products = await view_products(document_grocer);
         let categories = await view_categories();
         let categoriesByProducts: any[] = [];
@@ -58,7 +61,10 @@ export const get_view_products = async (req: Request, res: Response) => {
 export const get_view_price_products = async (req: Request, res: Response) => {
 
     try {
-        let products = await view_price_products();
+
+        const {document_grocer} = req.body;
+
+        let products = await view_price_products(document_grocer);
         let categories = await view_categories();
         let categoriesByProductsPrice: any[] = [];
 
