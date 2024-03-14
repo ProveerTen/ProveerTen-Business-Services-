@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { view_categories, view_categories_different, view_companies, view_grocers, view_price_products, view_products } from "../services/view";
+import { view_categories, view_categories_different, view_companies, view_grocers, view_price_products, view_products, view_products_by_location } from "../services/view";
 
 
 export const get_view_companies = async (req: Request, res: Response) => {
@@ -108,4 +108,28 @@ export const get_view_grocers = async (req: Request, res: Response) => {
     }
 };
 
+export const products_by_location = async (req: Request, res: Response) => {
 
+    try {
+        let { city, deparment } = req.body;
+
+        let products = await view_products_by_location(city,deparment);
+        let categories = await view_categories();
+        let categoriesByProducts: any[] = [];
+
+        products.forEach((product: any) => {
+            const filteredCategories = categories.filter((category: any) => category.fk_product_category_id_product === product.id_product);
+            product.categories = filteredCategories;
+            categoriesByProducts.push(product)
+        });
+
+        if (products) {
+            res.status(200).json({ categoriesByProducts });
+        }
+
+    } catch (error) {
+        res.status(400).json({
+            error
+        })
+    }
+}
