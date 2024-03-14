@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { view_categories, view_categories_different, view_companies, view_grocers, view_price_products, view_products, view_products_by_location } from "../services/view";
+import { view_categories, view_categories_different, view_companies, view_companies_by_location, view_grocers, view_price_products, view_products, view_products_by_location } from "../services/view";
 
 
 export const get_view_companies = async (req: Request, res: Response) => {
@@ -133,3 +133,31 @@ export const products_by_location = async (req: Request, res: Response) => {
         })
     }
 }
+
+export const companies_by_location = async (req: Request, res: Response) => {
+
+    try {
+
+        let { city, deparment } = req.body;
+
+        let companies = await view_companies_by_location(city,deparment);
+        let categories = await view_categories_different();
+        let categoriesByCompanies: any[] = [];
+
+
+        companies.forEach((compania: any) => {
+            const filteredCategories = categories.filter((category: any) => category.fk_product_nit_company === compania.nit_company);
+            compania.categories = filteredCategories
+            categoriesByCompanies.push(compania);
+        });
+
+        if (companies) {
+            res.status(200).json({ categoriesByCompanies });
+        }
+
+    } catch (error) {
+        res.status(400).json({
+            error
+        });
+    }
+};

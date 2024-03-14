@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { dataDecoded } from "../middlewares/auth-token";
 import generateRandomString from "../helpers/generate-string";
 import Order from "../models/order";
-import { insert_order, insert_products_order, get_stock, delete_order, get_quantity_order, reset_quantity_order, get_orders_grocer, get_orders_provider, get_orders_company, get_orders_detail, get_order } from '../services/order';
+import { insert_order, insert_products_order, get_stock, delete_order, get_quantity_order, reset_quantity_order, get_orders_grocer, get_orders_provider, get_orders_company, get_orders_detail, get_order, get_providers_city } from '../services/order';
 import { get_companies, get_products, get_providers, get_name_store_grocer } from "../services/order";
 import { generateOrderEmailContent } from "../helpers/generate_email";
 export const createOrder = async (req: Request, res: Response) => {
@@ -249,3 +249,23 @@ export const deleteProductOrder = async (req: Request, res: Response) => {
         res.status(400).json({ error })
     }
 }
+
+
+export const filter_providers_location = async (req: Request, res: Response) => {
+
+    try {
+        const data = {
+            companyId: req.body.companyId,
+            grocerId: req.body.grocerId
+        }
+       
+        
+        let providersbycity = await get_providers_city(data);
+        res.status(200).json({ providersbycity })
+    }
+    catch (error) {
+        res.status(400).json({ message: "Error internal server" })
+    }
+  
+  }
+  
