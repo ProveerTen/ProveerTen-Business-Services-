@@ -66,6 +66,29 @@ export const view_categories = (): Promise<any> => {
     })
 }
 
+export const view_subCategories = (name_category:any): Promise<any> => {
+
+    const query = 'call view_subCategories(?)';
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query,name_category, (error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    console.log(error);
+                    return reject('error')
+                }
+                resolve(result[0])
+            });
+        });
+    })
+}
+
+
 export const view_categories_different = (): Promise<any> => {
 
     const query = 'call view_categories_different()';
