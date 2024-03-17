@@ -8,7 +8,7 @@ import {
   get_name_company, insert_product,
   insert_product_category, delete_product,
   delete_product_category, deleteOldImage,
-  verifyExistProduct, updateDataProduct, get_product_price, insert_suggest_product_price, get_product, delete_product_suggested
+  verifyExistProduct, updateDataProduct, get_product_price, insert_suggest_product_price, get_product, delete_product_suggested, insert_product_subCategory
 } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import { view_categories } from "../services/view";
@@ -33,7 +33,8 @@ export const createProduct = async (req: Request, res: Response) => {
       content_product,
       availability_product,
       date_creation,
-      categories
+      category,
+      subCategory
     } = req.body;
 
     let name_company = await get_name_company(dataDecoded.id) + '_' + name_product.replace(/\s/g, '_');
@@ -64,7 +65,8 @@ export const createProduct = async (req: Request, res: Response) => {
 
     await insert_product(data);
 
-    insert_product_category(id_product, categories);
+    insert_product_category(id_product, category);
+    insert_product_subCategory(id_product, subCategory);
 
     res.status(200).json({ message: 'Ok' })
 
@@ -215,7 +217,7 @@ export const product = async (req: Request, res: Response) => {
     product.categories = filteredCategories;
     categoriesByProducts.push(product)
 
-    
+
     console.log("product___", product);
     console.log("categories___", categories);
     console.log("filteredCategories", filteredCategories); //

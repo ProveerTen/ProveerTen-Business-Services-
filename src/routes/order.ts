@@ -8,16 +8,16 @@ import validator from '../middlewares/order-validator';
 
 const router = Router();
 
-router.post('/create', verifyToken, validateRole(['grocer']),validator.paramsOrder,validator.validatorParams,createOrder);
-router.post('/delete',verifyToken, deleteOrder);
-router.get('/companies',verifyToken,companies);
-router.post('/products',verifyToken,products);
-router.post('/providers',verifyToken,providers);
-router.post('/addproducts',verifyToken,orderandproducts);
-router.get('/grocer',verifyToken,validateRole(['grocer']),orders_grocer);
-router.get('/company',verifyToken,validateRole(['company']),orders_company);
-router.get('/provider',verifyToken,validateRole(['provider']),orders_provider);
-router.post('/detail',verifyToken,orders_details);
+router.post('/create', verifyToken, validateRole(['grocer']), validator.paramsOrder, validator.validatorParams, createOrder);
+router.post('/delete', verifyToken, deleteOrder);
+router.get('/companies', verifyToken, companies);
+router.post('/products', verifyToken, products);
+router.post('/providers', verifyToken, providers);
+router.post('/addproducts', verifyToken, orderandproducts);
+router.get('/grocer', verifyToken, validateRole(['grocer']), orders_grocer);
+router.get('/company', verifyToken, validateRole(['company']), orders_company);
+router.get('/provider', verifyToken, validateRole(['provider']), orders_provider);
+router.post('/detail', verifyToken, orders_details);
 router.post('providers/location', filter_providers_location)
 
 
