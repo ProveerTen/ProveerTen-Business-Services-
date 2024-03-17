@@ -86,10 +86,10 @@ export const deleteOrder = async (req: Request, res: Response) => {
 
 export const companies = async (req: Request, res: Response) => {
 
-    let {id} = dataDecoded;
+    let { id } = dataDecoded;
 
     console.log(id);
-    
+
 
     try {
         let companies = await get_companies(id);
@@ -207,14 +207,16 @@ export const orders_details = async (req: Request, res: Response) => {
 
 export const orderandproducts = async (req: Request, res: Response) => {
     let { id_order } = req.body;
+    console.log(id_order);
+
 
     try {
         let order_detail: any = await get_orders_detail(id_order);
         let order: any = await get_order(id_order);
-        let products = await get_products(order[0].fk_nit_company);
+        let products = await get_products(order_detail[0].fk_product_nit_company);
         products = products[0];
-        let productsdistint: any[] = [];
 
+        let productsdistint: any[] = [];
         productsdistint = products.filter((product: any) => { return !order_detail.find((orderItem: any) => orderItem.fk_id_product === product.id_product); });
 
         res.status(200).json({
@@ -258,14 +260,13 @@ export const filter_providers_location = async (req: Request, res: Response) => 
             companyId: req.body.companyId,
             grocerId: req.body.grocerId
         }
-       
-        
+
+
         let providersbycity = await get_providers_city(data);
         res.status(200).json({ providersbycity })
     }
     catch (error) {
         res.status(400).json({ message: "Error internal server" })
     }
-  
-  }
-  
+
+}
