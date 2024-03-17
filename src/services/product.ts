@@ -21,7 +21,7 @@ export const get_name_company = (nit_company: string): Promise<string> => {
 };
 
 export const insert_product = (data: any): Promise<any> => {
-console.log("PRODUCT l ", data);
+  console.log("PRODUCT l ", data);
 
   const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,?,@message_text)";
 
@@ -60,7 +60,7 @@ console.log("PRODUCT l ", data);
   });
 };
 
-
+/*
 export const insert_product_category = (id_product: string, categories: string[]) => {
   const query = "call insert_product_category(?, ?, @message_text)";
 
@@ -83,6 +83,50 @@ export const insert_product_category = (id_product: string, categories: string[]
     });
   });
 };
+*/
+
+export const insert_product_category = (id_product: string, category: string) => {
+  const query = "call insert_product_category(?,?,@message_text)";
+
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.log(err);
+        reject(err)
+      }
+      connection.query(query, [id_product, category], (error: any, result: any) => {
+        connection.release();
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  });
+};
+
+export const insert_product_subCategory = (id_product: string, subCategory: string) => {
+  const query = "call insert_product_subCategory(?,?,@message_text)";
+
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.log(err);
+        reject(err)
+      }
+      connection.query(query, [id_product, subCategory], (error: any, result: any) => {
+        connection.release();
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  });
+};
+
 
 // delete
 export const delete_product = (id_product: string) => {
@@ -99,10 +143,10 @@ export const delete_product = (id_product: string) => {
         connection.release();
         if (error) {
           console.log(error);
-          
+
           reject(error);
         } else {
-  
+
           resolve(result);
         }
       });
@@ -110,7 +154,7 @@ export const delete_product = (id_product: string) => {
   });
 };
 
-export const deleteOldImage = (urlImage: string,urlVaues: any,fieldName: string): Promise<any> => {
+export const deleteOldImage = (urlImage: string, urlVaues: any, fieldName: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
@@ -131,7 +175,8 @@ export const deleteOldImage = (urlImage: string,urlVaues: any,fieldName: string)
             resolve(split[9]);
           } else {
             resolve(null);
-          }}
+          }
+        }
       });
     });
   });
@@ -154,7 +199,7 @@ export const delete_product_category = (id_product: string) => {
           resolve(result);
         }
       });
-    }); 
+    });
   });
 };
 
@@ -170,20 +215,20 @@ export const delete_product_suggested = (id_product: string) => {
         connection.release();
         if (error) {
           console.log(error);
-          
+
           reject(error);
         } else {
           console.log(result);
           resolve(result);
         }
       });
-    }); 
+    });
   });
 };
 
 export const verifyExistProduct = (idP: string): Promise<any> => {
   const queryV = "SELECT * FROM product WHERE id_product = ?";
-  
+
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
