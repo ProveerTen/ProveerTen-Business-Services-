@@ -85,8 +85,6 @@ const updateDataProvider = async (dataToken: any, dataToUpdate: any, callback: a
 };
 
 const updateDataGrocer = (dataToken: any, dataToUpdate: any, callback: any) => {
-console.log("apartment", dataToUpdate.apartment);
-
 
     let updateQuery: string, updateValues: string[]
     const { role, email, id } = dataToken;
@@ -100,7 +98,7 @@ console.log("apartment", dataToUpdate.apartment);
         try {
             updateQuery = "call update_data_grocer(?,?,?,?,?,?,?,?,?,?,?,@message_text)"
 
-            updateValues = [dataToUpdate.name_grocer, dataToUpdate.last_name_grocer, dataToUpdate.email_grocer, dataToUpdate.name_store, dataToUpdate.city_grocer, dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.apartment, dataToUpdate.number_grocer, id];
+            updateValues = [dataToUpdate.name_grocer, dataToUpdate.last_name_grocer, dataToUpdate.email_grocer, dataToUpdate.name_store, dataToUpdate.city_grocer, dataToUpdate.department,dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.number_grocer, id];
 
             connection.query(updateQuery, updateValues, async (err: QueryError | null, results) => {
                 connection.release();

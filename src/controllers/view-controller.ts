@@ -141,6 +141,7 @@ export const companies_by_location = async (req: Request, res: Response) => {
         let { city, deparment } = req.body;
 
         let companies = await view_companies_by_location(city,deparment);
+        
         let categories = await view_categories_different();
         let categoriesByCompanies: any[] = [];
 

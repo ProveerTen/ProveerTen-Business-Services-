@@ -63,6 +63,7 @@ export const patchGrocer = (req: Request, res: Response) => {
             role,
             id
         }
+        console.log("req,", req.body);
 
         updateService.updateDataGrocer(credentials, req.body, (error: any, results: any) => {
             if (error) {
@@ -102,17 +103,17 @@ export const getData = (req: Request, res: Response) => {
 
 export const addSocialRed = (req: Request, res: Response) => {
     try {
-        updateService.addSocialRed(req.body, (error:any, results:any )=> {
+        updateService.addSocialRed(req.body, (error: any, results: any) => {
             if (error) {
-                res.status(500).json({error})
+                res.status(500).json({ error })
             }
             if (results) {
-                res.status(200).json({"Status":results})
+                res.status(200).json({ "Status": results })
             }
         })
     } catch (error) {
         console.log(error);
-        res.status(500).json({"failed to add social red": error})        
+        res.status(500).json({ "failed to add social red": error })
     }
 }
 
@@ -120,54 +121,54 @@ export const getSocialRed = (req: Request, res: Response) => {
     const { email, role, id } = dataDecoded;
 
     try {
-        updateService.getSocialRed(id, (error:any, results:any )=> {
+        updateService.getSocialRed(id, (error: any, results: any) => {
             if (error) {
-                res.status(500).json({error})
+                res.status(500).json({ error })
             }
             if (results) {
-                res.status(200).json({"status":results})
+                res.status(200).json({ "status": results })
             }
         })
     } catch (error) {
         console.log(error);
-        res.status(500).json({"failed to add social red": error})        
+        res.status(500).json({ "failed to add social red": error })
     }
 }
 
 export const getSocialRedByCompany = (req: Request, res: Response) => {
-    let {id} = req.params
-    
+    let { id } = req.params
+
     try {
-        updateService.getSocialRed(id, (error:any, results:any )=> {
+        updateService.getSocialRed(id, (error: any, results: any) => {
             if (error) {
-                res.status(500).json({error})
+                res.status(500).json({ error })
             }
             if (results) {
-                res.status(200).json({"status":results})
+                res.status(200).json({ "status": results })
             }
         })
     } catch (error) {
         console.log(error);
-        res.status(500).json({"failed to add social red": error})        
+        res.status(500).json({ "failed to add social red": error })
     }
 }
 
 
 export const deleteSocialRed = (req: Request, res: Response) => {
-    const { email, role, id } = dataDecoded;  
+    const { email, role, id } = dataDecoded;
 
     try {
-        updateService.deleteSocialRed(id, req.query, (error:any, results:any )=> {
+        updateService.deleteSocialRed(id, req.query, (error: any, results: any) => {
             if (error) {
-                res.status(500).json({error})
+                res.status(500).json({ error })
             }
             if (results) {
-                res.status(200).json({"status":results})
+                res.status(200).json({ "status": results })
             }
         })
     } catch (error) {
         console.log(error);
-        res.status(500).json({"failed to add social red": error})        
+        res.status(500).json({ "failed to add social red": error })
     }
 }
 
