@@ -1,6 +1,6 @@
 import pool from "../config/db-mysql";
 
-export const get_companies = (document_grocer:string): Promise<any> => {
+export const get_companies = (document_grocer: string): Promise<any> => {
 
     const query = 'call get_companies(?)';
 
@@ -335,7 +335,6 @@ export const get_order = async (id_order: string) => {
             });
         });
     });
-
 };
 
 export const get_orders_detail = async (id_order: string) => {
@@ -383,7 +382,7 @@ export const delete_product_order = async (id_order: string) => {
         });
     });
 
-}; 
+};
 
 export const get_providers_city = (data: any): Promise<any> => {
 
@@ -395,7 +394,7 @@ export const get_providers_city = (data: any): Promise<any> => {
                 console.log(err);
                 reject(err)
             }
-            connection.query(query, [data.grocerId,data.companyId], (error: any, result: any) => {
+            connection.query(query, [data.grocerId, data.companyId], (error: any, result: any) => {
                 connection.release()
                 if (error) {
                     return reject(error)
@@ -406,3 +405,62 @@ export const get_providers_city = (data: any): Promise<any> => {
         })
     });
 }
+
+
+export const delete_products_order = async (id_order: string, products: any[]) => {
+
+    const query = 'call delete_order_products (?,?,@message_text)';
+    const promises: Promise<any>[] = [];
+    products.forEach((item: any) => {
+        const promise = new Promise((resolve, reject) => {
+            pool.getConnection((err, connection) => {
+                if (err) {
+                    console.log(err);
+                    reject(err)
+                }
+                connection.query(query, [id_order, item.fk_id_product], (error: any, result: any) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                        console.log(result);
+
+                    }
+                });
+            });
+        });
+        promises.push(promise);
+    });
+    return Promise.all(promises);
+};
+
+
+export const updateOrdersProducts = async (id_order: string, products: any[]) => {
+
+    const query = 'call updateOrdersProducts(?,?,?,@message_text)';
+    const promises: Promise<any>[] = [];
+
+    products.forEach((item: any) => {
+        const promise = new Promise((resolve, reject) => {
+            pool.getConnection((err, connection) => {
+                if (err) {
+                    console.log(err);
+                    reject(err)
+                }
+                connection.query(query, [id_order, item.id_product, item.quantity], (error: any, result: any) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                        console.log(result);
+                        
+                    }
+                });
+            });
+        });
+        promises.push(promise);
+    });
+    return Promise.all(promises);
+};
