@@ -438,7 +438,7 @@ export const delete_products_order = async (id_order: string, products: any[]) =
 
 export const updateOrdersProducts = async (id_order: string, products: any[]) => {
 
-    const query = 'call insertOrdersProducts(?,?,?,@message_text)';
+    const query = 'call updateOrdersProducts(?,?,?,@message_text)';
     const promises: Promise<any>[] = [];
 
     products.forEach((item: any) => {
@@ -454,7 +454,8 @@ export const updateOrdersProducts = async (id_order: string, products: any[]) =>
                         reject(error);
                     } else {
                         resolve(result);
-
+                        console.log(result);
+                        
                     }
                 });
             });

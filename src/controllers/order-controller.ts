@@ -6,6 +6,7 @@ import { insert_order, insert_products_order, get_stock, delete_order, get_quant
 import { get_companies, get_products, get_providers, get_name_store_grocer } from "../services/order";
 import { generateOrderEmailContent } from "../helpers/generate_email";
 import { product } from './product-controller';
+import { body } from "express-validator";
 export const createOrder = async (req: Request, res: Response) => {
 
     try {
@@ -259,11 +260,12 @@ export const updateOrder = async (req: Request, res: Response) => {
         const { id_order, list_update, list_delete } = req.body
 
 
+
         let success: boolean = false;
 
         await Promise.all(list_update.map(async (item: any) => {
             let data = await get_stock(item.id_product);
-            if (data[0].stock_product >= item.product_quantity) {
+            if (data[0].stock_product >= item.quantity) {
                 success = true;
             } else {
                 success = false;
@@ -271,23 +273,22 @@ export const updateOrder = async (req: Request, res: Response) => {
         }));
 
         if (success) {
-            let message:any;
-            updateOrdersProducts(id_order, list_update).then(async (mensaje: any) => {
-                message = mensaje[0][0][0].message_text 
-            }).catch((error: any) => { res.status(500).json({ message: error.sqlMessage }); });
+            let message: string = '';
+            await updateOrdersProducts(id_order, list_update).then(async (mensaje: any) => {
+                message = mensaje[0][0][0].message_text
+            }).catch((error: any) => { res.status(500).json({ message: error.sqlMessage }); console.log(error) });
 
-            delete_products_order(id_order, list_delete)
+            await delete_products_order(id_order, list_delete)
             list_delete.forEach((product: any) => {
                 reset_quantity_order(product.fk_id_product, product.quantity)
             });
-            res.status(200).json({ message: message });
+
+            res.status(200).json({ mensaje: message });
         } else {
+
             res.status(500).json({ message: "stock insuficiente" });
         }
 
-
-       
-      
     } catch (error) {
         res.status(400).json({ error })
     }
