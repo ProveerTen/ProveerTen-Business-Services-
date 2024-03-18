@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { validateRole } from "../middlewares/auth-role";
 import { verifyToken } from "../middlewares/auth-token";
-import { companies, createOrder, deleteOrder, filter_providers_location, orderandproducts, orders_company, orders_details, orders_grocer, orders_provider, products, providers } from "../controllers/order-controller";
+import { companies, createOrder, deleteOrder, filter_providers_location, orderandproducts, orders_company, orders_details, orders_grocer, orders_provider, products, providers, updateOrder } from "../controllers/order-controller";
 import validator from '../middlewares/order-validator';
 
 
@@ -10,6 +10,7 @@ const router = Router();
 
 router.post('/create', verifyToken, validateRole(['grocer']), validator.paramsOrder, validator.validatorParams, createOrder);
 router.post('/delete', verifyToken, deleteOrder);
+router.post('/update', verifyToken, updateOrder);
 router.get('/companies', verifyToken, companies);
 router.post('/products', verifyToken, products);
 router.post('/providers', verifyToken, providers);
