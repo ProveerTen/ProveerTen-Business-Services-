@@ -1,14 +1,14 @@
 
 import { Request, Response } from "express";
 import fs from 'fs-extra';
-
+import xlsx from 'xlsx';
 import cloudinary from '../libs/cloudinary';
 import Product from '../models/Product';
 import {
   get_name_company, insert_product,
   insert_product_category, delete_product,
   delete_product_category, deleteOldImage,
-  verifyExistProduct, updateDataProduct, get_product_price, insert_suggest_product_price, get_product, delete_product_suggested, insert_product_subCategory
+  verifyExistProduct, updateDataProduct, get_product_price, insert_suggest_product_price, get_product, delete_product_suggested, insert_product_subCategory, insert_products
 } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import { view_categories } from "../services/view";
@@ -233,3 +233,38 @@ export const product = async (req: Request, res: Response) => {
     })
   }
 }
+
+export const uploadProductsFile = async (req: Request, res: Response) => {
+
+  try {
+    let { dataExcel } = req.body;
+     
+    await insert_products(dataDecoded.id, dataExcel)
+    
+    res.status(200).json({ message: 'Ok' })
+
+  } catch (error) {
+    console.log('Error');
+    res.status(400).json(error)
+  }
+};
+
+
+
+
+export const getProductsFile = async (req: Request, res: Response) => {
+
+  try {
+    const workbook = xlsx.readFile(req.file?.path!);
+    const workbookSheets = workbook.SheetNames;
+    const sheet = workbookSheets[0];
+    const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
+  
+    fs.unlink(req.file?.path!);
+    res.status(200).json({ dataExcel })
+
+  } catch (error) {
+    console.log('Error');
+    res.status(400).json(error)
+  }
+};

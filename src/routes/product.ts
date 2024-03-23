@@ -2,7 +2,7 @@ import { Router } from "express"
 import multer from '../libs/multer';
 
 import { validateRole } from "../middlewares/auth-role";
-import { createProduct, deleteProduct , product, suggest_product_price, updateProduct} from "../controllers/product-controller";
+import { createProduct, deleteProduct , getProductsFile, product, suggest_product_price, updateProduct, uploadProductsFile} from "../controllers/product-controller";
 import { verifyToken } from "../middlewares/auth-token";
 
 import validator from '../middlewares/product-validator';
@@ -14,7 +14,9 @@ router.post('/create', verifyToken, validateRole(['company']), multer.single('im
 router.post('/update', verifyToken, validateRole (['company']), multer.single ('image_product'), validator.paramsProductUpdate, validator.validatorParams, updateProduct);
 router.post('/delete', verifyToken, validateRole(['company']), deleteProduct)
 router.post('/detail', product)
-router.post('/price', verifyToken, validateRole(['grocer']),suggest_product_price)
+router.post('/price', verifyToken, validateRole(['grocer']), suggest_product_price)
 
+router.post('/getfileProducts', verifyToken, validateRole(['company']), multer.single('file_products'), getProductsFile);
+router.post('/fileProducts', verifyToken, validateRole(['company']), uploadProductsFile);
 
 export default router;

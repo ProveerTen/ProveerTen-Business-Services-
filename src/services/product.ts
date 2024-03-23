@@ -1,4 +1,6 @@
 import pool from "../config/db-mysql";
+import { format } from 'date-fns';
+import generateRandomString from "../helpers/generate-string";
 
 export const get_name_company = (nit_company: string): Promise<string> => {
   const query = "call  get_name_company_by_id(?)";
@@ -23,7 +25,7 @@ export const get_name_company = (nit_company: string): Promise<string> => {
 export const insert_product = (data: any): Promise<any> => {
   console.log("PRODUCT l ", data);
 
-  const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,?,@message_text)";
+  const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,'Disponible',?,?,@message_text)";
 
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
@@ -347,4 +349,46 @@ export const get_product = (id_product: string): Promise<string> => {
       });
     });
   })
+};
+
+export const insert_products = async (nit_company:string, products: any[]) => {
+
+  const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,'Disponible',?,?,@message_text)";
+  const promises: Promise<any>[] = [];
+
+  products.forEach((data: any) => {
+    let id_product = data.name_product.replace(/\s/g, '_') + '_' + generateRandomString(5);
+    const promise = new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) {
+          console.log(err);
+          reject(err)
+        }
+        connection.query(query, [
+          id_product,
+          data.name_product,
+          data.description_product,
+          data.purchase_price_product,
+          data.unit_purchase_price_product,
+          data.suggested_unit_selling_price_product,
+          data.purchase_quantity,
+          data.stock_product,
+          data.content_product,
+          data.image_product,
+          format(new Date(), 'yyyy-MM-dd HH:mm:ss.SSS'),
+          nit_company
+        ], (error: any, result: any) => {
+          connection.release();
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+
+          }
+        });
+      });
+    });
+    promises.push(promise);
+  });
+  return Promise.all(promises);
 };
