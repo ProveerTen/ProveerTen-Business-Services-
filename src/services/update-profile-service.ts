@@ -46,10 +46,12 @@ const updateDataCompany = (dataToken: any, dataToUpdate: any, callback: any) => 
     });
 };
 
-const updateDataProvider = async (dataToken: any, dataToUpdate: any, callback: any) => {
+const updateDataProvider = async (data: any, dataToUpdate: any, callback: any) => {
 
     let updateQuery: string, updateValues: string[]
-    const { role, email, id } = dataToken;
+    const { role, email, id } = data;
+
+    console.log(id);
 
     pool.getConnection((err, connection) => {
         if (err) {
@@ -58,9 +60,12 @@ const updateDataProvider = async (dataToken: any, dataToUpdate: any, callback: a
         }
 
         try {
-            updateQuery = "call update_data_provider(?,?,?,?,?,?,?,?,?, @message_text)";
+            updateQuery = "call update_data_provider(?,?,?,?,?,?,?,?,?,?, @message_text)";
 
-            updateValues = [dataToUpdate.name_provider, dataToUpdate.last_name_provider, dataToUpdate.email_provider, dataToUpdate.city_provider, dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.number_provider, id];
+            updateValues = [dataToUpdate.name_provider, dataToUpdate.last_name_provider, dataToUpdate.email_provider, dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.number_provider, dataToUpdate.city_provider, dataToUpdate.department, id];
+
+            console.log(updateValues);
+
 
             connection.query(updateQuery, updateValues, async (err: QueryError | null, results) => {
                 if (err) {
@@ -98,7 +103,7 @@ const updateDataGrocer = (dataToken: any, dataToUpdate: any, callback: any) => {
         try {
             updateQuery = "call update_data_grocer(?,?,?,?,?,?,?,?,?,?,?,@message_text)"
 
-            updateValues = [dataToUpdate.name_grocer, dataToUpdate.last_name_grocer, dataToUpdate.email_grocer, dataToUpdate.name_store, dataToUpdate.city_grocer, dataToUpdate.department,dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.number_grocer, id];
+            updateValues = [dataToUpdate.name_grocer, dataToUpdate.last_name_grocer, dataToUpdate.email_grocer, dataToUpdate.name_store, dataToUpdate.city_grocer, dataToUpdate.department, dataToUpdate.neighborhood, dataToUpdate.street, dataToUpdate.number_street, dataToUpdate.number_grocer, id];
 
             connection.query(updateQuery, updateValues, async (err: QueryError | null, results) => {
                 connection.release();
@@ -123,15 +128,15 @@ const updateDataGrocer = (dataToken: any, dataToUpdate: any, callback: any) => {
     });
 };
 
-const addSocialRed = (dataToAdd:any, callback:any) => {
-    let addQuery:string, addValues:string[]
+const addSocialRed = (dataToAdd: any, callback: any) => {
+    let addQuery: string, addValues: string[]
 
     try {
         addQuery = "insert into socialRed (link, icon, fk_nit_company_socialRed) values (?,?,?)"
-        
+
         addValues = [dataToAdd.link, dataToAdd.icon, dataToAdd.nit_company]
         console.log(addValues);
-        
+
 
         pool.getConnection((err, connection) => {
             if (err) {
@@ -139,13 +144,13 @@ const addSocialRed = (dataToAdd:any, callback:any) => {
                 return callback(err);
             }
 
-            connection.query(addQuery, addValues, async (err:QueryError | null, results:any[])=> {
+            connection.query(addQuery, addValues, async (err: QueryError | null, results: any[]) => {
                 connection.release();
                 if (err) {
-                    callback({"Error insertando los datos": err})
+                    callback({ "Error insertando los datos": err })
                 } else {
                     console.log("exito");
-                    callback(null, {"Datos insertados con exito": results})                
+                    callback(null, { "Datos insertados con exito": results })
                 }
             })
         })
@@ -154,16 +159,16 @@ const addSocialRed = (dataToAdd:any, callback:any) => {
     }
 }
 
-const getSocialRed = (id:any, callback:any) => {
-    let getQuery:string, getValues:string[]
+const getSocialRed = (id: any, callback: any) => {
+    let getQuery: string, getValues: string[]
     console.log("id___", id);
-    
+
     try {
         getQuery = "select * from socialRed where fk_nit_company_socialRed = ?"
-        
+
         getValues = [id]
         console.log(getValues);
-        
+
 
         pool.getConnection((err, connection) => {
             if (err) {
@@ -171,17 +176,17 @@ const getSocialRed = (id:any, callback:any) => {
                 return callback(err);
             }
 
-            connection.query(getQuery, getValues, async (err:QueryError | null, results:any[])=> {
+            connection.query(getQuery, getValues, async (err: QueryError | null, results: any[]) => {
                 connection.release();
                 if (err) {
                     console.log("error", err);
-                    
-                    callback({"Error obteniendo los datos": err})
+
+                    callback({ "Error obteniendo los datos": err })
                 } else {
                     console.log("exito");
                     console.log(results);
-                    
-                    callback(null, {data: results})                
+
+                    callback(null, { data: results })
                 }
             })
         })
@@ -190,14 +195,14 @@ const getSocialRed = (id:any, callback:any) => {
     }
 }
 
-const deleteSocialRed = (id:any, datatoDelete:any, callback:any) => {
-    let getQuery:string, getValues:string[]
+const deleteSocialRed = (id: any, datatoDelete: any, callback: any) => {
+    let getQuery: string, getValues: string[]
 
     try {
         getQuery = "delete from socialRed where id = ?"
-        
+
         getValues = [datatoDelete.id]
-        console.log(getValues);        
+        console.log(getValues);
 
         pool.getConnection((err, connection) => {
             if (err) {
@@ -205,13 +210,13 @@ const deleteSocialRed = (id:any, datatoDelete:any, callback:any) => {
                 return callback(err);
             }
 
-            connection.query(getQuery, getValues, async (err:QueryError | null, results:any[])=> {
+            connection.query(getQuery, getValues, async (err: QueryError | null, results: any[]) => {
                 connection.release();
                 if (err) {
-                    callback({"Error eliminando los datos": err})
+                    callback({ "Error eliminando los datos": err })
                 } else {
                     console.log("exito");
-                    callback(null, {data: results})                
+                    callback(null, { data: results })
                 }
             })
         })
