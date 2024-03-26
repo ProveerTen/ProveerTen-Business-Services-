@@ -6,7 +6,7 @@ export const get_view_companies = async (req: Request, res: Response) => {
 
     try {
 
-        const {document_grocer} = req.body;
+        const { document_grocer } = req.body;
 
         let companies = await view_companies(document_grocer);
         let categories = await view_categories_different();
@@ -35,8 +35,8 @@ export const get_view_products = async (req: Request, res: Response) => {
 
     try {
 
-        const {document_grocer} = req.body;
-        
+        const { document_grocer } = req.body;
+
         let products = await view_products(document_grocer);
         let categories = await view_categories();
         let categoriesByProducts: any[] = [];
@@ -62,7 +62,7 @@ export const get_view_price_products = async (req: Request, res: Response) => {
 
     try {
 
-        const {document_grocer} = req.body;
+        const { document_grocer } = req.body;
 
         let products = await view_price_products(document_grocer);
         let categories = await view_categories();
@@ -93,7 +93,7 @@ export const get_view_grocers = async (req: Request, res: Response) => {
 
     try {
 
-        let {document_provider} = req.body
+        let { document_provider } = req.body
 
         let grocers = await view_grocers(document_provider);
 
@@ -113,7 +113,8 @@ export const products_by_location = async (req: Request, res: Response) => {
     try {
         let { city, deparment } = req.body;
 
-        let products = await view_products_by_location(city,deparment);
+        let categoriesByProducts = await view_products_by_location(city, deparment);
+        /*
         let categories = await view_categories();
         let categoriesByProducts: any[] = [];
 
@@ -124,6 +125,10 @@ export const products_by_location = async (req: Request, res: Response) => {
         });
 
         if (products) {
+            res.status(200).json({ categoriesByProducts });
+        }
+        */
+        if (categoriesByProducts) {
             res.status(200).json({ categoriesByProducts });
         }
 
@@ -140,8 +145,8 @@ export const companies_by_location = async (req: Request, res: Response) => {
 
         let { city, deparment } = req.body;
 
-        let companies = await view_companies_by_location(city,deparment);
-        
+        let companies = await view_companies_by_location(city, deparment);
+
         let categories = await view_categories_different();
         let categoriesByCompanies: any[] = [];
 
@@ -170,7 +175,7 @@ export const get_view_subCategories = async (req: Request, res: Response) => {
 
     try {
 
-        let {name_category} = req.body
+        let { name_category } = req.body
 
         let categories = await view_subCategories(name_category);
 

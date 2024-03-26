@@ -8,7 +8,7 @@ import {
   get_name_company, insert_product,
   insert_product_category, delete_product,
   delete_product_category, deleteOldImage,
-  verifyExistProduct, updateDataProduct, get_product_price, insert_suggest_product_price, get_product, delete_product_suggested, insert_product_subCategory, insert_products
+  verifyExistProduct, updateDataProduct, get_product_price, insert_suggest_product_price, get_product, delete_product_suggested, insert_product_subCategory, insert_products, delete_product_subcategory
 } from "../services/product";
 import { dataDecoded } from "../middlewares/auth-token";
 import { view_categories } from "../services/view";
@@ -94,6 +94,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     await delete_product_category(id_product);
     await delete_product_suggested(id_product);
+    await delete_product_subcategory(id_product);
     await delete_product(id_product);
 
     if (public_id_clou) {

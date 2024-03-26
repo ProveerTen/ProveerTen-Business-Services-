@@ -393,3 +393,24 @@ export const insert_products = async (nit_company: string, products: any[]) => {
   });
   return Promise.all(promises);
 };
+
+export const delete_product_subcategory = (id_product: string) => {
+  const query = "call delete_product_subcategory(?, @message_text)";
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.log(err);
+        reject(err)
+      }
+      connection.query(query, id_product, (error: any, result: any) => {
+        connection.release();
+        if (error) {
+          reject(error);
+        } else {
+          console.log(result);
+          resolve(result);
+        }
+      });
+    });
+  });
+};
