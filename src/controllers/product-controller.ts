@@ -237,10 +237,10 @@ export const product = async (req: Request, res: Response) => {
 export const uploadProductsFile = async (req: Request, res: Response) => {
 
   try {
-    let { dataExcel } = req.body;
-     
-    await insert_products(dataDecoded.id, dataExcel)
-    
+    let { data } = req.body;
+
+    await insert_products(dataDecoded.id, data)
+
     res.status(200).json({ message: 'Ok' })
 
   } catch (error) {
@@ -258,10 +258,10 @@ export const getProductsFile = async (req: Request, res: Response) => {
     const workbook = xlsx.readFile(req.file?.path!);
     const workbookSheets = workbook.SheetNames;
     const sheet = workbookSheets[0];
-    const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
-  
+    const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
+
     fs.unlink(req.file?.path!);
-    res.status(200).json({ dataExcel })
+    res.status(200).json({ data })
 
   } catch (error) {
     console.log('Error');

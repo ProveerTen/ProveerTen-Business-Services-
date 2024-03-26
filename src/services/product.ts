@@ -46,7 +46,7 @@ export const insert_product = (data: any): Promise<any> => {
           data.stock_product,
           data.content_product,
           data.image_product,
-          data.availability_product,
+          // data.availability_product,
           data.date_creation,
           data.fk_product_nit_company,
         ],
@@ -351,7 +351,7 @@ export const get_product = (id_product: string): Promise<string> => {
   })
 };
 
-export const insert_products = async (nit_company:string, products: any[]) => {
+export const insert_products = async (nit_company: string, products: any[]) => {
 
   const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,'Disponible',?,?,@message_text)";
   const promises: Promise<any>[] = [];
