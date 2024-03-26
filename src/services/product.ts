@@ -357,7 +357,7 @@ export const insert_products = async (nit_company: string, products: any[]) => {
   const promises: Promise<any>[] = [];
 
   products.forEach((data: any) => {
-    let id_product = data.name_product.replace(/\s/g, '_') + '_' + generateRandomString(5);
+    let id_product = generateRandomString(30);
     const promise = new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) {
@@ -382,8 +382,9 @@ export const insert_products = async (nit_company: string, products: any[]) => {
           if (error) {
             reject(error);
           } else {
+            insert_product_category(id_product, data.fk_product_category_name_category);
+            insert_product_subCategory(id_product, data.fk_subcategory_name_subcategory);
             resolve(result);
-
           }
         });
       });

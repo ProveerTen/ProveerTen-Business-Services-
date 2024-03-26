@@ -37,9 +37,9 @@ export const createProduct = async (req: Request, res: Response) => {
       subCategory
     } = req.body;
 
-    let name_company = await get_name_company(dataDecoded.id) + '_' + name_product.replace(/\s/g, '_');
+    // let name_company = await get_name_company(dataDecoded.id) + '_' + name_product.replace(/\s/g, '_');
 
-    let id_product = name_company + '_' + generateRandomString(5);
+    let id_product = generateRandomString(30);
 
     if (req.file?.path!) {
       result_cloudinary = await cloudinary.uploader.upload(req.file?.path!);
@@ -62,6 +62,9 @@ export const createProduct = async (req: Request, res: Response) => {
       date_creation,
       fk_product_nit_company: dataDecoded.id
     }
+
+    console.log(data);
+
 
     await insert_product(data);
 
