@@ -28,8 +28,7 @@ const pool = mysql.createPool({
     host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    connectTimeout: 60000 // 60 segundos
+    database: process.env.DATABASE
 });
 
 
