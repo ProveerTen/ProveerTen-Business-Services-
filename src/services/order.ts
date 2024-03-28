@@ -487,3 +487,27 @@ export const update_status_order = (id_order: string, status: string) : Promise<
         });
     });
 };
+
+
+
+export const get_email_order_grocer = (id_order: string): Promise<any> => {
+
+    const query = "call get_email_order_grocer(?);";
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query, id_order, (error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result[0][0]);
+                }
+            });
+        });
+    });
+};
