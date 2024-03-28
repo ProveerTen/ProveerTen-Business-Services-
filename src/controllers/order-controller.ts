@@ -7,6 +7,7 @@ import { get_companies, get_products, get_providers, get_name_store_grocer } fro
 import { generateOrderEmailContent } from "../helpers/generate_email";
 import { product } from './product-controller';
 import { body } from "express-validator";
+import { update_status_order } from "../services/order";
 export const createOrder = async (req: Request, res: Response) => {
 
     try {
@@ -259,8 +260,6 @@ export const updateOrder = async (req: Request, res: Response) => {
     try {
         const { id_order, list_update, list_delete } = req.body
 
-
-
         let success: boolean = false;
 
         await Promise.all(list_update.map(async (item: any) => {
@@ -295,6 +294,23 @@ export const updateOrder = async (req: Request, res: Response) => {
 }
 
 
+export const updateStatusOrder = async (req: Request, res: Response) => {
+
+    try {
+        const { id_order, status } = req.body;
+
+        await update_status_order(id_order, status).then(async (mensaje: any) => {
+            res.status(200).json({ message: mensaje[0][0].message_text });
+        }).catch((error: any) => {
+            res.status(500).json({ message: error });
+        });
+
+    } catch (error:any) {
+        res.status(400).json({ error })
+    }
+}
+
+
 export const filter_providers_location = async (req: Request, res: Response) => {
 
     try {
@@ -302,8 +318,6 @@ export const filter_providers_location = async (req: Request, res: Response) => 
             companyId: req.body.companyId,
             grocerId: req.body.grocerId
         }
-
-
         let providersbycity = await get_providers_city(data);
         res.status(200).json({ providersbycity })
     }

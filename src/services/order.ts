@@ -464,3 +464,26 @@ export const updateOrdersProducts = async (id_order: string, products: any[]) =>
     });
     return Promise.all(promises);
 };
+
+
+export const update_status_order = (id_order: string, status: string) : Promise<any> => {
+
+    const query = "call updateStatusOrder(?,?,@message_text);";
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query, [id_order, status], (error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result); 
+                }
+            });
+        });
+    });
+};
