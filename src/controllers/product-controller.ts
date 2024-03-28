@@ -263,7 +263,11 @@ export const getProductsFile = async (req: Request, res: Response) => {
     const workbookSheets = workbook.SheetNames;
     const sheet = workbookSheets[0];
     const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
-
+    data.forEach((product: any) => {
+        product.Categoría = product.Categoría.replace(/_/g, " ");
+    });
+    console.log(data);
+    
     fs.unlink(req.file?.path!);
     res.status(200).json({ data })
 

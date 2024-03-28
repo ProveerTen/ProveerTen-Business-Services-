@@ -366,15 +366,15 @@ export const insert_products = async (nit_company: string, products: any[]) => {
         }
         connection.query(query, [
           id_product,
-          data.name_product,
-          data.description_product,
-          data.purchase_price_product,
-          data.unit_purchase_price_product,
-          data.suggested_unit_selling_price_product,
-          data.purchase_quantity,
-          data.stock_product,
-          data.content_product,
-          data.image_product,
+          data.nombre,
+          data['Descripción'],
+          data['Precio de venta por paquete'],
+          data['Precio de venta unitario'],
+          data['Precio sugerido de venta'],
+          data['Cantidad minima de compra'],
+          data['Cantidad en existencia'],
+          data['Contenido del producto'],
+          data.image,
           format(new Date(), 'yyyy-MM-dd HH:mm:ss.SSS'),
           nit_company
         ], (error: any, result: any) => {
@@ -382,8 +382,8 @@ export const insert_products = async (nit_company: string, products: any[]) => {
           if (error) {
             reject(error);
           } else {
-            insert_product_category(id_product, data.fk_product_category_name_category);
-            insert_product_subCategory(id_product, data.fk_subcategory_name_subcategory);
+            insert_product_category(id_product, data['Categoría']);
+            insert_product_subCategory(id_product, data['Subcategoría']);
             resolve(result);
           }
         });
