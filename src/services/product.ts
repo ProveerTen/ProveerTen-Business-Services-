@@ -371,7 +371,7 @@ export const insert_products = async (nit_company: string, products: any[]) => {
           data['Precio de venta por paquete'],
           data['Precio de venta unitario'],
           data['Precio sugerido de venta'],
-          data['Cantidad minima de compra'],
+          data['Cantidad por paquete'],
           data['Cantidad en existencia'],
           data['Contenido del producto'],
           data.image,
