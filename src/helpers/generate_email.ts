@@ -114,8 +114,16 @@ export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
                     <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${new Date(dataEmail.order_date).toLocaleString()}</td>
                 </tr>
                 <tr>
+                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Estado del pedido:</strong></td>
+                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.status}</td>
+                </tr>
+                <tr>
                     <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Total del Pedido:</strong></td>
                     <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.total_ordered_price}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Compañia:</strong></td>
+                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.name_company}</td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Proveedor:</strong></td>
@@ -146,7 +154,7 @@ export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
             });
             const mailOptions = {
                 from: process.env.EMAIL,
-                to: dataEmail.email_grocer,
+                to: 'proveerten@gmail.com',
                 subject: 'Actualización de Estado del Pedido',
                 html: emailContent
             };
