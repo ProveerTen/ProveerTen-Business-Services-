@@ -43,7 +43,8 @@ export const get_view_products = async (req: Request, res: Response) => {
 
         const { document_grocer } = req.body;
 
-        let products = await view_products(document_grocer);
+        let categoriesByProducts = await view_products(document_grocer);
+        /*    
         let categories = await view_categories();
         let categoriesByProducts: any[] = [];
 
@@ -52,8 +53,8 @@ export const get_view_products = async (req: Request, res: Response) => {
             product.categories = filteredCategories;
             categoriesByProducts.push(product)
         });
-
-        if (products) {
+        */
+        if (categoriesByProducts) {
             res.status(200).json({ categoriesByProducts });
         }
 
@@ -69,7 +70,7 @@ export const get_view_price_products = async (req: Request, res: Response) => {
     try {
 
         const { document_grocer } = req.body;
-
+        
         let products = await view_price_products(document_grocer);
         let categories = await view_categories();
         let categoriesByProductsPrice: any[] = [];
