@@ -366,7 +366,7 @@ export const insert_products = async (nit_company: string, products: any[]) => {
         }
         connection.query(query, [
           id_product,
-          data.nombre,
+          data.Nombre,
           data['Descripción'],
           data['Precio de venta por paquete'],
           data['Precio de venta unitario'],
@@ -374,7 +374,7 @@ export const insert_products = async (nit_company: string, products: any[]) => {
           data['Cantidad por paquete'],
           data['Cantidad en existencia'],
           data['Contenido del producto'],
-          data.image,
+          data.Imagen,
           format(new Date(), 'yyyy-MM-dd HH:mm:ss.SSS'),
           nit_company
         ], (error: any, result: any) => {
