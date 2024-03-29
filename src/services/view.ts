@@ -200,3 +200,26 @@ export const view_price_products = (document_grocer: string): Promise<any> => {
         });
     });
 }
+
+
+export const view_subcategories_different = (): Promise<any> => {
+
+    const query = 'call get_subcategories_different()';
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query,(error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    console.log(error);
+                    return reject('error')
+                }
+                resolve(result[0])
+            });
+        });
+    });
+}
