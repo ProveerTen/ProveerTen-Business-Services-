@@ -140,6 +140,7 @@ export const getAllPublicationsByLocation = async (req: Request, res: Response) 
     try {
 
         let { city, deparment } = req.body;
+        console.log(req.body);
 
         let nits_companies = await view_publication_location(city, deparment);
 
