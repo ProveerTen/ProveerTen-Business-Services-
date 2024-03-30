@@ -139,9 +139,9 @@ export const getAllPublicationsByLocation = async (req: Request, res: Response) 
 
     try {
 
-        let { city, department } = req.body;
+        let { city, deparment } = req.body;
 
-        let nits_companies = await view_publication_location(city, department);
+        let nits_companies = await view_publication_location(city, deparment);
 
         const publications = await Publication.find({ nit_company: { $in: nits_companies } });
 
