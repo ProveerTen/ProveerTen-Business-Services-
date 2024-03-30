@@ -1,4 +1,5 @@
 import pool from '../config/db-mysql';
+import { Document } from 'mongoose';
 
 export const view_companies = (document_grocer: string): Promise<any> => {
 
@@ -223,3 +224,49 @@ export const view_subcategories_different = (): Promise<any> => {
         });
     });
 }
+
+
+export const get_publication_location = (document_grocer:string): Promise<any> => {
+
+    const query = 'call get_publication_location(?)';
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query, document_grocer,(error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    console.log(error);
+                    return reject('error')
+                }
+                resolve(result[0])
+            });
+        });
+    });
+}
+
+export const view_publication_location = (city: string, department: string): Promise<any> => {
+
+    const query = 'call view_publication_location(?)';
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query, [city,department], (error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    console.log(error);
+                    return reject('error')
+                }
+                resolve(result[0])
+            });
+        });
+    });
+}
+

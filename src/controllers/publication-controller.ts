@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 
 import Publication from '../models/Publication';
 import { dataDecoded } from '../middlewares/auth-token';
+import { get_publication_location, view_publication_location } from '../services/view';
 
 export const createPublication = async (req: Request, res: Response) => {
     try {
@@ -115,7 +116,32 @@ export const getPublicationsByCompany = async (req: Request, res: Response) => {
 
 export const getAllPublications = async (req: Request, res: Response) => {
 
+    try {  
+        const { document_grocer } = req.body;  
+
+        let nits_companies = await get_publication_location(document_grocer);
+
+        const publications = await Publication.find();
+
+        res.status(200).json({
+            publications
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            error: `error`
+        });
+    }
+};
+
+export const getAllPublicationsByLocation = async (req: Request, res: Response) => {
+
     try {
+
+        let { city, department } = req.body;
+
+        let nits_companies = await view_publication_location(city, department);
 
         const publications = await Publication.find();
 
