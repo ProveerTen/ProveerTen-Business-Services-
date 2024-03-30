@@ -265,6 +265,7 @@ export const view_publication_location = (city: string, department: string): Pro
                     return reject('error')
                 }
                 resolve(result[0])
+                
             });
         });
     });

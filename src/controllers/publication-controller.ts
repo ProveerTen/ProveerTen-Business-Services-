@@ -120,8 +120,9 @@ export const getAllPublications = async (req: Request, res: Response) => {
         const { document_grocer } = req.body;  
 
         let nits_companies = await get_publication_location(document_grocer);
+        const nitValues = nits_companies.map((company: any) => company.nit_company);
 
-        const publications = await Publication.find({ nit_company: { $in: nits_companies } });
+        const publications = await Publication.find({ nit_company: { $in: nitValues } });
 
         res.status(200).json({
             publications
@@ -141,10 +142,11 @@ export const getAllPublicationsByLocation = async (req: Request, res: Response) 
 
         let { city, deparment } = req.body;
         console.log(req.body);
-
+        
         let nits_companies = await view_publication_location(city, deparment);
-
-        const publications = await Publication.find({ nit_company: { $in: nits_companies } });
+        const nitValues = nits_companies.map((company:any) => company.nit_company);
+            
+        const publications = await Publication.find({ "nit_company": { $in: nitValues } });
 
         res.status(200).json({
             publications
