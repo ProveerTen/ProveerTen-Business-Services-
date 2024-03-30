@@ -15,13 +15,14 @@ export const get_view_companies = async (req: Request, res: Response) => {
 
         companies.forEach((company: any) => {
             const filteredCategories = categories.filter((category: any) => category.fk_product_nit_company === company.nit_company);
-            console.log(filteredCategories);
-            const categoriesWithSubcategories = filteredCategories.map((category: any) => {
-                const filteredSubcategories = subcategories.filter((subcategory: any) => subcategory.fk_name_category === category.fk_product_category_name_category && subcategory.fk_product_nit_company === company.nit_company);
-                category.subcategories = filteredSubcategories;
-                return category;
-            });
-            company.categories = categoriesWithSubcategories;
+
+            company.categories = filteredCategories;
+
+            const filteredSubcategories = subcategories.filter((subcategory: any) =>
+                subcategory.fk_product_nit_company === company.nit_company
+            );
+            company.subcategories = filteredSubcategories;
+
             categoriesByCompanies.push(company);
         });
 
