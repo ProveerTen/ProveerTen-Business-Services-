@@ -250,7 +250,7 @@ export const get_publication_location = (document_grocer:string): Promise<any> =
 
 export const view_publication_location = (city: string, department: string): Promise<any> => {
 
-    const query = 'call view_publication_location(?)';
+    const query = 'call view_publication_location(?,?)';
 
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
