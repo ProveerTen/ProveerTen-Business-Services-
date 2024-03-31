@@ -264,12 +264,33 @@ export const getProductsFile = async (req: Request, res: Response) => {
     const sheet = workbookSheets[0];
     const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
     data.forEach((product: any) => {
-        product.Categoría = product.Categoría.replace(/_/g, " ");
+      product.Categoría = product.Categoría.replace(/_/g, " ");
     });
     console.log(data);
-    
+
     fs.unlink(req.file?.path!);
     res.status(200).json({ data })
+
+  } catch (error) {
+    console.log('Error');
+    res.status(400).json(error)
+  }
+};
+
+
+export const uploadImage = async (req: Request, res: Response) => {
+
+  try {
+
+    let urlImage:any;
+
+    if (req.file?.path!) {
+      urlImage = await cloudinary.uploader.upload(req.file?.path!);
+      urlImage = urlImage.secure_url
+    }
+
+    fs.unlink(req.file?.path!);
+    res.status(200).json({ urlImage })
 
   } catch (error) {
     console.log('Error');
