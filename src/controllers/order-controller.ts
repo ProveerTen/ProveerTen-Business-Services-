@@ -275,7 +275,10 @@ export const updateOrder = async (req: Request, res: Response) => {
             let message: string = '';
             await updateOrdersProducts(id_order, list_update).then(async (mensaje: any) => {
                 message = mensaje[0][0][0].message_text
-            }).catch((error: any) => { res.status(500).json({ message: error.sqlMessage }); console.log(error) });
+            }).catch((error: any) => { 
+                console.log(error);
+                res.status(500).json({ message: error.sqlMessage });
+            });
 
             await delete_products_order(id_order, list_delete)
             list_delete.forEach((product: any) => {
