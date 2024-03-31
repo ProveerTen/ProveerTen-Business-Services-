@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { view_categories, view_categories_different, view_companies, view_companies_by_location, view_grocers, view_price_products, view_products, view_products_by_location, view_subCategories, view_subcategories_different } from "../services/view";
+import { get_neighborhoods_location, view_categories, view_categories_different, view_companies, view_companies_by_location, view_grocers, view_price_products, view_products, view_products_by_location, view_subCategories, view_subcategories_different } from "../services/view";
 
 
 export const get_view_companies = async (req: Request, res: Response) => {
@@ -197,6 +197,23 @@ export const get_view_subCategories = async (req: Request, res: Response) => {
         if (categories) {
             res.status(200).json({ categories });
         }
+
+    } catch (error) {
+        res.status(400).json({
+            error
+        });
+    }
+};
+
+export const get_neighborhood_by_location = async (req: Request, res: Response) => {
+
+    try {
+
+        let { document_provider } = req.body
+
+        let neighbothoods = await get_neighborhoods_location(document_provider); 
+
+        res.status(200).json({neighbothoods});
 
     } catch (error) {
         res.status(400).json({

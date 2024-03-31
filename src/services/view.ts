@@ -23,7 +23,7 @@ export const view_companies = (document_grocer: string): Promise<any> => {
     })
 }
 
-export const view_companies_by_location = (city: string,department:string): Promise<any> => {
+export const view_companies_by_location = (city: string, department: string): Promise<any> => {
 
     const query = 'call view_companies_by_location(?,?)';
 
@@ -33,7 +33,7 @@ export const view_companies_by_location = (city: string,department:string): Prom
                 console.log(err);
                 reject(err)
             }
-            connection.query(query,[city,department], (error: any, result: any) => {
+            connection.query(query, [city, department], (error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);
@@ -67,7 +67,7 @@ export const view_categories = (): Promise<any> => {
     })
 }
 
-export const view_subCategories = (name_category:any): Promise<any> => {
+export const view_subCategories = (name_category: any): Promise<any> => {
 
     const query = 'call view_subCategories(?)';
 
@@ -77,7 +77,7 @@ export const view_subCategories = (name_category:any): Promise<any> => {
                 console.log(err);
                 reject(err)
             }
-            connection.query(query,name_category, (error: any, result: any) => {
+            connection.query(query, name_category, (error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);
@@ -158,7 +158,7 @@ export const view_products = (document_grocer: string): Promise<any> => {
     });
 }
 
-export const view_products_by_location = (city: string,department:string): Promise<any> => {
+export const view_products_by_location = (city: string, department: string): Promise<any> => {
 
     const query = 'call view_products_by_location(?,?)';
 
@@ -168,7 +168,7 @@ export const view_products_by_location = (city: string,department:string): Promi
                 console.log(err);
                 reject(err)
             }
-            connection.query(query,[city,department], (error: any, result: any) => {
+            connection.query(query, [city, department], (error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);
@@ -213,7 +213,7 @@ export const view_subcategories_different = (): Promise<any> => {
                 console.log(err);
                 reject(err)
             }
-            connection.query(query,(error: any, result: any) => {
+            connection.query(query, (error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);
@@ -226,7 +226,7 @@ export const view_subcategories_different = (): Promise<any> => {
 }
 
 
-export const get_publication_location = (document_grocer:string): Promise<any> => {
+export const get_publication_location = (document_grocer: string): Promise<any> => {
 
     const query = 'call get_publication_location(?)';
 
@@ -236,7 +236,7 @@ export const get_publication_location = (document_grocer:string): Promise<any> =
                 console.log(err);
                 reject(err)
             }
-            connection.query(query, document_grocer,(error: any, result: any) => {
+            connection.query(query, document_grocer, (error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);
@@ -258,14 +258,37 @@ export const view_publication_location = (city: string, department: string): Pro
                 console.log(err);
                 reject(err)
             }
-            connection.query(query, [city,department], (error: any, result: any) => {
+            connection.query(query, [city, department], (error: any, result: any) => {
                 connection.release();
                 if (error) {
                     console.log(error);
                     return reject('error')
                 }
                 resolve(result[0])
-                
+
+            });
+        });
+    });
+}
+
+
+export const get_neighborhoods_location = (document_provider:string): Promise<any> => {
+
+    const query = 'call get_neighborhood_location(?)';
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query, document_provider, (error: any, result: any) => {
+                connection.release();
+                if (error) {
+                    console.log(error);
+                    return reject('error')
+                }
+                resolve(result[0])
             });
         });
     });
