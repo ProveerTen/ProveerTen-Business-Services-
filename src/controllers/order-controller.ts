@@ -261,7 +261,7 @@ export const updateOrder = async (req: Request, res: Response) => {
         const { id_order, list_update, list_delete } = req.body
 
         let success: boolean = false;
-
+        console.log(list_update)
         await Promise.all(list_update.map(async (item: any) => {
             let data = await get_stock(item.id_product);
             if (data[0].stock_product >= item.quantity) {
