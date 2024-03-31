@@ -211,9 +211,9 @@ export const get_neighborhood_by_location = async (req: Request, res: Response) 
 
         let { document_provider } = req.body
 
-        let neighbothoods = await get_neighborhoods_location(document_provider); 
+        let neighborhoods = await get_neighborhoods_location(document_provider); 
 
-        res.status(200).json({neighbothoods});
+        res.status(200).json({neighborhoods});
 
     } catch (error) {
         res.status(400).json({
