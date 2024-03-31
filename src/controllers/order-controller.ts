@@ -287,7 +287,7 @@ export const updateOrder = async (req: Request, res: Response) => {
 
             res.status(200).json({ mensaje: message });
         } else {
-
+            console.log(success)
             res.status(500).json({ message: "stock insuficiente" });
         }
 
