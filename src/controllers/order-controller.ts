@@ -279,16 +279,17 @@ export const updateOrder = async (req: Request, res: Response) => {
                 console.log(error);
                 res.status(500).json({ message: error.sqlMessage });
             });
-
-            await delete_products_order(id_order, list_delete)
-            list_delete.forEach((product: any) => {
-                reset_quantity_order(product.fk_id_product, product.quantity)
-            });
-
             res.status(200).json({ mensaje: message });
         } else {
             console.log(success)
             res.status(500).json({ message: "stock insuficiente" });
+        }
+
+        if (list_delete.length > 0) {
+            await delete_products_order(id_order, list_delete)
+            list_delete.forEach((product: any) => {
+                reset_quantity_order(product.fk_id_product, product.quantity)
+            });
         }
 
     } catch (error) {
