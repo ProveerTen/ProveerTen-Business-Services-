@@ -259,39 +259,29 @@ export const updateOrder = async (req: Request, res: Response) => {
 
     try {
         const { id_order, list_update, list_delete } = req.body
-
-        let success: boolean = false;
-        console.log(list_update)
-        await Promise.all(list_update.map(async (item: any) => {
-            let data = await get_stock(item.id_product);
-            if (data[0].stock_product >= item.quantity) {
-                success = true;
-            } else {
-                success = false;
-            }
-        }));
-
-        if (success) {
-            let message: string = '';
+    
+        let message: string = '';
+        if (list_delete.length === 0 && list_update.length > 0) {
             await updateOrdersProducts(id_order, list_update).then(async (mensaje: any) => {
                 message = mensaje[0][0][0].message_text
-            }).catch((error: any) => { 
+            }).catch((error: any) => {
                 console.log(error);
                 res.status(500).json({ message: error.sqlMessage });
             });
             res.status(200).json({ mensaje: message });
-        } else {
-            console.log(success)
-            res.status(500).json({ message: "stock insuficiente" });
-        }
-
-        if (list_delete.length > 0) {
+        } else if (list_delete.length > 0 && list_update.length > 0) {
+            await updateOrdersProducts(id_order, list_update).then(async (mensaje: any) => {
+                message = mensaje[0][0][0].message_text
+            }).catch((error: any) => {
+                console.log(error);
+                res.status(500).json({ message: error.sqlMessage });
+            });
             await delete_products_order(id_order, list_delete)
             list_delete.forEach((product: any) => {
                 reset_quantity_order(product.fk_id_product, product.quantity)
             });
-        }
-
+            res.status(200).json({ mensaje: message });
+        } 
     } catch (error) {
         res.status(400).json({ error })
     }
@@ -311,7 +301,7 @@ export const updateStatusOrder = async (req: Request, res: Response) => {
             res.status(500).json({ message: error });
         });
 
-    } catch (error:any) {
+    } catch (error: any) {
         res.status(400).json({ error })
     }
 }

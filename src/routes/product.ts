@@ -17,7 +17,7 @@ router.post('/detail', product)
 router.post('/price', verifyToken, validateRole(['grocer']), suggest_product_price)
 router.post('/getfileProducts', verifyToken, validateRole(['company']), multer.single('file_products'), getProductsFile);
 router.post('/fileProducts', verifyToken, validateRole(['company']), uploadProductsFile);
-router.post('/image', multer.single('image'), uploadImage);
+router.post('/image', verifyToken, multer.single('image'), uploadImage);
 
 
 export default router;
