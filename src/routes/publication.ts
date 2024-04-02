@@ -10,7 +10,7 @@ router.post('/create', verifyToken, validateRole(['company']), multer.single('im
 router.delete('/delete/:id', verifyToken, validateRole(['company']), deleteOnePublication);
 router.post('/view/', getAllPublications);
 router.post('/view/location', getAllPublicationsByLocation);
-router.get('/view/:id', verifyToken, validateRole(['company']), getPublicationById);
+router.get('/view/:id', getPublicationById);
 router.get('/view/company/:id', verifyToken, getPublicationsByCompany);
 router.get('/data/view/company/:id', getPublicationsByCompany);
 router.patch('/update', verifyToken, validateRole(['company']), multer.single('image'), updateDataPublication);
