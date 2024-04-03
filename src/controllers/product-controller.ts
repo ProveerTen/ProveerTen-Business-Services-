@@ -48,7 +48,7 @@ export const createProduct = async (req: Request, res: Response) => {
     }
 
     let availability_product_value:string;
-    if (stock_product === 0) {
+    if (stock_product === "0") {
       availability_product_value = 'No Disponible'
     } else {
       availability_product_value = 'Disponible'
