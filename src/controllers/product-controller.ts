@@ -47,6 +47,13 @@ export const createProduct = async (req: Request, res: Response) => {
       fs.unlink(req.file.path);
     }
 
+    let availability_product_value:string;
+    if (stock_product === 0) {
+      availability_product_value = 'No Disponible'
+    } else {
+      availability_product_value = 'Disponible'
+    }
+
     const data: Product = {
       id_product,
       name_product,
@@ -58,13 +65,12 @@ export const createProduct = async (req: Request, res: Response) => {
       stock_product,
       content_product,
       image_product: image!,
-      availability_product,
+      availability_product: availability_product_value,
       date_creation,
       fk_product_nit_company: dataDecoded.id
     }
 
     console.log(data);
-
 
     await insert_product(data);
 

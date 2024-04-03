@@ -25,7 +25,14 @@ export const get_name_company = (nit_company: string): Promise<string> => {
 export const insert_product = (data: any): Promise<any> => {
   console.log("PRODUCT l ", data);
 
-  const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,'Disponible',?,?,@message_text)";
+  // let availability_product:string;
+  // if (data.stock_product === 0) {
+  //   availability_product = 'No Disponible'
+  // } else {
+  //   availability_product = 'Disponible'
+  // }
+
+  const query = "call insertProduct(?,?,?,?,?,?,?,?,?,?,?,?,?,@message_text)";
 
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
@@ -46,7 +53,7 @@ export const insert_product = (data: any): Promise<any> => {
           data.stock_product,
           data.content_product,
           data.image_product,
-          // data.availability_product,
+          data.availability_product,
           data.date_creation,
           data.fk_product_nit_company,
         ],
