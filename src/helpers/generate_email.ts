@@ -171,54 +171,127 @@ export const generateOrderEmailContent = (order:any, order_detail:any, email:any
 export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
     try {
         let emailContent = `
-            <html>
-            <body style="font-family: Arial, sans-serif;">
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualización de Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-            <h2>Estimado/a ${dataEmail.name_grocer} ${dataEmail.last_name_grocer},</h2>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
 
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .order-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-details th,
+        .order-details td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="color: #fb8500">Actualización de Pedido</h1>
+        </div>
+
+        <div class="content">
+            <p>Estimado/a ${dataEmail.name_grocer} ${dataEmail.last_name_grocer},</p>
             <p>Le informamos que ha habido una actualización en el estado del pedido con el siguiente detalle:</p>
 
-            <table style="border-collapse: collapse; width: 100%;">
+            <table class="order-details">
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>ID del Pedido:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.id_order}</td>
+                    <td>ID del Pedido:</td>
+                    <td>${dataEmail.id_order}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Fecha del Pedido:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${new Date(dataEmail.order_date).toLocaleString()}</td>
+                    <td>Fecha del Pedido:</td>
+                    <td>${new Date(dataEmail.order_date).toLocaleString()}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Estado del pedido:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.status}</td>
+                    <td>Estado del Pedido:</td>
+                    <td>${dataEmail.status}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Total del Pedido:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.total_ordered_price}</td>
+                    <td>Total del Pedido:</td>
+                    <td>${dataEmail.total_ordered_price}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Compañia:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.name_company}</td>
+                    <td>Compañía:</td>
+                    <td>${dataEmail.name_company}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Proveedor:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.name_provider} ${dataEmail.last_name_provider}</td>
+                    <td>Proveedor:</td>
+                    <td>${dataEmail.name_provider} ${dataEmail.last_name_provider}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><strong>Email del Proveedor:</strong></td>
-                    <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${dataEmail.email_provider}</td>
+                    <td>Email del Proveedor:</td>
+                    <td>${dataEmail.email_provider}</td>
                 </tr>
             </table>
 
             <p>Por favor, manténgase informado/a sobre cualquier cambio adicional en el estado del pedido.</p>
 
-            <p>Coordial saludo</p>
+            <p>Cordial saludo,</p>
             <p>ProveerTen</p>
+        </div>
 
-            </body>
-            </html>
+        <div class="footer">
+            <p>Si tiene alguna duda, contáctenos a <a href="proveerten@gmail.com">proveerten@gmail.com</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
         `;
 
         if (dataEmail.email_grocer) {
+            console.log(dataEmail.email_grocer);
+            
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
