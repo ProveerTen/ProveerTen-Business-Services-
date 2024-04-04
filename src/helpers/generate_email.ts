@@ -1,97 +1,171 @@
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import pdf from 'html-pdf';
 
-export const generateOrderEmailContent = (order: any, order_detail: any, email: any) => {
+export const generateOrderEmailContent = (order:any, order_detail:any, email:any) => {
     try {
-        //console.log(order);
-        //console.log(order_detail);
-
-
         const { id_order, order_date, total_ordered_price } = order[0];
 
-        const products = order_detail.map((detail: any) => ({
+        const products = order_detail.map((detail:any) => ({
             name: detail.name_product,
             price: detail.price,
-            total_amount: detail.total_amount
+            total_amount: detail.total_amount,
+            image: detail.image_product, // Agregar la imagen del producto
+            quantity: detail.quantity // Agregar la cantidad del producto
         }));
-        //console.log(products);
 
+        let productsHtml = products.map((product:any) => `
+    <tr>
+        <td><img src="${product.image}" alt="${product.name}" style="max-width: 100px;"></td>
+        <td>${product.name}</td>
+        <td>${product.price}</td>
+        <td>${product.quantity}</td>
+        <td>${product.total_amount}</td>
+    </tr>
+`).join('');
 
-        let productsHtml = products.map((product: any) => `
-            <tr>
-                <td>${product.name}</td>
-                <td class="text-right">$${product.price}</td>
-                <td class="text-right">$${product.total_amount}</td>
-            </tr>
-        `).join('');
-
-        let emailContent = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>Email Template</title>
-                <!-- Include Bootstrap Email CSS -->
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap-email@5.0.0-alpha1/dist/bootstrap-email.min.css" rel="stylesheet">
-            </head>
-            <body>
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <img class="my-6 w-32" src="https://us.123rf.com/450wm/blankstock/blankstock2012/blankstock201205247/161013072-icono-de-carrito-de-compras-signo-de-pedido-expreso-s%C3%ADmbolo-de-compra-r%C3%A1pida-elemento-de-dise%C3%B1o.jpg" />
-                            <div class="space-y-4 mb-6">
-                                <h1 class="text-4xl fw-800">¡En hora buena por tu pedido!</h1>
-                                <p>Tu pedido ${id_order} ha sido realizado exitosamente. Fecha de creación del pedido ${order_date}. </p>
-                            </div>
-                            <div class="card rounded-3xl px-4 py-8 p-lg-10 mb-6">
-                                <h3 class="text-center">Detalle del Pedido</h3>
-                                <p class="text-center text-muted">ID de Pedido: ${id_order}</p>
-                                <table class="p-2 w-full">
-                                    <tbody>
-                                        ${productsHtml}
-                                        <tr>
-                                            <td class="fw-700 border-top">Total</td>
-                                            <td class="fw-700 text-right border-top">$${total_ordered_price}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p class="text-center">Si tienes alguna pregunta, contáctanos a <a href="https://bootstrapemail.com">contacto@example.com</a>.</p>
-                        </div>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-
-
-        if (email) {
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.KEY_EMAIL
-                }
-            });
-            const mailOptions = {
-                from: process.env.EMAIL,
-                to: email,
-                subject: 'Pedido Realizado',
-                html: emailContent
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.error('Error al enviar el correo:', error);
-                } else {
-                    console.log('Correo electrónico enviado:', info.response);
-                }
-            });
+        let emailContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Realizado Exitosamente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .order-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-details th,
+        .order-details td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://us.123rf.com/450wm/blankstock/blankstock2012/blankstock201205247/161013072-icono-de-carrito-de-compras-signo-de-pedido-expreso-s%C3%ADmbolo-de-compra-r%C3%A1pida-elemento-de-dise%C3%B1o.jpg" alt="Carrito de Compras">
+            <h1 style="color: #fb8500">¡En hora buena por tu pedido!</h1>
+            <p style="color: #666">Tu compra ${id_order} ha sido realizado exitosamente.</p>
+            <p>Tu pedido fue realizado el ${order_date}.</p>
+        </div>
+
+        <div class="order-details">
+            <h2>Detalle del Pedido</h2>
+            <p>ID de Pedido: ${id_order}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre del Producto</th>
+                        <th>Precio Unitario</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productsHtml}
+                    <tr>
+                        <td colspan="4" class="fw-700 border-top">Total</td>
+                        <td class="fw-700 text-right border-top">${total_ordered_price}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>Si tienes alguna duda, contáctanos a <a href="proveerten@gmail.com">proveerten@gmail.com</a>.</p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+        const pdfPath = 'order_details.pdf';
+
+        // Crea el PDF desde el HTML
+        pdf.create(emailContent).toFile(pdfPath, (err, res) => {
+            if (err) return console.error(err);
+            console.log('pdf creado exitosamente', res);
+
+            if (email) {
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL,
+                        pass: process.env.KEY_EMAIL
+                    }
+                });
+                const mailOptions = {
+                    from: process.env.EMAIL,
+                    to: email,
+                    subject: 'Pedido Realizado',
+                    html: emailContent,
+                    attachments: [{ filename: 'order_details.pdf', path: pdfPath }] // Adjunta el PDF al correo
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.error('Error al enviar el correo:', error);
+                    } else {
+                        console.log('Correo electrónico enviado:', info.response);
+                        // Elimina el archivo PDF después de enviar el correo
+                        fs.unlinkSync(pdfPath);
+                    }
+                });
+            }
+        });
     } catch (error) {
         console.error('Error:', error);
     }
 };
+
+
 
 
 export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
@@ -153,7 +227,7 @@ export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
                 }
             });
             const mailOptions = {
-                from: process.env.EMAIL,
+                from: dataEmail.email_grocer,
                 to: 'proveerten@gmail.com',
                 subject: 'Actualización de Estado del Pedido',
                 html: emailContent
