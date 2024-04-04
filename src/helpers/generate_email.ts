@@ -227,8 +227,8 @@ export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
                 }
             });
             const mailOptions = {
-                from: dataEmail.email_grocer,
-                to: 'proveerten@gmail.com',
+                from: process.env.EMAIL,
+                to: dataEmail.email_grocer,
                 subject: 'Actualización de Estado del Pedido',
                 html: emailContent
             };
