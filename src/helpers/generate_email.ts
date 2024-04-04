@@ -219,6 +219,7 @@ export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
         `;
 
         if (dataEmail.email_grocer) {
+              console.log(dataEmail.email_grocer);
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
