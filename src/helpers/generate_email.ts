@@ -395,7 +395,7 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_details:
 
         <div class="content">
             <p>Estimado/a ${dataEmail.name_grocer} ${dataEmail.last_name_grocer},</p>
-            <p>Le informamos que ha habido una actualización en el estado del pedido con el siguiente detalle:</p>
+            <p>Le informamos que tu pedido ha finalizado :</p>
 
             <table class="order-details">
                 <tr>
@@ -450,10 +450,10 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_details:
                 </tr>
             </table>
 
-            <p>Por favor, manténgase informado/a sobre cualquier cambio adicional en el estado del pedido.</p>
+            <p>Gracias por confiar en nosotros.</p>
 
             <p>Cordial saludo,</p>
-            <p>ProveerTen</p>
+            <p>Equipo ProveerTen</p>
         </div>
 
         <div class="footer">
