@@ -4,7 +4,7 @@ import generateRandomString from "../helpers/generate-string";
 import Order from "../models/order";
 import { insert_order, insert_products_order, get_stock, delete_order, get_quantity_order, reset_quantity_order, get_orders_grocer, get_orders_provider, get_orders_company, get_orders_detail, get_order, get_providers_city, delete_products_order, updateOrdersProducts, get_email_order_grocer } from '../services/order';
 import { get_companies, get_products, get_providers, get_name_store_grocer } from "../services/order";
-import { generateEmailUpdateStatusOrder, generateOrderEmailContent } from "../helpers/generate_email";
+import { generateEmailAndInvoiceElectronic, generateEmailUpdateStatusOrder, generateOrderEmailContent } from "../helpers/generate_email";
 import { product } from './product-controller';
 import { body } from "express-validator";
 import { update_status_order } from "../services/order";
@@ -295,7 +295,15 @@ export const updateStatusOrder = async (req: Request, res: Response) => {
 
         await update_status_order(id_order, status).then(async (mensaje: any) => {
             let dataEmail = await get_email_order_grocer(id_order);
-            generateEmailUpdateStatusOrder(dataEmail)
+            if (dataEmail.status !== 'Finalizado') {
+                generateEmailUpdateStatusOrder(dataEmail)
+            } else {
+                let order_detail: any = await get_orders_detail(id_order)
+                console.log(order_detail);
+                
+                //generateEmailAndInvoiceElectronic(dataEmail,order_detail)
+            }
+
             res.status(200).json({ message: mensaje[0][0].message_text });
         }).catch((error: any) => {
             res.status(500).json({ message: error });
