@@ -321,15 +321,17 @@ export const generateEmailUpdateStatusOrder = (dataEmail: any) => {
 
 
 
-export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_detail: any) => {
+export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_details: any) => {
     try {
+        let totalOrderAmount = parseFloat(dataEmail.total_ordered_price);
+
         let emailContent = `
             <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualización de Pedido</title>
+    <title>Factura Electrónica</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -349,9 +351,8 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_detail: 
             padding-bottom: 20px;
         }
 
-        .header img {
-            max-width: 100px;
-            height: auto;
+        .header h1 {
+            color: #fb8500;
         }
 
         .content {
@@ -362,9 +363,10 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_detail: 
             margin-bottom: 20px;
         }
 
-        .order-details table {
+        .order-details {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
         .order-details th,
@@ -374,23 +376,21 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_detail: 
             text-align: left;
         }
 
+        .order-details th {
+            background-color: #f2f2f2;
+        }
+
         .footer {
             text-align: center;
             color: #666;
             font-size: 14px;
-        }
-
-        @media screen and (max-width: 600px) {
-            .container {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1 style="color: #fb8500">Actualización de Pedido</h1>
+            <h1>Factura Electrónica</h1>
         </div>
 
         <div class="content">
@@ -399,32 +399,54 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_detail: 
 
             <table class="order-details">
                 <tr>
-                    <td>ID del Pedido:</td>
+                    <th>ID del Pedido</th>
                     <td>${dataEmail.id_order}</td>
                 </tr>
                 <tr>
-                    <td>Fecha del Pedido:</td>
+                    <th>Fecha del Pedido</th>
                     <td>${new Date(dataEmail.order_date).toLocaleString()}</td>
                 </tr>
                 <tr>
-                    <td>Estado del Pedido:</td>
+                    <th>Estado del Pedido</th>
                     <td>${dataEmail.status}</td>
                 </tr>
                 <tr>
-                    <td>Total del Pedido:</td>
-                    <td>${dataEmail.total_ordered_price}</td>
+                    <th>Total del Pedido</th>
+                    <td>${totalOrderAmount.toFixed(2)}</td>
                 </tr>
                 <tr>
-                    <td>Compañía:</td>
+                    <th>Compañía</th>
                     <td>${dataEmail.name_company}</td>
                 </tr>
                 <tr>
-                    <td>Proveedor:</td>
+                    <th>Proveedor</th>
                     <td>${dataEmail.name_provider} ${dataEmail.last_name_provider}</td>
                 </tr>
                 <tr>
-                    <td>Email del Proveedor:</td>
+                    <th>Email del Proveedor</th>
                     <td>${dataEmail.email_provider}</td>
+                </tr>
+            </table>
+
+            <p>Detalles del Pedido:</p>
+            <table class="order-details">
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+                ${order_details.map((detail: any) => `
+                    <tr>
+                        <td>${detail.name_product}</td>
+                        <td>${detail.quantity}</td>
+                        <td>${detail.purchase_price_product}</td>
+                        <td>${detail.total_amount}</td>
+                    </tr>
+                `).join('')}
+                <tr>
+                    <td colspan="3" style="text-align: right;"><b>Total Pedido:</b></td>
+                    <td>${totalOrderAmount.toFixed(2)}</td>
                 </tr>
             </table>
 
@@ -440,11 +462,10 @@ export const generateEmailAndInvoiceElectronic = (dataEmail: any, order_detail: 
     </div>
 </body>
 </html>
+
         `;
 
         if (dataEmail.email_grocer) {
-            console.log(dataEmail.email_grocer);
-
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {

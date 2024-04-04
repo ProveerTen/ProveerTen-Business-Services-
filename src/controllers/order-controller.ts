@@ -299,9 +299,7 @@ export const updateStatusOrder = async (req: Request, res: Response) => {
                 generateEmailUpdateStatusOrder(dataEmail)
             } else {
                 let order_detail: any = await get_orders_detail(id_order)
-                console.log(order_detail, "a huevo");
-                
-                //generateEmailAndInvoiceElectronic(dataEmail,order_detail)
+                generateEmailAndInvoiceElectronic(dataEmail,order_detail)
             }
 
             res.status(200).json({ message: mensaje[0][0].message_text });
